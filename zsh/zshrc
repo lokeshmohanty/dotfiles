@@ -132,21 +132,7 @@ setopt extended_glob
 # combination with the globalias plugin.
 
 # Directory coloring
-if [[ $OSTYPE = (darwin|freebsd)* ]]; then
-	export CLICOLOR="YES" # Equivalent to passing -G to ls.
-	export LSCOLORS="exgxdHdHcxaHaHhBhDeaec"
-
-	[ -d "/opt/local/bin" ] && export PATH="/opt/local/bin:$PATH"
-
-	# Prefer GNU version, since it respects dircolors.
-	if (( $+commands[gls] )); then
-		alias ls='() { $(whence -p gls) -Ctr --file-type --color=auto $@ }'
-	else
-		alias ls='() { $(whence -p ls) -CFtr $@ }'
-	fi
-else
-	alias ls='() { $(whence -p ls) -Ctr --file-type --color=auto $@ }'
-fi
+alias ls='() { $(whence -p ls) -Ctr --file-type --color=auto $@ }'
 
 # Set editor preference to nvim if available.
 if (( $+commands[nvim] )); then
@@ -162,13 +148,16 @@ alias egrep='() { $(whence -p egrep) --color=auto $@ }'
 # Custom helper aliases
 alias ccat='highlight -O ansi'
 alias rm='rm -v'
+alias rd='redshift -O 5000 > /dev/null 2>&1'
+alias dotfiles='cd ${HOME}/Documents/dotfiles'
+alias prog='cd ${HOME}/Programming/Practice'
 
 # Directory management
-alias la='ls -a'
+alias la='ls -A'
 alias ll='ls -l'
 alias lal='ls -al'
 alias d='dirs -v'
-alias 1='pu'
+alias 1='pu -1'
 alias 2='pu -2'
 alias 3='pu -3'
 alias 4='pu -4'
@@ -179,6 +168,7 @@ alias 8='pu -8'
 alias 9='pu -9'
 alias pu='() { pushd $1 &> /dev/null; dirs -v; }'
 alias po='() { popd &> /dev/null; dirs -v; }'
+
 alias bb='bb-wrapper'
 
 zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
@@ -483,4 +473,3 @@ POWERLEVEL9K_BATTERY_LEVEL_BACKGROUND_COLOR="$DEFAULT_BACKGROUND"
 POWERLEVEL9K_BATTERY_CHARGING_BACKGROUND="$DEFAULT_BACKGROUND"
 POWERLEVEL9K_BATTERY_CHARGED_BACKGROUND="$DEFAULT_BACKGROUND"
 POWERLEVEL9K_BATTERY_DISCONNECTED_BACKGROUND="$DEFAULT_BACKGROUND"
-
