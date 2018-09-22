@@ -30,8 +30,8 @@ endif
      call dein#add('tpope/vim-rhubarb')                  " extends fugitive.vim to support Github urls
      call dein#add('tommcdo/vim-fubitive')               " extend fugitive.vim to support Bitbucket urls
     call dein#add('nelstrom/vim-markdown-folding')      " folding for markdown
-    " colourschemes
-    call dein#add('morhetz/gruvbox')
+    call dein#add('morhetz/gruvbox')                    " colorscheme
+    call dein#add('lifepillar/vim-solarized8')          " colorscheme
     call dein#add('kristijanhusak/vim-hybrid-material') 
     call dein#add('vim-syntastic/syntastic')            " automatically check for syntax errors in a file
     call dein#add('ryanoasis/vim-devicons')
@@ -49,30 +49,116 @@ endif
 
 
 " system settings
+" Turn on filetype plugins
 filetype plugin indent on
+
+" Enable syntax highlight
 syntax enable
-set termguicolors   " Not sure what it actually does
-set guicursor=      " To prevent unknown symbol in ex mode
-set number          " To make line numbers appear 
-set tabstop=4       " Defining a tablength to be equal to 4 spaces
-set shiftwidth=0    " When shitwidth is zero, tabstop value is used
-set expandtab       " Tabs are made up of spaces
-set showcmd         " Display incomplete command
-set noswapfile
+
+" Enable true-color support
+set termguicolors
+
+" Set autoindent
+set autoindent
+
+" Set smartindent
+set smartindent
+
+" Always show window status
+set laststatus=2
+
+" Show line and column number
+set ruler
+
+" Show the nice autocomplete menu
+set wildmenu
+
+" Set enciding to utf-8
+set encoding=utf-8
+
+" Reload unchanged files automatically
+set autoread
+
+" Enable persistent undo
+set undodir=~/.nvimundo/
+set undofile
+
+" Enable lazyredraw
+set lazyredraw
+
+" Enable mouse for navigation
+set mouse=a
+
+" Set full autocompletion
+set wildmode=longest,full
+
+" Don't ignore case
+set smartcase
+
+" Auto-center on search result
+noremap n nzz
+noremap N Nzz
+
+" Set window title
+set title
+
+" Show line numbers
+set number
+
+" Show unfinished command
+set showcmd
+
+" Trigger autoread when changing buffers or coming back to vim in terminal.
+au FocusGained,BufEnter * :silent! !
+
+" Highlight search results
+" set hlsearch
 set nohlsearch
+
+" To prevent unknown symbol in ex mode
+set guicursor=      
+
+" Tabs are made up of spaces
+set expandtab       
+
+" Show existing tab with 4 spaces width
+set tabstop=4
+
+" When shiftwidth is 0, tabstop value is used
+" this defines '>'
+set shiftwidth=0
+
+" Set the background
+set background=dark
+
+set noswapfile
 set incsearch
 set foldmethod=expr
 " set guifont=InconsolataGo\ Nerd\ Font\ Mono\ Regular\ 15
-
-set autoread        " Reload files changed outside vim
- 
-" Trigger autoread when changing buffers or coming back to vim in terminal.
-au FocusGained,BufEnter * :silent! !
 set splitright      " Open new split panes to right and bottom
 set splitbelow      " Open new split panes to right and bottom
 set scrolloff=8     " Start scrolling when we're 8 lines away from margins
 set sidescrolloff=15
 set sidescroll=1
+
+
+" Set the colorscheme
+" colorscheme gruvbox
+colorscheme solarized8
+let g:enable_bold_font = 1
+
+" Visually hide the annoying tilde signs
+hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
+
+" Start NERDTreeTabs on GUI if dir selected
+let g:nerdtree_tabs_open_on_console_startup=2
+let g:nerdtree_tabs_smart_startup_focus=2
+let g:nerdtree_tabs_focus_on_files=1
+
+" Show hidden files
+let NERDTreeShowHidden=1
+
+
 
 " Toggle relative numbering and set to absolute on focus loss and insert mode
 set rnu
@@ -91,12 +177,6 @@ autocmd InsertLeave * call ToggleRelativeOn()
  
 
  
-" For colorscheme
-"
-set background=dark
-colorscheme gruvbox
-let g:enable_bold_font = 1
-" let g:enable_italic_font = 1
 
 
 " Enable live preview while substitution
@@ -104,6 +184,7 @@ set inccommand=split
 
 " Enable deoplete at startup
 let g:deoplete#enable_at_startup = 1
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Close vim when the only window left is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -118,10 +199,51 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " let g:syntastic_check_on_open = 1
 " let g:syntastic_check_on_wq = 0
 
+" =================================================================
+"                              MAPPINGS
+" =================================================================
 
-" Mapings
+" Define <Space> as leader
+let mapleader=" "
+
+" Disable <Space> as a single key
+map <Space> <nop>
+
 nmap <C-d> :NERDTreeToggle<CR>
-inoremap {<CR> <CR>{}<ESC>i<CR><ESC>O
+inoremap {<CR> {}<ESC>i<CR><ESC>O
+nnoremap <M-b> :buffers<CR>:buffer<Space>
+
+" Enable quick closing and saving
+nnoremap <Leader>q :q<CR>
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>x :x<CR>
+
+" Enable faster navigation
+nmap <silent> <Leader>k :wincmd k<CR>
+nmap <silent> <Leader>j :wincmd j<CR>
+nmap <silent> <Leader>h :wincmd h<CR>
+nmap <silent> <Leader>l :wincmd l<CR>
+
+" Disable Arrow keys in Escape mode
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+
+" Disable Arrow keys in Insert mode
+imap <up> <nop>
+imap <down> <nop>
+imap <left> <nop>
+imap <right> <nop>
+
+" Disable Arrow keys in Visual mode
+vmap <up> <nop>
+vmap <down> <nop>
+vmap <left> <nop>
+vmap <right> <nop>
+
+" Force saving files that require root permission
+cnoremap w!! w !sudo tee > /dev/null %
  
 "Use enter to create new lines w/o entering insert mode
 nnoremap <CR> o<Esc>
