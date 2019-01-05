@@ -10,6 +10,10 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
     source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+# Source fzf
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
+
 # Customize to your needs...
 
 # =============================================================================
@@ -169,7 +173,10 @@ alias 9='pu -9'
 alias pu='() { pushd $1 &> /dev/null; dirs -v; }'
 alias po='() { popd &> /dev/null; dirs -v; }'
 
+export TERM='screen-256color'
+alias tmux='tmux -2'
 alias bb='bb-wrapper'
+alias pcloud='proxychains pcloud </dev/null &>/dev/null &'
 
 zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
@@ -289,6 +296,7 @@ setup_agents() {
 setup_agents
 unfunction setup_agents
 
+# Exchange Capslock and ESC
 setxkbmap -option caps:swapescape
 
 # =============================================================================

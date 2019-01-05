@@ -26,7 +26,10 @@ My configuration files for linux.
     14. mutt
     15. youtube-dl
     16. nerd-fonts-complete
+<<<<<<< HEAD
     17. LibreOffice
+=======
+>>>>>>> 8120f14dab05b25b1a2b0142dfa5ff1ca3fc27c4
 
 ## TODO
 

@@ -38,21 +38,22 @@ if [ -d ${HOME}/.config/nvim ] ; then
 fi
 mkdir -p ${HOME}/.config/nvim
 ln -sv ${DOTFILES_DIR}/nvim/init.vim ${HOME}/.config/nvim/init.vim
-ln -sv ${DOTFILES_DIR}/nvim/plugins ${HOME}/.config/nvim/
+ln -sv ${DOTFILES_DIR}/nvim/plugin ${HOME}/.config/nvim/
 
 # Install neovim
 echo "Installing neovim..."
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
-sh ./installer.sh ~/.local/share/dein
+sh ./installer.sh ~/.local/share/dein > /dev/null 2>&1
 rm installer.sh
 if hash pip3 2>/dev/null; then
     pip3 install neovim
 else
     echo "Install pip for python3"
 fi
-nvim -c ":call dein#install()"
-nvim -c ":UpdateRemotePlugins"
-nvim -c ":wq"
+# nvim -c ":call dein#install()"
+# nvim -c ":UpdateRemotePlugins"
+# nvim -c ":wq"
+nvim -E -c ":call dein#install()" -c ":UpdateRemotePlugins" -c q
 
 # echo "Installing submodule (s)..."
 # git submodule update --init --recursive

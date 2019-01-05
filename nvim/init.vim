@@ -2,50 +2,65 @@
     set nocompatible
 endif
 
- """"" " dein Plugin Manager
- set runtimepath+=~/.local/share/dein/repos/github.com/Shougo/dein.vim
- if dein#load_state(expand('~/.local/share/dein'))
-     call dein#begin(expand('~/.local/share/dein'))
+""""" " dein Plugin Manager
+set runtimepath+=~/.local/share/dein/repos/github.com/Shougo/dein.vim
+if dein#load_state(expand('~/.local/share/dein'))
+    call dein#begin(expand('~/.local/share/dein'))
 
-     call dein#add('Shougo/dein.vim')
-     call dein#add('Shougo/deoplete.nvim')
-     if !has('nvim')
-         call dein#add('roxma/nvim-yarp')
-         call dein#add('roxma/vim-hug-neovim-rpc')
-     endif
+    call dein#add('Shougo/dein.vim')
+    call dein#add('Shougo/deoplete.nvim')
+    if !has('nvim')
+        call dein#add('roxma/nvim-yarp')
+        call dein#add('roxma/vim-hug-neovim-rpc')
+    endif
 
-     call dein#add('tpope/vim-fugitive')                 " :Gblame, :Gbrowse {using git tools with vim}
-     call dein#add('itchyny/lightline.vim')              " lighter alternative to airline
-     call dein#add('tomtom/tcomment_vim')                " gc{movement}, gcc{single line}, gcp{paragraph}
-     call dein#add('bling/vim-bufferline')               " :help bufferline
-     call dein#add('mattn/emmet-vim')                    " helpful for HTML, CSS. Go to github site for tutorial
-     call dein#add('mattn/gist-vim')
-     call dein#add('terryma/vim-multiple-cursors')
-     " call dein#add('junegunn/fzf')
-     call dein#add('scrooloose/nerdtree')                " :NERDTree {file directory}
-     call dein#add('tpope/vim-surround')                 " surround a text or replace the surround {helpful for html, css}
-     call dein#add('Xuyuanp/nerdtree-git-plugin')
-     call dein#add('mattn/webapi-vim')
-     call dein#add('shumphrey/fugitive-gitlab.vim')      " extend fugitive.vim to support Gitlab urls
-     call dein#add('tpope/vim-rhubarb')                  " extends fugitive.vim to support Github urls
-     call dein#add('tommcdo/vim-fubitive')               " extend fugitive.vim to support Bitbucket urls
-    call dein#add('nelstrom/vim-markdown-folding')      " folding for markdown
-    call dein#add('morhetz/gruvbox')                    " colorscheme
-    call dein#add('lifepillar/vim-solarized8')          " colorscheme
+    call dein#add('itchyny/lightline.vim')
+    call dein#add('tomtom/tcomment_vim')                " gc{movement}, gcc{single line}, gcp{paragraph}
+    call dein#add('bling/vim-bufferline')               " :help bufferline
+    call dein#add('mattn/emmet-vim')                    " helpful for HTML, CSS. Go to github site for tutorial
+    call dein#add('mattn/gist-vim')
+    call dein#add('terryma/vim-multiple-cursors')
+
+    " NERDTree for file directory management
+    call dein#add('scrooloose/nerdtree')
+    call dein#add('Xuyuanp/nerdtree-git-plugin')
+
+    call dein#add('tpope/vim-surround')
+    call dein#add('mattn/webapi-vim')
+
+    " For git tools within vim
+    call dein#add('tpope/vim-fugitive')     " :Gblame, :Gbrowse {using git tools with vim}
+    call dein#add('shumphrey/fugitive-gitlab.vim')
+    call dein#add('tpope/vim-rhubarb')
+    call dein#add('tommcdo/vim-fubitive')
+
+    " For folding
+    call dein#add('nelstrom/vim-markdown-folding')
+    call dein#add('LucHermitte/VimFold4C')
+    call dein#add('LucHermitte/lh-vim-lib')
+    call dein#add('sgeb/vim-diff-fold')
+
+    " For live preview of latex
+    call dein#add('xuhdev/vim-latex-live-preview')
+
+    " Colorschemes
+    " call dein#add('morhetz/gruvbox')
+    call dein#add('lifepillar/vim-solarized8')
+
     call dein#add('kristijanhusak/vim-hybrid-material') 
-    call dein#add('vim-syntastic/syntastic')            " automatically check for syntax errors in a file
+    call dein#add('vim-syntastic/syntastic')
     call dein#add('ryanoasis/vim-devicons')
+
     " To be added later
-    " call dein#add('tpope/vim-repeat')                   " it remaps '.' to be used by plugins
+    " call dein#add('tpope/vim-repeat')
+    if dein#check_install()
+        call dein#install()
+        let pluginsExist=1
+    endif
 
-     if dein#check_install()
-         call dein#install()
-         let pluginsExist=1
-     endif
-
-     call dein#end()
-     call dein#save_state()
- endif
+    call dein#end()
+    call dein#save_state()
+endif
 
 
 " system settings
@@ -131,16 +146,16 @@ set shiftwidth=0
 " Set the background
 set background=dark
 
+set t_Co=256
+let g:solarized_termcolors=256
 set noswapfile
 set incsearch
-set foldmethod=expr
 " set guifont=InconsolataGo\ Nerd\ Font\ Mono\ Regular\ 15
 set splitright      " Open new split panes to right and bottom
 set splitbelow      " Open new split panes to right and bottom
 set scrolloff=8     " Start scrolling when we're 8 lines away from margins
 set sidescrolloff=15
 set sidescroll=1
-
 
 " Set the colorscheme
 " colorscheme gruvbox
@@ -155,10 +170,8 @@ let g:nerdtree_tabs_open_on_console_startup=2
 let g:nerdtree_tabs_smart_startup_focus=2
 let g:nerdtree_tabs_focus_on_files=1
 
-" Show hidden files
+" Show hidden files in NERDTree
 let NERDTreeShowHidden=1
-
-
 
 " Toggle relative numbering and set to absolute on focus loss and insert mode
 set rnu
@@ -174,10 +187,6 @@ autocmd FocusLost * call ToggleRelativeOn()
 autocmd FocusGained * call ToggleRelativeOn()
 autocmd InsertEnter * call ToggleRelativeOn()
 autocmd InsertLeave * call ToggleRelativeOn()
- 
-
- 
-
 
 " Enable live preview while substitution
 set inccommand=split
@@ -209,14 +218,17 @@ let mapleader=" "
 " Disable <Space> as a single key
 map <Space> <nop>
 
+" Map ; to : as ; is not used anywhere
+nnoremap ; :
 nmap <C-d> :NERDTreeToggle<CR>
 inoremap {<CR> {}<ESC>i<CR><ESC>O
 nnoremap <M-b> :buffers<CR>:buffer<Space>
 
-" Enable quick closing and saving
-nnoremap <Leader>q :q<CR>
-nnoremap <Leader>w :w<CR>
-nnoremap <Leader>x :x<CR>
+nnoremap <Leader>< :vertical resize +5
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+nnoremap <silent> <Leader>> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nnoremap <silent> <Leader>< :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
 
 " Enable faster navigation
 nmap <silent> <Leader>k :wincmd k<CR>
@@ -244,7 +256,7 @@ vmap <right> <nop>
 
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
- 
+
 "Use enter to create new lines w/o entering insert mode
 nnoremap <CR> o<Esc>
 "Below is to fix issues with the ABOVE mappings in quickfix window
@@ -261,7 +273,7 @@ au FocusLost,WinLeave * :silent! wa
 
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
- 
+
 
 "update dir to current file
 autocmd BufEnter * silent! cd %:p:h
@@ -270,34 +282,38 @@ autocmd BufEnter * silent! cd %:p:h
 " Don't do it for commit messages, when the position is invalid, or when
 " inside an event handler (happens when dropping a file on gvim).
 autocmd BufReadPost *
-    \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
+            \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
+            \   exe "normal g`\"" |
+            \ endif
 
- 
+
 augroup vimrcEx
-  autocmd!
+    autocmd!
 
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it for commit messages, when the position is invalid, or when
-  " inside an event handler (happens when dropping a file on gvim).
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it for commit messages, when the position is invalid, or when
+    " inside an event handler (happens when dropping a file on gvim).
 
-  " Set syntax highlighting for specific file types
-  autocmd BufRead,BufNewFile *.md set filetype=markdown
+    " Set syntax highlighting for specific file types
+    autocmd BufRead,BufNewFile *.md set filetype=markdown
 
-  " autocmd BufRead *.jsx set ft=jsx.html
-  " autocmd BufNewFile *.jsx set ft=jsx.html
+    " autocmd BufRead *.jsx set ft=jsx.html
+    " autocmd BufNewFile *.jsx set ft=jsx.html
 
-  " Enable spellchecking for Markdown
-  autocmd FileType markdown setlocal spell
+    " Enable spellchecking for Markdown
+    autocmd FileType markdown setlocal spell
 
-  " Automatically wrap at 100 characters for Markdown
-  autocmd BufRead,BufNewFile *.md setlocal textwidth=100
+    " Automatically wrap at 100 characters for Markdown
+    autocmd BufRead,BufNewFile *.md setlocal textwidth=100
 
-  " Automatically wrap at 100 characters and spell check git commit messages
-  autocmd FileType gitcommit setlocal textwidth=100
-  autocmd FileType gitcommit setlocal spell
+    " Automatically wrap at 100 characters and spell check git commit messages
+    autocmd FileType gitcommit setlocal textwidth=100
+    autocmd FileType gitcommit setlocal spell
 
-  " Allow stylesheets to autocomplete hyphenated words
-  autocmd FileType css,scss,sass,less setlocal iskeyword+=-
+    " Allow stylesheets to autocomplete hyphenated words
+    autocmd FileType css,scss,sass,less setlocal iskeyword+=-
 augroup END
+
+" Decrease updatetime to a smaller value
+autocmd Filetype tex setl updatetime=1
+let g:livepreview_previewer = 'evince'
