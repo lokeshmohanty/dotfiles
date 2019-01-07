@@ -2,7 +2,7 @@
 
 # Update this list when adding new config files
 dotfiles=("zshenv" "zshrc" "zprezto" "bashrc" "bash_profile" "tmux.conf" "gitconfig")
-DOTFILES_DIR="${HOME}/Documents/dotfiles"
+DOTFILES_DIR="${HOME}/.dotfiles"
 BACKUP_DIR="${HOME}/.dotfiles_backup"
 
 echo "OS_NAME = $(uname)"
