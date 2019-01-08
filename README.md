@@ -26,10 +26,7 @@ My configuration files for linux.
     14. mutt
     15. youtube-dl
     16. nerd-fonts-complete
-<<<<<<< HEAD
     17. LibreOffice
-=======
->>>>>>> 8120f14dab05b25b1a2b0142dfa5ff1ca3fc27c4
 
 ## TODO
 
@@ -37,3 +34,7 @@ My configuration files for linux.
     2. Create a script to install my preferred apps
     3. Create a script to restore backed up dotfiles
     4. Add functionality to update dotfiles
+
+## Troubleshooting
+    
+    1. for python errors run `pip install neovim` as root
