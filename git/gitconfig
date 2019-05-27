@@ -6,5 +6,3 @@
 [url "https://github.com/"]
 	insteadOf = git://github.com/
 
-[http]
-	proxy = http://172.16.2.30:8080
