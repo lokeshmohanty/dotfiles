@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 # Update this list when adding new config files
-dotfiles=("zshenv" "zshrc" "zprezto" "bashrc" "shrc" "dir_colors" "bash_profile" "tmux.conf" "gitconfig")
+# Currently not using zsh
+dotfiles=("bashrc" "shrc" "dir_colors" "bash_profile" "gitconfig")
+# dotfiles=("zshenv" "zshrc" "zprezto" "bashrc" "shrc" "dir_colors" "bash_profile" "tmux.conf" "gitconfig")
 DOTFILES_DIR="${HOME}/.dotfiles"
 BACKUP_DIR="${HOME}/.dotfiles_backup"
 
