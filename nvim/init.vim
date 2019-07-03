@@ -43,6 +43,12 @@ if dein#load_state(expand('~/.local/share/dein'))
     " For live preview of latex
     call dein#add('xuhdev/vim-latex-live-preview')
 
+    " For live preview of markdown
+    call dein#add('suan/vim-instant-markdown')
+
+    " For markdown syntax highlighting
+    call dein#add('tpope/vim-markdown')
+
     " Colorschemes
     " call dein#add('morhetz/gruvbox')
     call dein#add('lifepillar/vim-solarized8')
@@ -165,6 +171,7 @@ let g:enable_bold_font = 1
 " Visually hide the annoying tilde signs
 hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
 
+"-----------  NerdTree
 " Start NERDTreeTabs on GUI if dir selected
 let g:nerdtree_tabs_open_on_console_startup=2
 let g:nerdtree_tabs_smart_startup_focus=2
@@ -172,6 +179,16 @@ let g:nerdtree_tabs_focus_on_files=1
 
 " Show hidden files in NERDTree
 let NERDTreeShowHidden=1
+"-----------
+
+"-----------  Vim-instant-markdown
+" To prevent update of display in realtime of vim-instant-markdown
+let g:instant_markdown_slow = 1
+
+" To prevent autostart of markdown preview. to start use
+" :InstantMarkdownPreview
+let g:instant_markdown_autostart = 0
+"-----------
 
 " Toggle relative numbering and set to absolute on focus loss and insert mode
 set rnu
