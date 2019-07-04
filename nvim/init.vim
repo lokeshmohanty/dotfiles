@@ -52,6 +52,8 @@ if dein#load_state(expand('~/.local/share/dein'))
     " Colorschemes
     " call dein#add('morhetz/gruvbox')
     call dein#add('lifepillar/vim-solarized8')
+    call dein#add('dikiaap/minimalist')
+    call dein#add('owickstrom/vim-colors-paramount')
 
     call dein#add('kristijanhusak/vim-hybrid-material') 
     call dein#add('vim-syntastic/syntastic')
@@ -166,10 +168,12 @@ set sidescroll=1
 " Set the colorscheme
 " colorscheme gruvbox
 colorscheme solarized8
+" colorscheme minimalist
+" colorscheme paramount
 let g:enable_bold_font = 1
 
 " Visually hide the annoying tilde signs
-hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
+" hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
 
 "-----------  NerdTree
 " Start NERDTreeTabs on GUI if dir selected
