@@ -239,9 +239,9 @@ let mapleader=" "
 " Disable <Space> as a single key
 map <Space> <nop>
 
-" Map ; to : as ; is not used anywhere
-nnoremap ; :
-nmap <C-d> :NERDTreeToggle<CR>
+" Map ; to :! as ; is not used anywhere
+nnoremap ; :!
+nmap <Leader>f :NERDTreeToggle<CR>
 inoremap {<CR> {}<ESC>i<CR><ESC>O
 nnoremap <M-b> :buffers<CR>:buffer<Space>
 
@@ -256,24 +256,6 @@ nmap <silent> <Leader>k :wincmd k<CR>
 nmap <silent> <Leader>j :wincmd j<CR>
 nmap <silent> <Leader>h :wincmd h<CR>
 nmap <silent> <Leader>l :wincmd l<CR>
-
-" Disable Arrow keys in Escape mode
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
-
-" Disable Arrow keys in Insert mode
-imap <up> <nop>
-imap <down> <nop>
-imap <left> <nop>
-imap <right> <nop>
-
-" Disable Arrow keys in Visual mode
-vmap <up> <nop>
-vmap <down> <nop>
-vmap <left> <nop>
-vmap <right> <nop>
 
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
