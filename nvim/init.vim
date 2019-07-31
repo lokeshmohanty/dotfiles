@@ -7,12 +7,17 @@ set runtimepath+=~/.local/share/dein/repos/github.com/Shougo/dein.vim
 if dein#load_state(expand('~/.local/share/dein'))
     call dein#begin(expand('~/.local/share/dein'))
 
+    " Plugin Manager
     call dein#add('Shougo/dein.vim')
+
+    " Autocomplete
     call dein#add('Shougo/deoplete.nvim')
     if !has('nvim')
         call dein#add('roxma/nvim-yarp')
         call dein#add('roxma/vim-hug-neovim-rpc')
     endif
+    call dein#add('neoclide/coc.nvim')
+
 
     call dein#add('itchyny/lightline.vim')
     call dein#add('tomtom/tcomment_vim')                " gc{movement}, gcc{single line}, gcp{paragraph}
@@ -59,8 +64,13 @@ if dein#load_state(expand('~/.local/share/dein'))
     call dein#add('vim-syntastic/syntastic')
     call dein#add('ryanoasis/vim-devicons')
 
-    " To be added later
-    " call dein#add('tpope/vim-repeat')
+    " Javascript Linter
+    call dein#add('dense-analysis/ale')
+
+    " Repeat plugin commands
+    call dein#add('tpope/vim-repeat')
+    call dein#add('tpope/vim-unimpaired')
+
     if dein#check_install()
         call dein#install()
         let pluginsExist=1
@@ -72,6 +82,8 @@ endif
 
 
 " system settings
+
+set shell=/bin/sh
 " Turn on filetype plugins
 filetype plugin indent on
 
@@ -139,20 +151,17 @@ au FocusGained,BufEnter * :silent! !
 set nohlsearch
 
 " To prevent unknown symbol in ex mode
-set guicursor=      
+set guicursor=
 
 " Tabs are made up of spaces
-set expandtab       
+set expandtab
 
-" Show existing tab with 4 spaces width
-set tabstop=4
+" Show existing tab with 2 spaces width
+set tabstop=2
 
 " When shiftwidth is 0, tabstop value is used
 " this defines '>'
 set shiftwidth=0
-
-" Set the background
-set background=dark
 
 set t_Co=256
 let g:solarized_termcolors=256
@@ -170,6 +179,7 @@ set sidescroll=1
 colorscheme solarized8
 " colorscheme minimalist
 " colorscheme paramount
+set background=dark
 let g:enable_bold_font = 1
 
 " Visually hide the annoying tilde signs
@@ -229,18 +239,18 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " let g:syntastic_check_on_open = 1
 " let g:syntastic_check_on_wq = 0
 
+" Js linting
+let g:ale_fixers = {
+  \'javascript': ['eslint']
+  \}
+
 " =================================================================
 "                              MAPPINGS
 " =================================================================
 
-" Define <Space> as leader
-let mapleader=" "
+" Define <semi-colon> as leader
+let mapleader=";"
 
-" Disable <Space> as a single key
-map <Space> <nop>
-
-" Map ; to :! as ; is not used anywhere
-nnoremap ; :!
 nmap <Leader>f :NERDTreeToggle<CR>
 inoremap {<CR> {}<ESC>i<CR><ESC>O
 nnoremap <M-b> :buffers<CR>:buffer<Space>
@@ -260,8 +270,6 @@ nmap <silent> <Leader>l :wincmd l<CR>
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
 
-"Use enter to create new lines w/o entering insert mode
-nnoremap <CR> o<Esc>
 "Below is to fix issues with the ABOVE mappings in quickfix window
 autocmd CmdwinEnter * nnoremap <CR> <CR>
 autocmd BufReadPost quickfix nnoremap <CR> <CR>
