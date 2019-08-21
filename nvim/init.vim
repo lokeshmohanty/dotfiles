@@ -10,66 +10,68 @@ if dein#load_state(expand('~/.local/share/dein'))
     " Plugin Manager
     call dein#add('Shougo/dein.vim')
 
-    " Autocomplete
+    " " Autocomplete
     call dein#add('Shougo/deoplete.nvim')
-    if !has('nvim')
-        call dein#add('roxma/nvim-yarp')
-        call dein#add('roxma/vim-hug-neovim-rpc')
-    endif
-    call dein#add('neoclide/coc.nvim')
+    " if !has('nvim')
+    "     call dein#add('roxma/nvim-yarp')
+    "     call dein#add('roxma/vim-hug-neovim-rpc')
+    " endif
+    " call dein#add('neoclide/coc.nvim')
 
 
     call dein#add('itchyny/lightline.vim')
     call dein#add('tomtom/tcomment_vim')                " gc{movement}, gcc{single line}, gcp{paragraph}
     call dein#add('bling/vim-bufferline')               " :help bufferline
-    call dein#add('mattn/emmet-vim')                    " helpful for HTML, CSS. Go to github site for tutorial
-    call dein#add('mattn/gist-vim')
+    " call dein#add('mattn/emmet-vim')                    " helpful for HTML, CSS. Go to github site for tutorial
+    " call dein#add('mattn/gist-vim')
     call dein#add('terryma/vim-multiple-cursors')
 
-    " NERDTree for file directory management
-    call dein#add('scrooloose/nerdtree')
-    call dein#add('Xuyuanp/nerdtree-git-plugin')
+    " Plugin for file directory management
+    call dein#add('Shougo/defx.nvim')
+    " call dein#add('scrooloose/nerdtree')
+    " call dein#add('Xuyuanp/nerdtree-git-plugin')
 
-    call dein#add('tpope/vim-surround')
-    call dein#add('mattn/webapi-vim')
+    " call dein#add('tpope/vim-surround')
+    " call dein#add('mattn/webapi-vim')
 
     " For git tools within vim
-    call dein#add('tpope/vim-fugitive')     " :Gblame, :Gbrowse {using git tools with vim}
-    call dein#add('shumphrey/fugitive-gitlab.vim')
-    call dein#add('tpope/vim-rhubarb')
-    call dein#add('tommcdo/vim-fubitive')
+    " call dein#add('tpope/vim-fugitive')     " :Gblame, :Gbrowse {using git tools with vim}
+    " call dein#add('shumphrey/fugitive-gitlab.vim')
+    " call dein#add('tpope/vim-rhubarb')
+    " call dein#add('tommcdo/vim-fubitive')
 
     " For folding
-    call dein#add('nelstrom/vim-markdown-folding')
-    call dein#add('LucHermitte/VimFold4C')
-    call dein#add('LucHermitte/lh-vim-lib')
-    call dein#add('sgeb/vim-diff-fold')
+    " call dein#add('nelstrom/vim-markdown-folding')
+    " call dein#add('LucHermitte/VimFold4C')
+    " call dein#add('LucHermitte/lh-vim-lib')
+    " call dein#add('sgeb/vim-diff-fold')
 
     " For live preview of latex
-    call dein#add('xuhdev/vim-latex-live-preview')
+    " call dein#add('xuhdev/vim-latex-live-preview')
 
     " For live preview of markdown
-    call dein#add('suan/vim-instant-markdown')
+    " call dein#add('suan/vim-instant-markdown')
 
     " For markdown syntax highlighting
-    call dein#add('tpope/vim-markdown')
+    " call dein#add('tpope/vim-markdown')
 
     " Colorschemes
     " call dein#add('morhetz/gruvbox')
-    call dein#add('lifepillar/vim-solarized8')
-    call dein#add('dikiaap/minimalist')
-    call dein#add('owickstrom/vim-colors-paramount')
+    " call dein#add('lifepillar/vim-solarized8')
+    " call dein#add('dikiaap/minimalist')
+    " call dein#add('owickstrom/vim-colors-paramount')
+    call dein#add('nightsense/carbonized')
 
     call dein#add('kristijanhusak/vim-hybrid-material') 
-    call dein#add('vim-syntastic/syntastic')
+    " call dein#add('vim-syntastic/syntastic')
     call dein#add('ryanoasis/vim-devicons')
 
     " Javascript Linter
-    call dein#add('dense-analysis/ale')
+    " call dein#add('dense-analysis/ale')
 
     " Repeat plugin commands
-    call dein#add('tpope/vim-repeat')
-    call dein#add('tpope/vim-unimpaired')
+    " call dein#add('tpope/vim-repeat')
+    " call dein#add('tpope/vim-unimpaired')
 
     if dein#check_install()
         call dein#install()
@@ -80,7 +82,59 @@ if dein#load_state(expand('~/.local/share/dein'))
     call dein#save_state()
 endif
 
+" =========================Learning[Start]================================"
+"
+" ----------Normal Mode-------------
+" *, # => search for the word under the cursor
+" g*, g# => partial search
+" ^U, ^D => scroll half page up/down/up
+" ^F, ^B => scroll full page forward/backward
+" 
+" ^O, ^I => move backward/forward cursor positions
+" ``, '' => move to last cursor position
+" m[char] => mark
+" `[char] => jump to mark
+" ', ", [, ] => special marks
+" zt, zz, zb => puts the cursor line at the top/mid/bottom
+"
+" daw => delete the word the cursor is on(along with the following space)[delete a word]
+" das => delete the object the cursor is on[delete a sentence]
+" dis => delete the object the cursor is on[is => text object]
+" diw => delete current word 
+" ~ => toggle case
+" g~ => toggle case mode [~:line, rest same as other movement shortcuts]
+" gU => Upper case mode [U:line, rest same as other movement shortcuts]
+" gu => lower case mode [u:line, rest same as other movement shortcuts]
+"
+" ZZ => :x ; ZQ => :q!
+"
+" ----------Command Mode-------------
+" :set noincsearch => disables display of matches while typing for search
+" :set nowrapsearch => stops search at the end of the file
+" :set nohlsearch => disables hilighting the matches for search
+" :nohlsearch => clears all the hilighting done by search
+" :set ignorecase => search ignores case
+"
+"
+" :set number => show line numbers
+" :set ruler => show cursor position at bottom right corner
+" =========================Learning[End]================================"
 
+" =========================Plugins[Start]================================"
+" -----------------Lightline----------------
+let g:lightline = {
+      \ 'colorscheme': 'carbonized_dark',
+      \ }
+" let g:lightline.separator = {
+"       \ 'left': "▶",
+"       \ 'right': "◀",
+"       \ }
+" let g:lightline.subseparator = {
+"       \ 'left': "〉",
+"       \ 'right': "〈",
+"       \ }
+
+" =========================Plugins[End]================================"
 " system settings
 
 set shell=/bin/sh
@@ -147,8 +201,8 @@ set showcmd
 au FocusGained,BufEnter * :silent! !
 
 " Highlight search results
-" set hlsearch
-set nohlsearch
+set hlsearch
+" set nohlsearch
 
 " To prevent unknown symbol in ex mode
 set guicursor=
@@ -176,11 +230,16 @@ set sidescroll=1
 
 " Set the colorscheme
 " colorscheme gruvbox
-colorscheme solarized8
+" let g:gruvbox_italic = 1
+" let g:gruvbox_bold = 0
+" let g:gruvbox_contrast_dark = 'hard'
+
+" colorscheme solarized8
 " colorscheme minimalist
 " colorscheme paramount
-set background=dark
-let g:enable_bold_font = 1
+colorscheme carbonized-dark
+" set background=dark
+" let g:enable_bold_font = 1
 
 " Visually hide the annoying tilde signs
 " hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
@@ -249,7 +308,7 @@ let g:ale_fixers = {
 " =================================================================
 
 " Define <semi-colon> as leader
-let mapleader=";"
+" let mapleader=";"
 
 nmap <Leader>f :NERDTreeToggle<CR>
 inoremap {<CR> {}<ESC>i<CR><ESC>O
