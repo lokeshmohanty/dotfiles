@@ -9,25 +9,26 @@ if dein#load_state(expand('~/.local/share/dein'))
 
     " Plugin Manager
     call dein#add('Shougo/dein.vim')
+    if !has('nvim')
+        call dein#add('roxma/nvim-yarp')
+        call dein#add('roxma/vim-hug-neovim-rpc')
+    endif
 
     " " Autocomplete
-    call dein#add('Shougo/deoplete.nvim')
-    " if !has('nvim')
-    "     call dein#add('roxma/nvim-yarp')
-    "     call dein#add('roxma/vim-hug-neovim-rpc')
-    " endif
+    call dein#add('Shougo/deoplete.nvim', { 'build': ':UpdateRemotePlugins' })       " Requires :UpdateRemotePlugins
+    call dein#add('Shougo/denite.nvim', { 'build': ':UpdateRemotePlugins' })         " Unites all interfaces, a bit like fuzzy finder but more
     " call dein#add('neoclide/coc.nvim')
 
 
     call dein#add('itchyny/lightline.vim')
     call dein#add('tomtom/tcomment_vim')                " gc{movement}, gcc{single line}, gcp{paragraph}
     call dein#add('bling/vim-bufferline')               " :help bufferline
-    " call dein#add('mattn/emmet-vim')                    " helpful for HTML, CSS. Go to github site for tutorial
+    " call dein#add('mattn/emmet-vim')                  " helpful for HTML, CSS. Go to github site for tutorial
     " call dein#add('mattn/gist-vim')
     call dein#add('terryma/vim-multiple-cursors')
 
     " Plugin for file directory management
-    call dein#add('Shougo/defx.nvim')
+    " call dein#add('Shougo/defx.nvim')
     " call dein#add('scrooloose/nerdtree')
     " call dein#add('Xuyuanp/nerdtree-git-plugin')
 
@@ -67,12 +68,18 @@ if dein#load_state(expand('~/.local/share/dein'))
     call dein#add('ryanoasis/vim-devicons')
 
     " Javascript Linter
-    " call dein#add('dense-analysis/ale')
+    call dein#add('dense-analysis/ale')
+    call dein#add('leafgarland/typescript-vim')
+    call dein#add('mhartington/nvim-typescript', {'build': './install.sh'})   " Requires :UpdateRemotePlugins
+    call dein#add('HerringtonDarkholme/yats.vim')   " syntax file required by mharington/nvim-typescript
 
     " Repeat plugin commands
     " call dein#add('tpope/vim-repeat')
     " call dein#add('tpope/vim-unimpaired')
 
+    " Plugins to try
+    " call dein#add('junegunn/fzf')
+    " call dein#add('SirVer/ultisnips') "for creating custom snippets
     if dein#check_install()
         call dein#install()
         let pluginsExist=1
@@ -133,85 +140,169 @@ let g:lightline = {
 "       \ 'left': "〉",
 "       \ 'right': "〈",
 "       \ }
+" --------------------------------------------
+
+" -----------------Deoplete----------------
+" Enable deoplete at startup
+let g:deoplete#enable_at_startup = 1
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+" Disable deoplete for denite buffer
+autocmd FileType denite-filter
+      \   call deoplete#custom#buffer_option('auto_complete', v:false)
+" --------------------------------------------
+
+"-----------------  Denite -----------------------
+" call denite#custom#option('default', {
+"       \ 'prompt': '❯'
+"       \ })
+"
+" call denite#custom#var('file/rec', 'command',
+"       \ ['fd', '-H', '--full-path'])
+" call denite#custom#var('grep', 'command', ['rg'])
+" call denite#custom#var('grep', 'default_opts',
+"       \ ['--hidden', '--vimgrep', '--smart-case'])
+" call denite#custom#var('grep', 'recursive_opts', [])
+" call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+" call denite#custom#var('grep', 'separator', ['--'])
+" call denite#custom#var('grep', 'final_opts', [])
+"
+" autocmd FileType denite call s:denite_settings()
+"
+" function! s:denite_settings() abort
+"   nnoremap <silent><buffer><expr> <CR>
+"         \ denite#do_map('do_action')
+"   nnoremap <silent><buffer><expr> <C-v>
+"         \ denite#do_map('do_action', 'vsplit')
+"   nnoremap <silent><buffer><expr> d
+"         \ denite#do_map('do_action', 'delete')
+"   nnoremap <silent><buffer><expr> p
+"         \ denite#do_map('do_action', 'preview')
+"   nnoremap <silent><buffer><expr> <Esc>
+"         \ denite#do_map('quit')
+"   nnoremap <silent><buffer><expr> q
+"         \ denite#do_map('quit')
+"   nnoremap <silent><buffer><expr> i
+"         \ denite#do_map('open_filter_buffer')
+" endfunction
+"
+" autocmd FileType denite-filter call s:denite_filter_settings()
+"
+" function! s:denite_filter_settings() abort
+"   nmap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
+" endfunction
+"
+" nnoremap <C-p> :<C-u>Denite file/rec -start-filter<CR>
+" nnoremap <leader>s :<C-u>Denite buffer<CR>
+" nnoremap <leader>8 :<C-u>DeniteCursorWord grep:.<CR>
+" nnoremap <leader>/ :<C-u>Denite grep:.<CR>
+" nnoremap <leader><Space>/ :<C-u>DeniteBufferDir grep:.<CR>
+" nnoremap <leader>d :<C-u>DeniteBufferDir file/rec -start-filter<CR>
+" nnoremap <leader>r :<C-u>Denite -resume -cursor-pos=+1<CR>
+" nnoremap <leader><C-r> :<C-u>Denite register:.<CR>
+" nnoremap <leader>g :<C-u>Denite gitstatus<CR>
+"
+" hi link deniteMatchedChar Special
+
+" --------------------------------------------
+
+" ----------------Settings for syntastic------
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
+" --------------------------------------------
+
+"-----------  Vim-instant-markdown -----------
+" To prevent update of display in realtime of vim-instant-markdown
+let g:instant_markdown_slow = 1
+
+" To prevent autostart of markdown preview. to start use
+" :InstantMarkdownPreview
+let g:instant_markdown_autostart = 0
+" --------------------------------------------
+
+"-----------  Javascript Plugins  -----------
+let g:ale_linters = {
+      \ 'javascript': ['eslint'],
+      \ 'typescript': ['tsserver', 'tslint'],
+      \ 'vue': ['eslint']
+      \ }
+
+let g:ale_fixers = {
+       \ 'javascript': ['eslint'],
+       \ 'typescript': ['prettier'],
+       \ 'vue': ['eslint'],
+       \ 'scss': ['prettier'],
+       \ 'html': ['prettier']
+       \ }
+let g:ale_fix_on_save = 1
+
+" autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
+
+
+" " Decrease updatetime to a smaller value
+" autocmd Filetype tex setl updatetime=1
+" let g:livepreview_previewer = 'evince'
+
+" --------------------------------------------
+
+"-----------  Plulgin -----------
+" --------------------------------------------
 
 " =========================Plugins[End]================================"
-" system settings
+
+
+
+" =========================System Settings[Start]================================"
 
 set shell=/bin/sh
-" Turn on filetype plugins
-filetype plugin indent on
-
-" Enable syntax highlight
-syntax enable
-
-" Enable true-color support
-set termguicolors
-
-" Set autoindent
-set autoindent
-
-" Set smartindent
-set smartindent
-
-" Always show window status
-set laststatus=2
-
-" Show line and column number
-set ruler
-
-" Show the nice autocomplete menu
-set wildmenu
-
-" Set enciding to utf-8
-set encoding=utf-8
-
-" Reload unchanged files automatically
-set autoread
+filetype plugin indent on         " Turn on filetype plugins
+syntax enable                     " Enable syntax highlight
+set termguicolors				          " Enable true-color support
+set autoindent				            " Set autoindent
+set smartindent				            " Set smartindent
+set laststatus=2				          " Always show window status
+set ruler				                  " Show line and column number
+set wildmenu				              " Show the nice autocomplete menu
+set encoding=utf-8				        " Set enciding to utf-8
+set autoread				              " Reload unchanged files automatically
+set autochdir                     " Automatically change directory to file location
 
 " Enable persistent undo
 set undodir=~/.nvimundo/
 set undofile
 
-" Enable lazyredraw
-set lazyredraw
+" Enable live preview while substitution
+set inccommand=split
 
-" Enable mouse for navigation
-set mouse=a
-
-" Set full autocompletion
-set wildmode=longest,full
-
-" Don't ignore case
-set smartcase
+set lazyredraw				            " Enable lazyredraw
+set mouse=a				                " Enable mouse for navigation
+set wildmode=longest,full				  " Set full autocompletion
+set smartcase				              " Don't ignore case
 
 " Auto-center on search result
 noremap n nzz
 noremap N Nzz
 
-" Set window title
-set title
-
-" Show line numbers
-set number
-
-" Show unfinished command
-set showcmd
+set title				                  " Set window title
+set number				                " Show line numbers
+set showcmd				                " Show unfinished command
 
 " Trigger autoread when changing buffers or coming back to vim in terminal.
 au FocusGained,BufEnter * :silent! !
 
 " Highlight search results
-set hlsearch
-" set nohlsearch
+" set hlsearch				              
+set nohlsearch
 
-" To prevent unknown symbol in ex mode
-set guicursor=
-
-" Tabs are made up of spaces
-set expandtab
-
-" Show existing tab with 2 spaces width
-set tabstop=2
+set guicursor=                    " To prevent unknown symbol in ex mode
+set expandtab				              " Tabs are made up of spaces
+set tabstop=2				              " Show existing tab with 2 spaces width
 
 " When shiftwidth is 0, tabstop value is used
 " this defines '>'
@@ -244,81 +335,67 @@ colorscheme carbonized-dark
 " Visually hide the annoying tilde signs
 " hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
 
-"-----------  NerdTree
-" Start NERDTreeTabs on GUI if dir selected
-let g:nerdtree_tabs_open_on_console_startup=2
-let g:nerdtree_tabs_smart_startup_focus=2
-let g:nerdtree_tabs_focus_on_files=1
-
-" Show hidden files in NERDTree
-let NERDTreeShowHidden=1
-"-----------
-
-"-----------  Vim-instant-markdown
-" To prevent update of display in realtime of vim-instant-markdown
-let g:instant_markdown_slow = 1
-
-" To prevent autostart of markdown preview. to start use
-" :InstantMarkdownPreview
-let g:instant_markdown_autostart = 0
-"-----------
-
-" Toggle relative numbering and set to absolute on focus loss and insert mode
-set rnu
-function! ToggleNumbersOn()
-    set nu!
-    set rnu
-endfunction
-function! ToggleRelativeOn()
-    set rnu!
-    set nu
-endfunction
-autocmd FocusLost * call ToggleRelativeOn()
-autocmd FocusGained * call ToggleRelativeOn()
-autocmd InsertEnter * call ToggleRelativeOn()
-autocmd InsertLeave * call ToggleRelativeOn()
-
-" Enable live preview while substitution
-set inccommand=split
-
-" Enable deoplete at startup
-let g:deoplete#enable_at_startup = 1
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-" Close vim when the only window left is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" Settings for syntastic
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
-
-" Js linting
+" ------------- Js linting -------------------
 let g:ale_fixers = {
   \'javascript': ['eslint']
   \}
+" --------------------------------------------
+
+" ------------- Netrw -------------------
+" let g:netrw_liststyle = 0         " Choose the directory view (hit i to cycle through the options when netrw is open)
+let g:netrw_banner = 0            " To remove the banner (hit I to remove temporarily)
+" let g:netrw_browse_split = 0      " Open file in the previous window
+let g:netrw_winsize = 25
+" let g:netrw_altv = 1      " To split towards right
+
+" To open netrw along with vim
+" augroup ProjectDrawer
+"   autocmd!
+"   autocmd VimEnter * :Vexplore
+" augroup END
+" --------------------------------------------
+
+
+" =========================System Settings[End]================================"
+
+
+" Toggle relative numbering and set to absolute on focus loss and insert mode
+" set rnu
+" function! ToggleNumbersOn()
+"     set nu!
+"     set rnu
+" endfunction
+" function! ToggleRelativeOn()
+"     set rnu!
+"     set nu
+" endfunction
+" autocmd FocusLost * call ToggleRelativeOn()
+" autocmd FocusGained * call ToggleRelativeOn()
+" autocmd InsertEnter * call ToggleRelativeOn()
+" autocmd InsertLeave * call ToggleRelativeOn()
+
+
 
 " =================================================================
 "                              MAPPINGS
 " =================================================================
 
 " Define <semi-colon> as leader
-" let mapleader=";"
+let mapleader=";"
 
-nmap <Leader>f :NERDTreeToggle<CR>
+nmap <Leader>f :Lexplore<CR>
 inoremap {<CR> {}<ESC>i<CR><ESC>O
 nnoremap <M-b> :buffers<CR>:buffer<Space>
+" nnoremap <Leader>t :Terminal<CR>
 
-nnoremap <Leader>< :vertical resize +5
-nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
-nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
-nnoremap <silent> <Leader>> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
-nnoremap <silent> <Leader>< :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+nnoremap <Leader>> :vertical resize +5<CR>
+nnoremap <Leader>< :vertical resize -5<CR>
+nnoremap <Leader>+ :resize +5<CR>
+nnoremap <Leader>- :resize -5<CR>
+" nnoremap <silent> <Leader>+ :exe 'resize ' . (winheight(0) * 3/2)<CR>
+" nnoremap <silent> <Leader>- :exe 'resize ' . (winheight(0) * 2/3)<CR>
+" nnoremap <silent> <Leader>> :exe 'vertical resize ' . (winwidth(0) * 3/2)<CR>
+" nnoremap <silent> <Leader>< :exe 'vertical resize ' . (winwidth(0) * 2/3)<CR>
 
 " Enable faster navigation
 nmap <silent> <Leader>k :wincmd k<CR>
@@ -374,16 +451,13 @@ augroup vimrcEx
     autocmd FileType markdown setlocal spell
 
     " Automatically wrap at 100 characters for Markdown
-    autocmd BufRead,BufNewFile *.md setlocal textwidth=100
+    " autocmd BufRead,BufNewFile *.md setlocal textwidth=100
 
     " Automatically wrap at 100 characters and spell check git commit messages
-    autocmd FileType gitcommit setlocal textwidth=100
+    " autocmd FileType gitcommit setlocal textwidth=100
     autocmd FileType gitcommit setlocal spell
 
     " Allow stylesheets to autocomplete hyphenated words
     autocmd FileType css,scss,sass,less setlocal iskeyword+=-
 augroup END
 
-" Decrease updatetime to a smaller value
-autocmd Filetype tex setl updatetime=1
-let g:livepreview_previewer = 'evince'
