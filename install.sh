@@ -49,6 +49,7 @@ sh ./installer.sh ~/.local/share/dein > /dev/null 2>&1
 rm installer.sh
 if hash pip3 2>/dev/null; then
     pip3 install --user neovim
+    # pip3 install --user pynvim
 else
     echo "Install pip for python3"
 fi
