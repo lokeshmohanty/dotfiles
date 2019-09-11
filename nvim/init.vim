@@ -385,6 +385,8 @@ let mapleader=";"
 nmap <Leader>f :Lexplore<CR>
 inoremap {<CR> {}<ESC>i<CR><ESC>O
 nnoremap <M-b> :buffers<CR>:buffer<Space>
+nnoremap <M-v> :buffers<CR>:vsplit<Space>#
+nnoremap <M-s> :buffers<CR>:split<Space>#
 " nnoremap <Leader>t :Terminal<CR>
 
 nnoremap <Leader>> :vertical resize +5<CR>
