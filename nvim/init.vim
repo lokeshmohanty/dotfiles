@@ -36,7 +36,7 @@ if dein#load_state(expand('~/.local/share/dein'))
     " call dein#add('mattn/webapi-vim')
 
     " For git tools within vim
-    " call dein#add('tpope/vim-fugitive')     " :Gblame, :Gbrowse {using git tools with vim}
+    call dein#add('tpope/vim-fugitive')     " :Gblame, :Gbrowse {using git tools with vim}
     " call dein#add('shumphrey/fugitive-gitlab.vim')
     " call dein#add('tpope/vim-rhubarb')
     " call dein#add('tommcdo/vim-fubitive')
@@ -125,6 +125,8 @@ endif
 "
 " :set number => show line numbers
 " :set ruler => show cursor position at bottom right corner
+"
+" <C-r><C-f> => recall the filename the cursor is on
 " =========================Learning[End]================================"
 
 " =========================Plugins[Start]================================"
@@ -293,9 +295,6 @@ set title				                  " Set window title
 set number				                " Show line numbers
 set showcmd				                " Show unfinished command
 
-" Trigger autoread when changing buffers or coming back to vim in terminal.
-au FocusGained,BufEnter * :silent! !
-
 " Highlight search results
 " set hlsearch				              
 set nohlsearch
@@ -403,14 +402,36 @@ nmap <silent> <Leader>j :wincmd j<CR>
 nmap <silent> <Leader>h :wincmd h<CR>
 nmap <silent> <Leader>l :wincmd l<CR>
 
+" Terminal 
+tnoremap <ESC> <C-\><C-n>
+" nnoremap <Leader>vt :vsplit|terminal<CR>
+" nnoremap <Leader>ht :split|terminal<CR>
+nnoremap <Leader>vt :vsplit term://bash<CR>
+nnoremap <Leader>ht :split term://bash<CR>
+nnoremap <Leader>t :edit term://bash<CR>
+
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
+
+" =================================================================
+"                              AUTOCOMMANDS
+" =================================================================
+
+" Trigger autoread when changing buffers or coming back to vim in terminal.
+au FocusGained,BufEnter * :silent! !
+
+" Automatically go to insert mode in terminal
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 
 "Below is to fix issues with the ABOVE mappings in quickfix window
 autocmd CmdwinEnter * nnoremap <CR> <CR>
 autocmd BufReadPost quickfix nnoremap <CR> <CR>
 
 
+
+" =================================================================
+" =================================================================
+" =================================================================
 "" AUTOCOMMANDS
 
 " Save whenever switching windows or leaving vim. This is useful when running
