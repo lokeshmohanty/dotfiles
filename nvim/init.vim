@@ -409,9 +409,10 @@ tnoremap <ESC> <C-\><C-n>
 nnoremap <Leader>q :bdelete<CR>
 " nnoremap <Leader>vt :vsplit|terminal<CR>
 " nnoremap <Leader>ht :split|terminal<CR>
-nnoremap <Leader>vt :vsplit term://bash<CR>
-nnoremap <Leader>ht :split term://bash<CR>
-nnoremap <Leader>t :edit term://bash<CR>
+nnoremap <Leader>tv :vsplit term://bash<CR>
+nnoremap <Leader>th :split term://bash<CR>
+nnoremap <Leader>tt :tabnew term://bash<CR>
+nnoremap <Leader>te :edit term://bash<CR>
 
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
