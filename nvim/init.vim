@@ -404,8 +404,9 @@ nmap <silent> <Leader>j :wincmd j<CR>
 nmap <silent> <Leader>h :wincmd h<CR>
 nmap <silent> <Leader>l :wincmd l<CR>
 
-" Terminal 
+" -----Terminal 
 tnoremap <ESC> <C-\><C-n>
+nnoremap <Leader>q :bdelete<CR>
 " nnoremap <Leader>vt :vsplit|terminal<CR>
 " nnoremap <Leader>ht :split|terminal<CR>
 nnoremap <Leader>vt :vsplit term://bash<CR>
