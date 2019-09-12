@@ -113,6 +113,7 @@ endif
 " gU => Upper case mode [U:line, rest same as other movement shortcuts]
 " gu => lower case mode [u:line, rest same as other movement shortcuts]
 "
+"
 " ZZ => :x ; ZQ => :q!
 "
 " ----------Command Mode-------------
@@ -125,6 +126,16 @@ endif
 "
 " :set number => show line numbers
 " :set ruler => show cursor position at bottom right corner
+"
+"
+" " Buffers
+" :bwipe => wipes the buffer along with memory 
+" :bdelete => deletes the buffer and not the memory
+" :ls, :buffers => shows a list of buffers
+" :buffer <buff-name> => opens the buffer in current window
+" :sb <buff-name> => opens the buffer in a split
+" :vertical sb <buff-name> => opens the buffer in a vertical split
+"
 "
 " <C-r><C-f> => recall the filename the cursor is on
 " =========================Learning[End]================================"
@@ -380,7 +391,7 @@ let g:netrw_winsize = 25
 " =================================================================
 
 " Define <semi-colon> as leader
-let mapleader=";"
+let mapleader=" "
 
 nmap <Leader>f :Lexplore<CR>
 inoremap {<CR> {}<ESC>i<CR><ESC>O
@@ -406,7 +417,7 @@ nmap <silent> <Leader>l :wincmd l<CR>
 
 " -----Terminal 
 tnoremap <ESC> <C-\><C-n>
-nnoremap <Leader>q :bdelete<CR>
+nnoremap <Leader>q :bwipe!<CR>
 " nnoremap <Leader>vt :vsplit|terminal<CR>
 " nnoremap <Leader>ht :split|terminal<CR>
 nnoremap <Leader>tv :vsplit term://bash<CR>
