@@ -14,10 +14,13 @@ if dein#load_state(expand('~/.local/share/dein'))
         call dein#add('roxma/vim-hug-neovim-rpc')
     endif
 
+    call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+
     " " Autocomplete
-    call dein#add('Shougo/deoplete.nvim', { 'build': ':UpdateRemotePlugins' })       " Requires :UpdateRemotePlugins
-    call dein#add('Shougo/denite.nvim', { 'build': ':UpdateRemotePlugins' })         " Unites all interfaces, a bit like fuzzy finder but more
+    " call dein#add('Shougo/deoplete.nvim', { 'build': ':UpdateRemotePlugins' })       " Requires :UpdateRemotePlugins
+    " call dein#add('Shougo/denite.nvim', { 'build': ':UpdateRemotePlugins' })         " Unites all interfaces, a bit like fuzzy finder but more
     " call dein#add('neoclide/coc.nvim')
+    call dein#add('Quramy/tsuquyomi')
 
 
     call dein#add('itchyny/lightline.vim')
@@ -70,8 +73,8 @@ if dein#load_state(expand('~/.local/share/dein'))
     " Javascript Linter
     call dein#add('dense-analysis/ale')
     call dein#add('leafgarland/typescript-vim')
-    call dein#add('mhartington/nvim-typescript', {'build': './install.sh'})   " Requires :UpdateRemotePlugins
-    call dein#add('HerringtonDarkholme/yats.vim')   " syntax file required by mharington/nvim-typescript
+    " call dein#add('mhartington/nvim-typescript', {'build': './install.sh'})   " Requires :UpdateRemotePlugins, :TSDoc 
+    " call dein#add('HerringtonDarkholme/yats.vim')   " syntax file required by mharington/nvim-typescript
 
     " Repeat plugin commands
     " call dein#add('tpope/vim-repeat')
@@ -88,6 +91,9 @@ if dein#load_state(expand('~/.local/share/dein'))
     call dein#end()
     call dein#save_state()
 endif
+
+" To remove uneeded repositories
+" call map(dein#check_clean(), "delete(v:val, 'rf')")
 
 " =========================Learning[Start]================================"
 "
@@ -294,6 +300,41 @@ let g:ale_fixers = {
 let g:ale_fix_on_save = 1
 
 " autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
+
+
+" ------------------------------- Tsuquyomi -------------------------------------
+"
+" <C-x><C-o> {insert mode} => completion
+" <C-]> => got to definition, alternative: `:TsuquyomiDefinition` or
+" `:TsuDefinition`
+" <C-t> => last location <C-]> was typed
+" <C-^> => references, alternative: `:TsuReferences`
+" :TsuSearch {keyword} => get list of locations containing the keyword
+"
+" :TsuGeterr, :TsuGeterrProject, :TsuQuickFix
+"
+" :TsuquyomiReloadProject
+"
+"
+
+" To prevent popup menu for omni-completion
+" autocmd FileType typescript setlocal completeopt-=menu
+
+" To show signature in popup menu, slows completion
+" let g:tsuquyomi_completion_detail = 1
+
+" To show signature in preview window
+" autocmd FileType typescript setlocal completeopt+=menu,preview
+
+let g:tsuquyomi_shortest_import_path = 1
+
+" To rename a symbol, 2nd one is for comments as well
+autocmd FileType typescript nmap <buffer> <Leader>e <Plug>(TsuquyomiRenameSymbol)
+autocmd FileType typescript nmap <buffer> <Leader>E <Plug>(TsuquyomiRenameSymbolC)
+
+" To veiw definition as a tooltip
+" autocmd FileType typescript nmap <buffer> <Leader>q : <C-u>echo tsuquyomi#hint()<CR> 
+" ----------------------------------------------------------------------------------
 
 
 " " Decrease updatetime to a smaller value
