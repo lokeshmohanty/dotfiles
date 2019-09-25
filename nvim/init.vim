@@ -113,8 +113,11 @@ endif
 " gU => Upper case mode [U:line, rest same as other movement shortcuts]
 " gu => lower case mode [u:line, rest same as other movement shortcuts]
 "
-"
 " ZZ => :x ; ZQ => :q!
+"
+"
+" CTRL-w H/J/K/L => moves the current window to far left/down/up/right
+"
 "
 " ----------Command Mode-------------
 " :set noincsearch => disables display of matches while typing for search
@@ -126,7 +129,24 @@ endif
 "
 " :set number => show line numbers
 " :set ruler => show cursor position at bottom right corner
+" 
+" :set noscrollbind => to prevent scrollbind in diff mode
 "
+" :set modifiable => file cannot be edited
+" :set write => file can be edited
+"
+" :saveas <filename> => writes current buffer to filename and edits that file
+" :file <filename> => same as saveas except that `filename` is not saved
+"
+" :close => closes the current window without exiting vim
+" :only => closes all windows except the current one
+" :split => opens the current file in a new window
+" :new => opens an emplty file in a new window
+" :[range]split <file> => opens file in a new window of height [range]
+" :qall /:wall /:wqall => quit/write all windows
+"
+" :diffsplit <file> => enter diff mode from within vim
+" :diffpatch <file.diff> => patches the current file without saving
 "
 " " Buffers
 " :bwipe => wipes the buffer along with memory 
@@ -138,6 +158,24 @@ endif
 "
 "
 " <C-r><C-f> => recall the filename the cursor is on
+"
+"
+"
+"
+"
+"
+"
+"
+"
+"
+" vim -R file (or) view file => read-only file, cannot be written but can be editted
+" vim -M file => non modifiable file, cannot be edited 
+"
+" vim -o ...file => open all files in splits
+" vim -O ...file => open all files in vertical splits
+" vim -d file1 file2 => diff mode
+"
+"
 " =========================Learning[End]================================"
 
 " =========================Plugins[Start]================================"
@@ -352,7 +390,7 @@ let g:ale_fixers = {
 " --------------------------------------------
 
 " ------------- Netrw -------------------
-" let g:netrw_liststyle = 0         " Choose the directory view (hit i to cycle through the options when netrw is open)
+let g:netrw_liststyle = 3         " Choose the directory view (hit i to cycle through the options when netrw is open)
 let g:netrw_banner = 0            " To remove the banner (hit I to remove temporarily)
 " let g:netrw_browse_split = 0      " Open file in the previous window
 let g:netrw_winsize = 25
@@ -400,8 +438,8 @@ nnoremap <M-v> :buffers<CR>:vsplit<Space>#
 nnoremap <M-s> :buffers<CR>:split<Space>#
 " nnoremap <Leader>t :Terminal<CR>
 
-nnoremap <Leader>> :vertical resize +5<CR>
-nnoremap <Leader>< :vertical resize -5<CR>
+nnoremap <Leader>> :vertical resize +5<CR>        " [range]<CTRL-w>+        , [range]<CTRL-w>_ => sets height to range
+nnoremap <Leader>< :vertical resize -5<CR>        " [range]<CTRL-w>-
 nnoremap <Leader>+ :resize +5<CR>
 nnoremap <Leader>- :resize -5<CR>
 " nnoremap <silent> <Leader>+ :exe 'resize ' . (winheight(0) * 3/2)<CR>
