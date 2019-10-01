@@ -31,9 +31,9 @@ if dein#load_state(expand('~/.local/share/dein'))
     call dein#add('terryma/vim-multiple-cursors')
 
     " Plugin for file directory management
-    " call dein#add('Shougo/defx.nvim')
-    " call dein#add('scrooloose/nerdtree')
-    " call dein#add('Xuyuanp/nerdtree-git-plugin')
+    call dein#add('Shougo/defx.nvim')
+    call dein#add('kristijanhusak/defx-git')
+    call dein#add('kristijanhusak/defx-icons')
 
     " call dein#add('tpope/vim-surround')
     " call dein#add('mattn/webapi-vim')
@@ -43,6 +43,13 @@ if dein#load_state(expand('~/.local/share/dein'))
     " call dein#add('shumphrey/fugitive-gitlab.vim')
     " call dein#add('tpope/vim-rhubarb')
     " call dein#add('tommcdo/vim-fubitive')
+
+    " Pairs of handy bracket mappings
+    call dein#add('tpope/vim-unimpaired')
+
+    " Repeat plugin commands
+    call dein#add('tpope/vim-repeat')
+
 
     " For folding
     " call dein#add('nelstrom/vim-markdown-folding')
@@ -75,10 +82,6 @@ if dein#load_state(expand('~/.local/share/dein'))
     call dein#add('leafgarland/typescript-vim')
     " call dein#add('mhartington/nvim-typescript', {'build': './install.sh'})   " Requires :UpdateRemotePlugins, :TSDoc 
     " call dein#add('HerringtonDarkholme/yats.vim')   " syntax file required by mharington/nvim-typescript
-
-    " Repeat plugin commands
-    " call dein#add('tpope/vim-repeat')
-    " call dein#add('tpope/vim-unimpaired')
 
     " Plugins to try
     " call dein#add('junegunn/fzf')
@@ -209,71 +212,6 @@ autocmd FileType denite-filter
       \   call deoplete#custom#buffer_option('auto_complete', v:false)
 " --------------------------------------------
 
-"-----------------  Denite -----------------------
-" call denite#custom#option('default', {
-"       \ 'prompt': '❯'
-"       \ })
-"
-" call denite#custom#var('file/rec', 'command',
-"       \ ['fd', '-H', '--full-path'])
-" call denite#custom#var('grep', 'command', ['rg'])
-" call denite#custom#var('grep', 'default_opts',
-"       \ ['--hidden', '--vimgrep', '--smart-case'])
-" call denite#custom#var('grep', 'recursive_opts', [])
-" call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-" call denite#custom#var('grep', 'separator', ['--'])
-" call denite#custom#var('grep', 'final_opts', [])
-"
-" autocmd FileType denite call s:denite_settings()
-"
-" function! s:denite_settings() abort
-"   nnoremap <silent><buffer><expr> <CR>
-"         \ denite#do_map('do_action')
-"   nnoremap <silent><buffer><expr> <C-v>
-"         \ denite#do_map('do_action', 'vsplit')
-"   nnoremap <silent><buffer><expr> d
-"         \ denite#do_map('do_action', 'delete')
-"   nnoremap <silent><buffer><expr> p
-"         \ denite#do_map('do_action', 'preview')
-"   nnoremap <silent><buffer><expr> <Esc>
-"         \ denite#do_map('quit')
-"   nnoremap <silent><buffer><expr> q
-"         \ denite#do_map('quit')
-"   nnoremap <silent><buffer><expr> i
-"         \ denite#do_map('open_filter_buffer')
-" endfunction
-"
-" autocmd FileType denite-filter call s:denite_filter_settings()
-"
-" function! s:denite_filter_settings() abort
-"   nmap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
-" endfunction
-"
-" nnoremap <C-p> :<C-u>Denite file/rec -start-filter<CR>
-" nnoremap <leader>s :<C-u>Denite buffer<CR>
-" nnoremap <leader>8 :<C-u>DeniteCursorWord grep:.<CR>
-" nnoremap <leader>/ :<C-u>Denite grep:.<CR>
-" nnoremap <leader><Space>/ :<C-u>DeniteBufferDir grep:.<CR>
-" nnoremap <leader>d :<C-u>DeniteBufferDir file/rec -start-filter<CR>
-" nnoremap <leader>r :<C-u>Denite -resume -cursor-pos=+1<CR>
-" nnoremap <leader><C-r> :<C-u>Denite register:.<CR>
-" nnoremap <leader>g :<C-u>Denite gitstatus<CR>
-"
-" hi link deniteMatchedChar Special
-
-" --------------------------------------------
-
-" ----------------Settings for syntastic------
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
-" --------------------------------------------
-
 "-----------  Vim-instant-markdown -----------
 " To prevent update of display in realtime of vim-instant-markdown
 let g:instant_markdown_slow = 1
@@ -300,13 +238,14 @@ let g:ale_fixers = {
 let g:ale_fix_on_save = 1
 
 " autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
+" --------------------------------------------
 
 
 " ------------------------------- Tsuquyomi -------------------------------------
 "
 " <C-x><C-o> {insert mode} => completion
-" <C-]> => got to definition, alternative: `:TsuquyomiDefinition` or
-" `:TsuDefinition`
+" <C-]> => got to definition, alternative: `:TsuquyomiDefinition` or `:TsuDefinition`
+" :TsuGoBack => go to previous jump
 " <C-t> => last location <C-]> was typed
 " <C-^> => references, alternative: `:TsuReferences`
 " :TsuSearch {keyword} => get list of locations containing the keyword
@@ -332,19 +271,85 @@ let g:tsuquyomi_shortest_import_path = 1
 autocmd FileType typescript nmap <buffer> <Leader>e <Plug>(TsuquyomiRenameSymbol)
 autocmd FileType typescript nmap <buffer> <Leader>E <Plug>(TsuquyomiRenameSymbolC)
 
+" work around for jump to definition issue
+let g:tsuquyomi_use_local_typescript = 0
+
 " To veiw definition as a tooltip
 " autocmd FileType typescript nmap <buffer> <Leader>q : <C-u>echo tsuquyomi#hint()<CR> 
 " ----------------------------------------------------------------------------------
 
 
+"-------------------------------  Defx --------------------------------------------
+
+" [c => goes to next file with git status
+" ]c => goes to previous file with git status
+
+let g:loaded_netrwPlugin = 1     " disable netrw.vim
+
+nnoremap <Leader>f :Defx
+      \ -split=vertical
+      \ -winwidth=30 -direction=topleft
+      \ -columns=git:icons:indent:filename:type<CR>
+"       \ `expand('%:p:h')` -search=`expand('%:p')`<CR>
+
+augroup defxConfig
+  autocmd!
+  autocmd FileType defx call s:defx_my_settings()
+augroup END
+
+function! s:defx_my_settings() abort
+	  nnoremap <silent><buffer><expr> <CR> defx#do_action('drop')
+	  nnoremap <silent><buffer><expr> c defx#do_action('copy')
+	  nnoremap <silent><buffer><expr> m defx#do_action('move')
+	  nnoremap <silent><buffer><expr> p defx#do_action('paste')
+	  nnoremap <silent><buffer><expr> l defx#do_action('open')
+	  nnoremap <silent><buffer><expr> E defx#do_action('open', 'vsplit')
+	  nnoremap <silent><buffer><expr> P defx#do_action('open', 'pedit')
+	  nnoremap <silent><buffer><expr> o defx#do_action('open_or_close_tree')
+	  nnoremap <silent><buffer><expr> K defx#do_action('new_directory')
+	  nnoremap <silent><buffer><expr> N defx#do_action('new_file')
+	  nnoremap <silent><buffer><expr> M defx#do_action('new_multiple_files')
+	  nnoremap <silent><buffer><expr> C
+	  \ defx#do_action('toggle_columns',
+	  \                'mark:indent:icon:filename:type:size:time')
+	  nnoremap <silent><buffer><expr> S defx#do_action('toggle_sort', 'time')
+	  nnoremap <silent><buffer><expr> d defx#do_action('remove')
+	  nnoremap <silent><buffer><expr> r defx#do_action('rename')
+	  nnoremap <silent><buffer><expr> ! defx#do_action('execute_command')
+	  nnoremap <silent><buffer><expr> x defx#do_action('execute_system')
+	  nnoremap <silent><buffer><expr> yy defx#do_action('yank_path')
+	  nnoremap <silent><buffer><expr> . defx#do_action('toggle_ignored_files')
+	  nnoremap <silent><buffer><expr> ; defx#do_action('repeat')
+	  nnoremap <silent><buffer><expr> h defx#do_action('cd', ['..'])
+	  nnoremap <silent><buffer><expr> ~ defx#do_action('cd')
+	  nnoremap <silent><buffer><expr> q defx#do_action('quit')
+	  nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
+	  nnoremap <silent><buffer><expr> * defx#do_action('toggle_select_all')
+	  nnoremap <silent><buffer><expr> j line('.') == line('$') ? 'gg' : 'j'
+	  nnoremap <silent><buffer><expr> k line('.') == 1 ? 'G' : 'k'
+	  nnoremap <silent><buffer><expr> <C-l> defx#do_action('redraw')
+	  nnoremap <silent><buffer><expr> <C-g> defx#do_action('print')
+	  nnoremap <silent><buffer><expr> cd defx#do_action('change_vim_cwd')
+  " nnoremap <silent><buffer><expr> <CR> defx#do_action('open', 'wincmd w \| drop')
+  " nnoremap <silent><buffer><expr> M defx#do_action('new_multiple_files')
+  " nnoremap <silent><buffer><expr> ~ defx#do_action('cd', [getcwd()])
+  " nnoremap <silent><buffer><expr> C defx#do_action('toggle_columns', 'mark:filename:type:size:time')
+  " nnoremap <silent><buffer><expr> S defx#do_action('toggle_sort', 'time')
+  " nnoremap <silent><buffer><expr> e defx#do_action('call', 'OpenRanger')
+  " nnoremap <silent><buffer><expr> e defx#do_action('call', 'DefxExternalExplorer')
+endfunction
+" ----------------------------------------------------------------------------------------
+
+
+"-----------  Texlive  ----------------------
 " " Decrease updatetime to a smaller value
 " autocmd Filetype tex setl updatetime=1
 " let g:livepreview_previewer = 'evince'
+" -------------------------------------------------------
 
-" --------------------------------------------
 
-"-----------  Plulgin -----------
-" --------------------------------------------
+"-------------------------------  Plulgin ------------------------------
+" -----------------------------------------------------------------------------
 
 " =========================Plugins[End]================================"
 
@@ -424,18 +429,18 @@ colorscheme carbonized-dark
 " Visually hide the annoying tilde signs
 " hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
 
-" ------------- Js linting -------------------
-let g:ale_fixers = {
-  \'javascript': ['eslint']
-  \}
-" --------------------------------------------
-
 " ------------- Netrw -------------------
-let g:netrw_liststyle = 3         " Choose the directory view (hit i to cycle through the options when netrw is open)
-let g:netrw_banner = 0            " To remove the banner (hit I to remove temporarily)
-" let g:netrw_browse_split = 0      " Open file in the previous window
-let g:netrw_winsize = 25
+" let g:netrw_liststyle = 3         " Choose the directory view (hit i to cycle through the options when netrw is open)
+" let g:netrw_banner = 0            " To remove the banner (hit I to remove temporarily)
+" let g:netrw_winsize = 25
 " let g:netrw_altv = 1      " To split towards right
+
+" ++++ Mappings
+" nmap <Leader>f :Lexplore<CR>
+
+" ++++ Autocommands
+" Wipe the irritating files created by netrw
+" autocmd FileType netrw setl bufhidden=wipe
 
 " To open netrw along with vim
 " augroup ProjectDrawer
@@ -472,7 +477,6 @@ let g:netrw_winsize = 25
 " Define <semi-colon> as leader
 let mapleader=" "
 
-nmap <Leader>f :Lexplore<CR>
 inoremap {<CR> {}<ESC>i<CR><ESC>O
 nnoremap <M-b> :buffers<CR>:buffer<Space>
 nnoremap <M-v> :buffers<CR>:vsplit<Space>#
@@ -517,11 +521,9 @@ au FocusGained,BufEnter * :silent! !
 " Automatically go to insert mode in terminal
 au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 
-"Below is to fix issues with the ABOVE mappings in quickfix window
+" Below is to fix issues with the ABOVE mappings in quickfix window
 autocmd CmdwinEnter * nnoremap <CR> <CR>
 autocmd BufReadPost quickfix nnoremap <CR> <CR>
-
-
 
 " =================================================================
 " =================================================================
