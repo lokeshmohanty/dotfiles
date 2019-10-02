@@ -23,3 +23,28 @@
   - Download a [font](http://nerdfonts.com/)
   - Unzip and copy to `~/fonts/`
   - Run `fc-cache -fv` to manually rebuild the font cache
+
+
+## Git
+
+  - To force pull a remote in git
+  ```
+    git fetch origin master
+    git reset --hard origin/master
+  ```
+  - To force a pull from remote while maintaining local commits(local commits stored in new-branch)
+  ```
+    git checkout master
+    git branch new-branch
+    git fetch --all
+    git reset --hard origin/master
+  ```
+
+  - To stash uncommitted changes
+  ```
+    git stash
+  ```
+  - To reapply stashed changes
+  ```
+    git stash pop
+  ```

@@ -286,11 +286,12 @@ let g:tsuquyomi_use_local_typescript = 0
 
 let g:loaded_netrwPlugin = 1     " disable netrw.vim
 
-nnoremap <Leader>f :Defx
-      \ -split=vertical
-      \ -winwidth=30 -direction=topleft
-      \ -columns=git:icons:indent:filename:type<CR>
+" nnoremap <Leader>f :Defx
+"       \ -split=vertical
+"       \ -winwidth=30 -direction=topleft
+"       \ -columns=git:icons:indent:filename:type
 "       \ `expand('%:p:h')` -search=`expand('%:p')`<CR>
+nnoremap <Leader>f :Defx -split=vertical -winwidth=30 -direction=topleft -columns=git:icons:indent:filename:type `expand('%:p:h')` -search=`expand('%:p')`<CR>
 
 augroup defxConfig
   autocmd!
