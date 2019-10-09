@@ -4,3 +4,5 @@
 
 PATH=$PATH:$HOME/.AndroidSDK:$HOME/.AndroidSDK/tools:$HOME/.AndroidSDK/bin
 export PATH
+
+setxkbmap -option caps:swapescape
