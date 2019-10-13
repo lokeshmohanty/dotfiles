@@ -48,7 +48,8 @@ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh >
 sh ./installer.sh ~/.local/share/dein > /dev/null 2>&1
 rm installer.sh
 if hash pip3 2>/dev/null; then
-    pip3 install --user neovim
+    python3 -m pip install --user neovim
+    python3 -m pip install --user pynvim
     # pip3 install --user pynvim
 else
     echo "Install pip for python3"
