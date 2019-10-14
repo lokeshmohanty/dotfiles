@@ -48,3 +48,13 @@
   ```
     git stash pop
   ```
+
+# Ubuntu
+
+## dpkg
+
+  - Resolve `trying to overwrite error`
+  ```
+    sudo dpkg -i --force-overwrite <pkg-name>
+    sudo apt -f install
+  ```
