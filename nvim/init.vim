@@ -187,6 +187,50 @@ endif
 "
 " =========================Learning[End]================================"
 
+
+" =================================================================
+"                              MAPPINGS
+" =================================================================
+
+" Define <space> as leader
+nnoremap <Space> <Nop>
+let mapleader=" "
+
+inoremap {<CR> {}<ESC>i<CR><ESC>O
+nnoremap <M-b> :buffers<CR>:buffer<Space>
+nnoremap <M-v> :buffers<CR>:vsplit<Space>#
+nnoremap <M-s> :buffers<CR>:split<Space>#
+" nnoremap <Leader>t :Terminal<CR>
+
+nnoremap <Leader>> :vertical resize +5<CR>        " [range]<CTRL-w>+        , [range]<CTRL-w>_ => sets height to range
+nnoremap <Leader>< :vertical resize -5<CR>        " [range]<CTRL-w>-
+nnoremap <Leader>+ :resize +5<CR>
+nnoremap <Leader>- :resize -5<CR>
+" nnoremap <silent> <Leader>+ :exe 'resize ' . (winheight(0) * 3/2)<CR>
+" nnoremap <silent> <Leader>- :exe 'resize ' . (winheight(0) * 2/3)<CR>
+" nnoremap <silent> <Leader>> :exe 'vertical resize ' . (winwidth(0) * 3/2)<CR>
+" nnoremap <silent> <Leader>< :exe 'vertical resize ' . (winwidth(0) * 2/3)<CR>
+
+" Enable faster navigation
+nmap <silent> <Leader>k :wincmd k<CR>
+nmap <silent> <Leader>j :wincmd j<CR>
+nmap <silent> <Leader>h :wincmd h<CR>
+nmap <silent> <Leader>l :wincmd l<CR>
+
+" -----Terminal 
+tnoremap <ESC> <C-\><C-n>
+nnoremap <Leader>q :bwipe!<CR>
+" nnoremap <Leader>vt :vsplit|terminal<CR>
+" nnoremap <Leader>ht :split|terminal<CR>
+nnoremap <Leader>tv :vsplit term://bash<CR>
+nnoremap <Leader>th :split term://bash<CR>
+nnoremap <Leader>tt :tabnew term://bash<CR>
+nnoremap <Leader>te :edit term://bash<CR>
+
+" Force saving files that require root permission
+cnoremap w!! w !sudo tee > /dev/null %
+
+
 " =========================Plugins[Start]================================"
 " -----------------Lightline----------------
 let g:lightline = {
@@ -468,49 +512,6 @@ colorscheme carbonized-dark
 " autocmd FocusGained * call ToggleRelativeOn()
 " autocmd InsertEnter * call ToggleRelativeOn()
 " autocmd InsertLeave * call ToggleRelativeOn()
-
-
-
-" =================================================================
-"                              MAPPINGS
-" =================================================================
-
-" Define <semi-colon> as leader
-let mapleader=" "
-
-inoremap {<CR> {}<ESC>i<CR><ESC>O
-nnoremap <M-b> :buffers<CR>:buffer<Space>
-nnoremap <M-v> :buffers<CR>:vsplit<Space>#
-nnoremap <M-s> :buffers<CR>:split<Space>#
-" nnoremap <Leader>t :Terminal<CR>
-
-nnoremap <Leader>> :vertical resize +5<CR>        " [range]<CTRL-w>+        , [range]<CTRL-w>_ => sets height to range
-nnoremap <Leader>< :vertical resize -5<CR>        " [range]<CTRL-w>-
-nnoremap <Leader>+ :resize +5<CR>
-nnoremap <Leader>- :resize -5<CR>
-" nnoremap <silent> <Leader>+ :exe 'resize ' . (winheight(0) * 3/2)<CR>
-" nnoremap <silent> <Leader>- :exe 'resize ' . (winheight(0) * 2/3)<CR>
-" nnoremap <silent> <Leader>> :exe 'vertical resize ' . (winwidth(0) * 3/2)<CR>
-" nnoremap <silent> <Leader>< :exe 'vertical resize ' . (winwidth(0) * 2/3)<CR>
-
-" Enable faster navigation
-nmap <silent> <Leader>k :wincmd k<CR>
-nmap <silent> <Leader>j :wincmd j<CR>
-nmap <silent> <Leader>h :wincmd h<CR>
-nmap <silent> <Leader>l :wincmd l<CR>
-
-" -----Terminal 
-tnoremap <ESC> <C-\><C-n>
-nnoremap <Leader>q :bwipe!<CR>
-" nnoremap <Leader>vt :vsplit|terminal<CR>
-" nnoremap <Leader>ht :split|terminal<CR>
-nnoremap <Leader>tv :vsplit term://bash<CR>
-nnoremap <Leader>th :split term://bash<CR>
-nnoremap <Leader>tt :tabnew term://bash<CR>
-nnoremap <Leader>te :edit term://bash<CR>
-
-" Force saving files that require root permission
-cnoremap w!! w !sudo tee > /dev/null %
 
 " =================================================================
 "                              AUTOCOMMANDS
