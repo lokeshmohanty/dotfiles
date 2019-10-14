@@ -232,6 +232,24 @@ cnoremap w!! w !sudo tee > /dev/null %
 
 
 " =========================Plugins[Start]================================"
+
+" -----------------Deoplete----------------
+" Enable deoplete at startup
+let g:deoplete#enable_at_startup = 1
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+" Disable deoplete for denite buffer
+autocmd FileType denite-filter
+      \   call deoplete#custom#buffer_option('auto_complete', v:false)
+" --------------------------------------------
+
+
+"-------------------------------  Fugitive ------------------------------
+nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gp :Gpush<CR>
+
+" -----------------------------------------------------------------------------
+
 " -----------------Lightline----------------
 let g:lightline = {
       \ 'colorscheme': 'carbonized_dark',
@@ -244,16 +262,6 @@ let g:lightline = {
 "       \ 'left': "〉",
 "       \ 'right': "〈",
 "       \ }
-" --------------------------------------------
-
-" -----------------Deoplete----------------
-" Enable deoplete at startup
-let g:deoplete#enable_at_startup = 1
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-" Disable deoplete for denite buffer
-autocmd FileType denite-filter
-      \   call deoplete#custom#buffer_option('auto_complete', v:false)
 " --------------------------------------------
 
 "-----------  Vim-instant-markdown -----------
