@@ -14,13 +14,13 @@ if dein#load_state(expand('~/.local/share/dein'))
         call dein#add('roxma/vim-hug-neovim-rpc')
     endif
 
-    call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+    " call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
 
     " " Autocomplete
-    " call dein#add('Shougo/deoplete.nvim', { 'build': ':UpdateRemotePlugins' })       " Requires :UpdateRemotePlugins
-    " call dein#add('Shougo/denite.nvim', { 'build': ':UpdateRemotePlugins' })         " Unites all interfaces, a bit like fuzzy finder but more
+    call dein#add('Shougo/deoplete.nvim', { 'build': ':UpdateRemotePlugins' })       " Requires :UpdateRemotePlugins
+    call dein#add('Shougo/denite.nvim', { 'build': ':UpdateRemotePlugins' })         " Unites all interfaces, a bit like fuzzy finder but more
     " call dein#add('neoclide/coc.nvim')
-    call dein#add('Quramy/tsuquyomi')
+    " call dein#add('Quramy/tsuquyomi')
 
 
     call dein#add('itchyny/lightline.vim')
@@ -79,7 +79,7 @@ if dein#load_state(expand('~/.local/share/dein'))
 
     " Javascript Linter
     call dein#add('dense-analysis/ale')
-    call dein#add('leafgarland/typescript-vim')
+    " call dein#add('leafgarland/typescript-vim')
     " call dein#add('mhartington/nvim-typescript', {'build': './install.sh'})   " Requires :UpdateRemotePlugins, :TSDoc 
     " call dein#add('HerringtonDarkholme/yats.vim')   " syntax file required by mharington/nvim-typescript
 
@@ -287,7 +287,7 @@ let g:ale_fixers = {
        \ 'scss': ['prettier'],
        \ 'html': ['prettier']
        \ }
-let g:ale_fix_on_save = 1
+" let g:ale_fix_on_save = 1
 
 " autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 " --------------------------------------------
