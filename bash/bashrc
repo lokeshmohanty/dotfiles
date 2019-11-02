@@ -660,3 +660,5 @@ function __setprompt
 	PS4='\[${DARKGRAY}\]+\[${NOCOLOR}\] '
 }
 PROMPT_COMMAND='__setprompt'
+
+alias gtp="cd /home/Shared/Projects/"

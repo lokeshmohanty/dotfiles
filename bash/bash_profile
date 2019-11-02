@@ -2,7 +2,7 @@
 # runs your .bashrc and is recommended by the bash info pages.
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
-PATH=$PATH:$HOME/.AndroidSDK:$HOME/.AndroidSDK/tools:$HOME/.AndroidSDK/bin
+PATH=$PATH:$HOME/.local/bin
 export PATH
 
 setxkbmap -option caps:swapescape

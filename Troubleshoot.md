@@ -58,3 +58,15 @@
     sudo dpkg -i --force-overwrite <pkg-name>
     sudo apt -f install
   ```
+
+## Firewall
+
+  - Check allowed ports
+  ```
+  sudo ufw status verbose
+  ```
+
+  - Allow a port
+  ```
+  sudo ufw allow 3000/tcp
+  ```
