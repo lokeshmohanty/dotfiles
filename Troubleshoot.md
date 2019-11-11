@@ -49,6 +49,12 @@
     git stash pop
   ```
 
+## Haskell
+  - Install haskell
+  ```
+    wget -qO- https://get.haskellstack.org/ | sh
+  ```
+
 # Ubuntu
 
 ## dpkg
@@ -69,4 +75,12 @@
   - Allow a port
   ```
   sudo ufw allow 3000/tcp
+  ```
+
+# Tips
+
+## HardWare Info
+
+  ```
+    inxi -Fxz
   ```
