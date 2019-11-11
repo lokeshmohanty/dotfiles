@@ -57,6 +57,18 @@
 
 # Ubuntu
 
+## neovim
+
+  - Build from source
+  ```
+    make CMAKE_BUILD_TYPE=RelWithDebInfo
+    sudo make install
+  ```
+
+  - Dependencies
+  ```
+    sudo apt install cmake pkg-config libtool libtool-bin m4 automake gettext
+  ```
 ## dpkg
 
   - Resolve `trying to overwrite error`

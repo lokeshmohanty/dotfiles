@@ -661,4 +661,4 @@ function __setprompt
 }
 PROMPT_COMMAND='__setprompt'
 
-alias gtp="cd /home/Shared/Projects/"
+alias gtp="cd /home/lokesh/Shared/Projects/"
