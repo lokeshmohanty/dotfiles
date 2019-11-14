@@ -57,6 +57,12 @@
 
 # Ubuntu
 
+## Process
+  - check process
+  ```
+    sudo netstat -tnpl
+  ```
+
 ## neovim
 
   - Build from source
@@ -95,4 +101,22 @@
 
   ```
     inxi -Fxz
+  ```
+
+
+# Handy Commands
+
+  - Lock user
+  ```
+    gnome-screensaver-command -l
+  ```
+
+  - Unlock user
+  ```
+    loginctl unlock-session <session-id>
+  ```
+
+  - Get all sessions
+  ```
+    loginctl list-sessions --no-legend | while read id rest; do echo; loginctl show-session $id; done
   ```
