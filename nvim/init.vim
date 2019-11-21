@@ -31,7 +31,7 @@ if dein#load_state(expand('~/.local/share/dein'))
     call dein#add('terryma/vim-multiple-cursors')
 
     " Plugin for file directory management
-    call dein#add('Shougo/defx.nvim')
+    call dein#add('Shougo/defx.nvim', { 'build': ':UpdateRemotePlugins' })
     call dein#add('kristijanhusak/defx-git')
     call dein#add('kristijanhusak/defx-icons')
 
@@ -174,6 +174,8 @@ endif
 "
 "
 "
+" :mksession path/to/my-session-file.vim
+" nvim -S path/to/my-session-file.vim
 "
 "
 "

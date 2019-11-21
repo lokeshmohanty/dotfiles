@@ -97,12 +97,22 @@
 
 # Tips
 
-## HardWare Info
+## Miscellaneous
 
+  - Hardware Info
   ```
     inxi -Fxz
   ```
 
+  - Find processes
+  ```
+    sudo netstat -tnlp
+  ```
+
+  - Kill a process with pid
+  ```
+    sudo kill -9 <pid>
+  ```
 
 # Handy Commands
 
