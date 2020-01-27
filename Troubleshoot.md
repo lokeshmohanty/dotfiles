@@ -95,6 +95,12 @@
   sudo ufw allow 3000/tcp
   ```
 
+## Youtube-dl
+
+  - Download audio of a video from youtube
+  ```
+    youtube-dl --extract-audio --audio-format mp3 <url>
+  ```
 # Tips
 
 ## Miscellaneous
