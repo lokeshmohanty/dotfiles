@@ -48,6 +48,10 @@
   ```
     git stash pop
   ```
+  - To send a pull request to upstream (start is the commit from where you last pulled)
+  ```
+    git request-pull <start> <url> <end, default: HEAD>
+  ```
 
 ## Haskell
   - Install haskell
