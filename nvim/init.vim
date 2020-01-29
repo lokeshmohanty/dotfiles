@@ -2,7 +2,7 @@
     set nocompatible
 endif
 
-""""" " dein Plugin Manager
+" =============== dein Plugin Manager ==============================
 set runtimepath+=~/.local/share/dein/repos/github.com/Shougo/dein.vim
 if dein#load_state(expand('~/.local/share/dein'))
     call dein#begin(expand('~/.local/share/dein'))
@@ -19,7 +19,7 @@ if dein#load_state(expand('~/.local/share/dein'))
     " " Autocomplete
     call dein#add('Shougo/deoplete.nvim', { 'build': ':UpdateRemotePlugins' })       " Requires :UpdateRemotePlugins
     call dein#add('Shougo/denite.nvim', { 'build': ':UpdateRemotePlugins' })         " Unites all interfaces, a bit like fuzzy finder but more
-    " call dein#add('neoclide/coc.nvim')
+    " call dein#add('neoclide/coc.nvim', {'merge':0, 'rev': 'release'})
     " call dein#add('Quramy/tsuquyomi')
 
 
@@ -335,33 +335,34 @@ let g:tsuquyomi_use_local_typescript = 0
 
 
 "-----------------------------  Denite -------------------------------------------
-" if executable('rg')
-"   call denite#custom#var('file_rec', 'command', ['rg', '--files', '--glob', '!.git'])
-"   call denite#custom#var('grep', 'command', ['rg'])
-"   call denite#custom#var('grep', 'recursive_opts', [])
-"   call denite#custom#var('grep', 'final_opts', [])
-"   call denite#custom#var('grep', 'separator', ['--'])
-"   call denite#custom#var('grep', 'default_opts', ['--vimgrep', '--no-heading', '--ignore-case'])
-" else
-"   call denite#custom#var('file_rec', 'command',
-"       \ ['grep', '--follow', '--nocolor', '--nogroup', '-g', ''])
-" endif
-"
-" " allow grep source filtering on either path or text
-" call denite#custom#source('grep', 'converters', ['converter_abbr_word'])
-"
-" call denite#custom#map('insert', '<C-h>', '<denite:move_to_first_line>', 'noremap')
-" call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
-" call denite#custom#map('insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
-" call denite#custom#map('insert', '<C-l>', '<denite:move_to_last_line>', 'noremap')
-"
-" call denite#custom#option('default', 'prompt', '>')
-" call denite#custom#option('default', 'cursor_wrap', v:true)
-"
-" nnoremap <C-p> :Denite -direction=topleft file_rec<CR>
-" nnoremap <space>/ :Denite -direction=topleft grep<CR>
-" nnoremap <space>f :Denite -direction=topleft -no-quit -mode=normal grep:.<CR>
-" nnoremap <space>s :Denite -direction=topleft buffer<CR>
+
+nnoremap <C-p> :Denite -direction=topleft -start-filter file/rec<CR>
+nnoremap <Leader>/ :Denite -direction=topleft -start-filter grep<CR>
+nnoremap <Leader>F :Denite -direction=topleft -no-quit -mode=normal -start-filter grep:.<CR>
+nnoremap <Leader>s :Denite -direction=topleft -start-filter buffer<CR>
+
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> p denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q denite#do_map('quit')
+  nnoremap <silent><buffer><expr> <C-[> denite#do_map('quit')
+  nnoremap <silent><buffer><expr> <Space> denite#do_map('toggle_select').'j'
+endfunction
+
+autocmd FileType denite-filter call s:denite_filter_my_settings()
+function! s:denite_filter_my_settings() abort
+  inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
+
+  " quit _everything_ instead of just closing filter window with denite_filter_quit
+  imap <silent><buffer><expr> <C-[> denite#do_map('quit')
+  imap <silent><buffer><expr> <Esc> denite#do_map('quit')
+
+  " C-j/C-k to navigate denite buffer from filter
+  inoremap <silent><buffer> <C-j> <Esc><C-w>p:call cursor(line('.')+1,0)<CR><C-w>pA
+  inoremap <silent><buffer> <C-k> <Esc><C-w>p:call cursor(line('.')-1,0)<CR><C-w>pA
+endfunction
+
 
 "---------------------------------------------------------------------------------
 
