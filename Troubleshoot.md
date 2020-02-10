@@ -13,7 +13,7 @@
     eval "$(ssh-agent -s)"
   ```
 
-  - Add key to the agent
+  - Add key to the agent(private)
   ```
     ssh-add ~/.ssh/id_rsa
   ```
