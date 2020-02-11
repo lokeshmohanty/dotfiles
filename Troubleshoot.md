@@ -124,8 +124,17 @@
     sudo kill -9 <pid>
   ```
 
+  - View running process
+  ```
+    ps -aux
+  ```
+
+  - View installed locale: `locale -a`
+  - Setup locale: `echo "LANG=en_US.UTF-8" > /etc/locale.conf`
+
 # Handy Commands
 
+## Ubuntu
   - Lock user
   ```
     gnome-screensaver-command -l
