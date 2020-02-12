@@ -514,6 +514,9 @@ colorscheme carbonized-dark
 " set background=dark
 " let g:enable_bold_font = 1
 
+" make neovim transparent
+hi Normal guibg=NONE ctermbg=NONE
+
 " Visually hide the annoying tilde signs
 " hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
 
