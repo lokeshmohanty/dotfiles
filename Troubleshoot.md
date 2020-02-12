@@ -24,6 +24,8 @@
   - Unzip and copy to `~/fonts/`
   - Run `fc-cache -fv` to manually rebuild the font cache
 
+  - If icons appear as rectangles then install Font-awesome and restart
+
 
 ## Git
 
