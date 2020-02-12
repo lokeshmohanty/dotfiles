@@ -1,7 +1,5 @@
-
-import System.IO
+import System.IO (Handle, hPutStrLn)
 import System.Exit
--- import System.Taffybar.Hooks.PagerHints (pagerHints)
 
 import qualified Data.List as L
 
@@ -11,12 +9,11 @@ import XMonad.Actions.UpdatePointer
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers
-import XMonad.Hooks.SetWMName
+import XMonad.Hooks.ManageHelpers(doFullFloat, doCenterFloat, isFullscreen, isDialog)
 import XMonad.Hooks.EwmhDesktops (ewmh)
 
 import XMonad.Layout.Gaps
-import XMonad.Layout.Fullscreen
+import XMonad.Layout.Fullscreen (fullscreenFull, fullscreenEventHook)
 import XMonad.Layout.BinarySpacePartition as BSP
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Tabbed
@@ -32,145 +29,34 @@ import XMonad.Layout.WindowNavigation
 import XMonad.Layout.ZoomRow
 
 import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Util.Cursor
 
 import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
- 
 import XMonad.Actions.CycleWS
-
-
--- import System.IO (Handle, hPutStrLn)
--- import XMonad.Hooks.Minimize
--- import XMonad.Hooks.ManageHelpers(doFullFloat, doCenterFloat, isFullscreen, isDialog)
--- import XMonad.Util.EZConfig (additionalKeys, additionalMouseBindings)
--- import XMonad.Config.Desktop
--- import XMonad.Config.Azerty
--- import XMonad.Actions.SpawnOn
--- import XMonad.Actions.CycleWS
--- import XMonad.Hooks.UrgencyHook
--- import qualified Codec.Binary.UTF8.String as UTF8
 -- import qualified XMonad.Actions.DynamicWorkspaceOrder as DO
-
-
--- import XMonad.Layout.Fullscreen (fullscreenFull)
--- import XMonad.Layout.ResizableTile
--- import XMonad.Layout.Cross(simpleCross)
--- import XMonad.Layout.Spiral(spiral)
--- import XMonad.Layout.Grid
 -- import XMonad.Layout.IndependentScreens
--- import XMonad.Layout.Minimize
--- import XMonad.Layout.CenteredMaster(centerMaster)
 --
--- import qualified Data.ByteString as B
---
--- import Control.Monad (liftM2)
-
-------------------------------------------------------------------------
--- Run xmonad with all the defaults we set up.
---
-
--- main = do
---   xmproc <- spawnPipe ("xmobar " ++ myXmobarrc)
---   xmonad $ defaults
---
---
--- main = do
---   xmproc <- spawnPipe "xmobar ~/.xmonad/xmobarrc.hs"
---   -- xmproc <- spawnPipe "taffybar"
---   xmonad $ docks
---          $ withNavigation2DConfig myNav2DConf
---          $ additionalNav2DKeys (xK_Up, xK_Left, xK_Down, xK_Right)
---                                [
---                                   (mod4Mask,               windowGo  )
---                                 , (mod4Mask .|. shiftMask, windowSwap)
---                                ]
---                                False
---          $ ewmh
---          -- $ pagerHints -- uncomment to use taffybar
---          $ myDefaults {
---          logHook = dynamicLogWithPP xmobarPP {
---                   ppCurrent = xmobarColor xmobarCurrentWorkspaceColor "" . wrap "[" "]"
---                 , ppTitle = xmobarColor xmobarTitleColor "" . shorten 50
---                 , ppSep = "   "
---                 , ppOutput = hPutStrLn xmproc
---          } >> updatePointer (0.75, 0.75) (0.75, 0.75)
---       }
-
-main = do
-  xmonad $ docks
-         $ withNavigation2DConfig myNav2DConf
-         $ additionalNav2DKeys (xK_Up, xK_Left, xK_Down, xK_Right)
-                               [
-                                  (mod4Mask,               windowGo  )
-                                , (mod4Mask .|. shiftMask, windowSwap)
-                               ]
-                               False
-         $ ewmh myDefaults
-
-------------------------------------------------------------------------
--- A structure containing your configuration settings, overriding
--- fields in the default config. Any you don't override, will
--- use the defaults defined in xmonad/XMonad/Config.hs
---
--- No need to modify this.
---
-
-myDefaults = def {
-          terminal            = myTerminal
-        , focusFollowsMouse   = myFocusFollowsMouse
-        , borderWidth         = myBorderWidth
-        , modMask             = myModMask
-        , workspaces          = myWorkspaces
-        , normalBorderColor   = myNormalBorderColor
-        , focusedBorderColor  = myFocusedBorderColor
-
-        -- key bindings
-        , keys                = myKeys
-        , mouseBindings       = myMouseBindings
-
-        -- hooks, layouts
-        , layoutHook          = myLayout
-        -- , handleEventHook     = fullscreenEventHook <+> docksEventHook
-        -- , handleEventHook     = fullscreenEventHook <+> docksEventHook <+> minimizeEventHook
-        -- , handleEventHook     = fullscreenEventHook
-        , manageHook          = manageDocks <+> myManageHook
-        , startupHook         = myStartupHook
-        }
 
 ------------------------------------------------------------------------
 -- My Configuration
 --
 
-myTerminal = "xfce4-terminal"
+myTerminal = "st"
 
 -- Focus rules
 -- True if your focus should follow your mouse cursor.
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = False
 
--- Command to lock the screen or show the screensaver.
-myScreensaver = "slimlock"
-
--- The command to take a selective screenshot, where you select
--- what you'd like to capture on the screen.
-mySelectScreenshot = "select-screenshot"
-
--- The command to take a fullscreen screenshot.
-myScreenshot = "xfce4-screenshooter"
-
--- The command to use as a launcher, to launch commands that don't have
--- preset keybindings.
-myLauncher = "rofi -show run"
-
 ------------------------------------------------------------------------
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1: term","2: web","3: code","4: media"] ++ map show [5..9]
+myWorkspaces = ["1: TERM","2: WEB","3: CODE","4: OTHER"] ++ map show [5..9]
 
 
 ------------------------------------------------------------------------
@@ -188,11 +74,11 @@ myWorkspaces = ["1: term","2: web","3: code","4: media"] ++ map show [5..9]
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
-    [ className =? "chromium"                     --> doShift "2:web"
-    , className =? "firefox"                      --> doShift "2:web"
-    , className =? "code-oss"                     --> doShift "3:code"
-    , className =? "postman"                      --> doShift "4:media"
-    , className =? "dbeaver"                      --> doShift "4:media"
+    [ className =? "chromium"                     --> doShift "2:WEB"
+    , className =? "firefox"                      --> doShift "2:WEB"
+    , className =? "code-oss"                     --> doShift "3:CODE"
+    , className =? "postman"                      --> doShift "4:OTHER"
+    , className =? "dbeaver"                      --> doShift "4:OTHER"
     -- , resource  =? "desktop_window"               --> doIgnore
     -- , className =? "Galculator"                   --> doCenterFloat
     -- , className =? "Steam"                        --> doCenterFloat
@@ -202,8 +88,6 @@ myManageHook = composeAll
     -- , className =? "Pavucontrol"                  --> doCenterFloat
     -- , className =? "Mate-power-preferences"       --> doCenterFloat
     -- , className =? "Xfce4-power-manager-settings" --> doCenterFloat
-    -- , className =? "VirtualBox"                   --> doShift "4:vm"
-    -- , className =? "Xchat"                        --> doShift "5:media"
     -- , className =? "stalonetray"                  --> doIgnore
     , isFullscreen                                --> (doF W.focusDown <+> doFullFloat)
     -- , isFullscreen                             --> doFullFloat
@@ -364,23 +248,23 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Lock the screen using command specified by myScreensaver.
   , ((modMask, xK_0),
-     spawn myScreensaver)
+     spawn "slimlock")
 
   -- Use this to launch programs without a key binding.
   , ((modMask, xK_p),
-     spawn "rofi -show run")
+     spawn "dmenu_run -l 15")
 
   -- Use this to view and focus currently open programs
-  , ((modMask .|. shiftMask, xK_p),
-     spawn "rofi -show")
+  -- , ((modMask .|. shiftMask, xK_p),
+  --    spawn "rofi -show")
 
   -- Take a selective screenshot using the command specified by mySelectScreenshot.
-  -- , ((modMask .|. shiftMask, xK_p),
-  --    spawn mySelectScreenshot)
+  , ((modMask .|. shiftMask, xK_p),
+     spawn "scrot -s")
 
   -- Take a full screenshot using the command specified by myScreenshot.
-  -- , ((modMask .|. controlMask .|. shiftMask, xK_p),
-  --    spawn myScreenshot)
+  , ((modMask .|. controlMask .|. shiftMask, xK_p),
+     spawn "scrot")
 
   -- Toggle current focus window to fullscreen
   , ((modMask, xK_f), sendMessage $ Toggle FULL)
@@ -587,8 +471,74 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 myStartupHook = do
   -- setWMName "LG3D"
   -- spawn     "bash ~/.xmonad/startup.sh"
-  -- spawn "xmobar"
+  spawn "picom -b -d :0"
   spawn "setxkbmap -option caps:swapescape"
   setDefaultCursor xC_left_ptr
 
+------------------------------------------------------------------------
+-- Run xmonad with all the defaults we set up.
+--
+--
+-- main = do
+--   xmproc <- spawnPipe "xmobar ~/.xmonad/xmobarrc.hs"
+--   -- xmproc <- spawnPipe "taffybar"
+--   xmonad $ docks
+--          $ withNavigation2DConfig myNav2DConf
+--          $ additionalNav2DKeys (xK_Up, xK_Left, xK_Down, xK_Right)
+--                                [
+--                                   (mod4Mask,               windowGo  )
+--                                 , (mod4Mask .|. shiftMask, windowSwap)
+--                                ]
+--                                False
+--          $ ewmh
+--          -- $ pagerHints -- uncomment to use taffybar
+--          $ myDefaults {
+--          logHook = dynamicLogWithPP xmobarPP {
+--                   ppCurrent = xmobarColor xmobarCurrentWorkspaceColor "" . wrap "[" "]"
+--                 , ppTitle = xmobarColor xmobarTitleColor "" . shorten 50
+--                 , ppSep = "   "
+--                 , ppOutput = hPutStrLn xmproc
+--          } >> updatePointer (0.75, 0.75) (0.75, 0.75)
+--       }
+
+main = xmonad =<< xmobar defaults
+defaults =  docks
+         $ withNavigation2DConfig myNav2DConf
+         $ additionalNav2DKeys (xK_Up, xK_Left, xK_Down, xK_Right)
+                               [
+                                  (mod4Mask,               windowGo  )
+                                , (mod4Mask .|. shiftMask, windowSwap)
+                               ]
+                               False
+         $ ewmh myDefaults
+
+------------------------------------------------------------------------
+-- A structure containing your configuration settings, overriding
+-- fields in the default config. Any you don't override, will
+-- use the defaults defined in xmonad/XMonad/Config.hs
+--
+-- No need to modify this.
+--
+
+myDefaults = def {
+          terminal            = myTerminal
+        , focusFollowsMouse   = myFocusFollowsMouse
+        , borderWidth         = myBorderWidth
+        , modMask             = myModMask
+        , workspaces          = myWorkspaces
+        , normalBorderColor   = myNormalBorderColor
+        , focusedBorderColor  = myFocusedBorderColor
+
+        -- key bindings
+        , keys                = myKeys
+        , mouseBindings       = myMouseBindings
+
+        -- hooks, layouts
+        , layoutHook          = myLayout
+        , handleEventHook     = fullscreenEventHook <+> docksEventHook
+        -- , handleEventHook     = fullscreenEventHook <+> docksEventHook <+> minimizeEventHook
+        -- , handleEventHook     = fullscreenEventHook
+        , manageHook          = manageDocks <+> myManageHook
+        , startupHook         = myStartupHook
+        }
 
