@@ -8,14 +8,24 @@
 
 ### Add key to ssh-agent
 
-  - Start ssh-agent in background
+  - Start ssh-agent in background(bash)
   ```
     eval "$(ssh-agent -s)"
+  ```
+
+  - Start ssh-agent in background(fish)
+  ```
+    eval (ssh-agent -c)
   ```
 
   - Add key to the agent(private)
   ```
     ssh-add ~/.ssh/id_rsa
+  ```
+
+  - List added keys to ssh-agent
+  ```
+    ssh-add -l
   ```
 
 ## Font
