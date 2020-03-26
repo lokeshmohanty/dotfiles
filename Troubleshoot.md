@@ -39,6 +39,11 @@
 
 ## Git
 
+  - To set upstream branch
+  ```
+    git branch --set-upstream-to <remote/branch-name>
+  ```
+
   - To force pull a remote in git
   ```
     git fetch origin master
@@ -117,6 +122,16 @@
   ```
     youtube-dl --extract-audio --audio-format mp3 <url>
   ```
+
+## Stack (haskell)
+
+  - Uninstall stack
+  ```
+    rm -rf ~/.stack
+    rm -rf /usr/local/bin/stack
+  ```
+  - Install stack
+
 # Tips
 
 ## Miscellaneous
@@ -146,8 +161,26 @@
     xwininfo
   ```
 
+  - Find graphics card model
+  ```
+    lspci | grep -i vga
+  ```
+
+  - Find hardware info (display)
+  ```
+    lshw -class display
+  ```
+
   - View installed locale: `locale -a`
   - Setup locale: `echo "LANG=en_US.UTF-8" > /etc/locale.conf`
+
+  - Splitting/Compression
+  ```
+    # create archives
+    $ tar cz my_large_file_1 my_large_file_2 | split -b 1024MiB - myfiles_split.tgz_
+    # uncompress
+    $ cat myfiles_split.tgz_* | tar xz
+  ```
 
 # Handy Commands
 
@@ -166,3 +199,20 @@
   ```
     loginctl list-sessions --no-legend | while read id rest; do echo; loginctl show-session $id; done
   ```
+
+## Scrot
+  - Generate thumbnail, <num> is percentage of original size
+  ```
+    scrot --thumb <num>
+  ``` 
+
+  - Execute operations on saved images
+  ```
+    scrot -e 'mv $f ~/Pictures/'
+  ```
+
+  - Adjust quality of screenshot, <num> is in the scale of 1-100
+  ```
+    scrot --quality <num>
+  ```
+
