@@ -41,6 +41,12 @@ import XMonad.Actions.CycleWS
 -- import XMonad.Layout.IndependentScreens
 --
 
+-- For transparent Hook
+import Graphics.X11.Xlib
+import Graphics.X11.Xlib.Extras
+import Data.Monoid
+import Data.Word (Word32)
+
 ------------------------------------------------------------------------
 -- My Configuration
 --
@@ -50,7 +56,7 @@ myTerminal = "st"
 -- Focus rules
 -- True if your focus should follow your mouse cursor.
 myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = False
+myFocusFollowsMouse = True
 
 ------------------------------------------------------------------------
 -- Workspaces
@@ -74,11 +80,11 @@ myWorkspaces = ["1: TERM","2: WEB","3: CODE","4: OTHER"] ++ map show [5..9]
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
-    [ className =? "chromium"                     --> doShift "2:WEB"
-    , className =? "firefox"                      --> doShift "2:WEB"
+    [ className =? "Chromium"                     --> doShift "2:WEB"
+    , className =? "Firefox"                      --> doShift "2:WEB"
     , className =? "code-oss"                     --> doShift "3:CODE"
-    , className =? "postman"                      --> doShift "4:OTHER"
-    , className =? "dbeaver"                      --> doShift "4:OTHER"
+    , className =? "Postman"                      --> doShift "4:OTHER"
+    , className =? "Dbeaver"                      --> doShift "4:OTHER"
     -- , resource  =? "desktop_window"               --> doIgnore
     -- , className =? "Galculator"                   --> doCenterFloat
     -- , className =? "Steam"                        --> doCenterFloat
@@ -246,7 +252,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   [ ((modMask .|. shiftMask, xK_Return),
      spawn $ XMonad.terminal conf)
 
-  -- Lock the screen using command specified by myScreensaver.
+  -- Lock the screen
   , ((modMask, xK_0),
      spawn "slimlock")
 
@@ -254,20 +260,27 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_p),
      spawn "dmenu_run -l 15")
 
-  -- Use this to view and focus currently open programs
-  -- , ((modMask .|. shiftMask, xK_p),
-  --    spawn "rofi -show")
+  -- Take a selective screenshot
+  , ((0, xK_Print),
+     spawn "sleep 0.5s; scrot -sf -e 'mv $f ~/Pictures/'")
 
-  -- Take a selective screenshot using the command specified by mySelectScreenshot.
-  , ((modMask .|. shiftMask, xK_p),
-     spawn "scrot -s")
+  -- Take a selective low quality screenshot
+  , ((modMask .|. shiftMask, xK_Print),
+     spawn "sleep 0.5s; scrot -sf -e 'mv $f ~/Pictures/' --quality 100")
 
-  -- Take a full screenshot using the command specified by myScreenshot.
-  , ((modMask .|. controlMask .|. shiftMask, xK_p),
-     spawn "scrot")
+  -- Take a screenshot of focused window
+  , ((modMask .|. altMask, xK_Print),
+     spawn "sleep 0.5s; scrot -sf -e 'mv $f ~/Pictures/' --quality 10")
+
+  -- Take a full screenshot
+  , ((modMask , xK_Print),
+     spawn "scrot -e 'mv $f ~/Pictures/'")
 
   -- Toggle current focus window to fullscreen
   , ((modMask, xK_f), sendMessage $ Toggle FULL)
+
+  -- Refresh
+  , ((modMask, xK_n), refresh)
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
@@ -462,6 +475,18 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   ]
 
 ------------------------------------------------------------------------
+-- setTransparentHook
+--
+
+setTransparentHook :: Event -> X All
+setTransparentHook ConfigureEvent{ev_event_type = createNotify, ev_window = id} = do
+  setOpacity id opacity
+  return (All True) where
+    opacityFloat = 0.9
+    opacity = floor $ fromIntegral (maxBound :: Word32) * opacityFloat
+    setOpacity id op = spawn $ "xprop -id " ++ show id ++ " -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY " ++ show op
+setTransparentHook _ = return (All True)
+------------------------------------------------------------------------
 -- Startup hook
 -- Perform an arbitrary action each time xmonad starts or is restarted
 -- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
@@ -479,29 +504,19 @@ myStartupHook = do
 -- Run xmonad with all the defaults we set up.
 --
 --
--- main = do
---   xmproc <- spawnPipe "xmobar ~/.xmonad/xmobarrc.hs"
---   -- xmproc <- spawnPipe "taffybar"
---   xmonad $ docks
---          $ withNavigation2DConfig myNav2DConf
---          $ additionalNav2DKeys (xK_Up, xK_Left, xK_Down, xK_Right)
---                                [
---                                   (mod4Mask,               windowGo  )
---                                 , (mod4Mask .|. shiftMask, windowSwap)
---                                ]
---                                False
---          $ ewmh
---          -- $ pagerHints -- uncomment to use taffybar
---          $ myDefaults {
---          logHook = dynamicLogWithPP xmobarPP {
---                   ppCurrent = xmobarColor xmobarCurrentWorkspaceColor "" . wrap "[" "]"
---                 , ppTitle = xmobarColor xmobarTitleColor "" . shorten 50
---                 , ppSep = "   "
---                 , ppOutput = hPutStrLn xmproc
---          } >> updatePointer (0.75, 0.75) (0.75, 0.75)
---       }
+main = do
+  xmproc <- spawnPipe "xmobar"
+  -- xmproc <- spawnPipe "taffybar"
+  xmonad $ defaults {
+         logHook = dynamicLogWithPP xmobarPP {
+                  ppCurrent = xmobarColor xmobarCurrentWorkspaceColor "" . wrap "[" "]"
+                , ppTitle = xmobarColor xmobarTitleColor "" . shorten 50
+                , ppSep = "   "
+                , ppOutput = hPutStrLn xmproc
+         } >> updatePointer (0.75, 0.75) (0.75, 0.75)
+      }
 
-main = xmonad =<< xmobar defaults
+-- main = xmonad =<< xmobar defaults
 defaults =  docks
          $ withNavigation2DConfig myNav2DConf
          $ additionalNav2DKeys (xK_Up, xK_Left, xK_Down, xK_Right)
@@ -535,10 +550,9 @@ myDefaults = def {
 
         -- hooks, layouts
         , layoutHook          = myLayout
-        , handleEventHook     = fullscreenEventHook <+> docksEventHook
+        , handleEventHook     = fullscreenEventHook <+> docksEventHook <+> setTransparentHook
         -- , handleEventHook     = fullscreenEventHook <+> docksEventHook <+> minimizeEventHook
-        -- , handleEventHook     = fullscreenEventHook
-        , manageHook          = manageDocks <+> myManageHook
+        , manageHook          = manageDocks <+> myManageHook <+> manageHook def
         , startupHook         = myStartupHook
         }
 
