@@ -132,6 +132,13 @@
   ```
   - Install stack
 
+## Xmonad
+
+  - Get WM_CLASS for manageHook
+  ```
+    xprop | grep WM_CLASS
+  ```
+
 # Tips
 
 ## Miscellaneous
