@@ -113,20 +113,37 @@ endif
 " ', ", [, ] => special marks
 " zt, zz, zb => puts the cursor line at the top/mid/bottom
 "
+" J => Join lines
+"
 " daw => delete the word the cursor is on(along with the following space)[delete a word]
+" dap => delete a paragraph(separated by empty lines)
 " das => delete the object the cursor is on[delete a sentence]
 " dis => delete the object the cursor is on[is => text object]
 " diw => delete current word 
 " ~ => toggle case
+"
+" Record: q{register}, @{register}, @@
+" use Capital form of register to append(same for yank and delete)
+" record uses the same register as copy/paste
 " g~ => toggle case mode [~:line, rest same as other movement shortcuts]
 " gU => Upper case mode [U:line, rest same as other movement shortcuts]
 " gu => lower case mode [u:line, rest same as other movement shortcuts]
+"
+" gq{movement} => reformat text
+"
+" !{motion}{program} => replaces the range by output of program
+" !!{program}        => replace the current line by output of program
 "
 " ZZ => :x ; ZQ => :q!
 "
 "
 " CTRL-w H/J/K/L => moves the current window to far left/down/up/right
+" CTRL-L => redraw screen
 "
+"
+" ----------Visual Block Mode-------------
+"
+" I, A, c, C, u, U, ~, r, <, >, J 
 "
 " ----------Command Mode-------------
 " :set noincsearch => disables display of matches while typing for search
@@ -134,6 +151,8 @@ endif
 " :set nohlsearch => disables hilighting the matches for search
 " :nohlsearch => clears all the hilighting done by search
 " :set ignorecase => search ignores case
+"
+" :set textwidth => lines will be broken based on textwidth
 "
 "
 " :set number => show line numbers
@@ -146,6 +165,10 @@ endif
 "
 " :saveas <filename> => writes current buffer to filename and edits that file
 " :file <filename> => same as saveas except that `filename` is not saved
+"
+" :[range]read {filename}
+" :[range]write {filename} => write to a file, range can be provied just like
+" :[range]write >>{filename} =>  append to file
 "
 " :close => closes the current window without exiting vim
 " :only => closes all windows except the current one
@@ -165,6 +188,13 @@ endif
 " :sb <buff-name> => opens the buffer in a split
 " :vertical sb <buff-name> => opens the buffer in a vertical split
 "
+" " Substitution
+" :s/a/b/ can be replaced with :s+a+b+ to not use regex
+" :{from},{to}s/a/b/ => . -> current line, .+3 -> 3 lines below current
+" :{from},{to}s=a=b= => when from and to are patterns(from: ?^Chapter?, to:
+" /^Chapter/) (marks can also be used)
+"
+" :[range]global/{pattern}/{command} => command is a command line command
 "
 " <C-r><C-f> => recall the filename the cursor is on
 "
@@ -224,10 +254,10 @@ tnoremap <ESC> <C-\><C-n>
 nnoremap <Leader>q :bwipe!<CR>
 " nnoremap <Leader>vt :vsplit|terminal<CR>
 " nnoremap <Leader>ht :split|terminal<CR>
-nnoremap <Leader>tv :vsplit term://bash<CR>
-nnoremap <Leader>th :split term://bash<CR>
-nnoremap <Leader>tt :tabnew term://bash<CR>
-nnoremap <Leader>te :edit term://bash<CR>
+nnoremap <Leader>tv :vsplit term://fish<CR>
+nnoremap <Leader>th :split term://fish<CR>
+nnoremap <Leader>tt :tabnew term://fish<CR>
+nnoremap <Leader>te :edit term://fish<CR>
 
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
