@@ -1,62 +1,41 @@
 import System.IO (Handle, hPutStrLn)
 import System.Exit
-
-import qualified Data.List as L
-
 import XMonad
-import XMonad.Actions.Navigation2D
-import XMonad.Actions.UpdatePointer
-
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers(doFullFloat, doCenterFloat, isFullscreen, isDialog)
-import XMonad.Hooks.EwmhDesktops (ewmh)
-
-import XMonad.Layout.Gaps
+import XMonad.Hooks.ManageHelpers (doFullFloat, doCenterFloat, isFullscreen, isDialog)
+import XMonad.Hooks.SetWMName
 import XMonad.Layout.Fullscreen (fullscreenFull, fullscreenEventHook)
-import XMonad.Layout.BinarySpacePartition as BSP
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
+import XMonad.Layout.Decoration (def)
 import XMonad.Layout.ThreeColumns
-import XMonad.Layout.Spacing
-import XMonad.Layout.MultiToggle
-import XMonad.Layout.MultiToggle.Instances
-import XMonad.Layout.NoFrillsDecoration
-import XMonad.Layout.Renamed
-import XMonad.Layout.Simplest
-import XMonad.Layout.SubLayouts
-import XMonad.Layout.WindowNavigation
-import XMonad.Layout.ZoomRow
 
-import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.EZConfig (additionalKeys)
-import XMonad.Util.Cursor
+import XMonad.Util.Cursor (setDefaultCursor)
 
 import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
-import XMonad.Actions.CycleWS
--- import qualified XMonad.Actions.DynamicWorkspaceOrder as DO
--- import XMonad.Layout.IndependentScreens
---
-
--- For transparent Hook
-import Graphics.X11.Xlib
-import Graphics.X11.Xlib.Extras
-import Data.Monoid
-import Data.Word (Word32)
+-- -- For transparent Hook
+-- import Graphics.X11.Xlib
+-- import Graphics.X11.Xlib.Extras
+-- import Data.Monoid
+-- import Data.Word (Word32)
 
 ------------------------------------------------------------------------
--- My Configuration
+-- Terminal
+-- The preferred terminal program, which is used in a binding below and by
+-- certain contrib modules.
 --
-
 myTerminal = "st"
 
--- Focus rules
--- True if your focus should follow your mouse cursor.
-myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
+-- Location of your xmobar.hs / xmobarrc
+myXmobarrc = "~/.xmonad/xmobarrc"
+
 
 ------------------------------------------------------------------------
 -- Workspaces
@@ -80,25 +59,28 @@ myWorkspaces = ["1: TERM","2: WEB","3: CODE","4: OTHER"] ++ map show [5..9]
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
-    [ className =? "Chromium"                     --> doShift "2:WEB"
-    , className =? "Firefox"                      --> doShift "2:WEB"
-    , className =? "code-oss"                     --> doShift "3:CODE"
-    , className =? "Postman"                      --> doShift "4:OTHER"
-    , className =? "Dbeaver"                      --> doShift "4:OTHER"
-    -- , resource  =? "desktop_window"               --> doIgnore
-    -- , className =? "Galculator"                   --> doCenterFloat
-    -- , className =? "Steam"                        --> doCenterFloat
-    -- , className =? "Gimp"                         --> doCenterFloat
-    -- , resource  =? "gpicview"                     --> doCenterFloat
-    -- , className =? "MPlayer"                      --> doCenterFloat
-    -- , className =? "Pavucontrol"                  --> doCenterFloat
-    -- , className =? "Mate-power-preferences"       --> doCenterFloat
-    -- , className =? "Xfce4-power-manager-settings" --> doCenterFloat
-    -- , className =? "stalonetray"                  --> doIgnore
-    , isFullscreen                                --> (doF W.focusDown <+> doFullFloat)
-    -- , isFullscreen                             --> doFullFloat
-    ]
+    [ className =? "Chromium"       --> doShift "2:WEB"
+    , className =? "Firefox"        --> doShift "2:WEB"
+    , className =? "Google-chrome"  --> doShift "2:WEB"
+    , className =? "Code - OSS"     --> doShift "3:CODE"
+    , className =? "PostmanCanary"  --> doShift "4:OTHER"
+    -- Java because of dbeaver
+    , className =? "Java"           --> doShift "4:OTHER"
+    , className =? "DBeaver"        --> doShift "4:OTHER"
 
+    , className =? "ringcentral"    --> doShift "7"
+
+    , resource  =? "desktop_window" --> doIgnore
+    , className =? "Galculator"     --> doFloat
+    , className =? "Steam"          --> doFloat
+    , className =? "Gimp"           --> doFloat
+    , resource  =? "gpicview"       --> doFloat
+    , className =? "MPlayer"        --> doFloat
+    -- , className =? "MPlayer"        --> doCenterFloat
+    , className =? "feh"            --> doFloat
+    , className =? "VirtualBox"     --> doShift "4:vm"
+    , className =? "stalonetray"    --> doIgnore
+    , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
 
 
 ------------------------------------------------------------------------
@@ -110,128 +92,45 @@ myManageHook = composeAll
 --
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
-
-outerGaps    = 10
-myGaps       = gaps [(U, outerGaps), (R, outerGaps), (L, outerGaps), (D, outerGaps)]
-addSpace     = renamed [CutWordsLeft 2] . spacing gap
-tab          =  avoidStruts
-               $ renamed [Replace "Tabbed"]
-               $ addTopBar
-               $ myGaps
-               $ tabbed shrinkText myTabTheme
-
-layouts      = avoidStruts (
-                (
-                    renamed [CutWordsLeft 1]
-                  $ addTopBar
-                  $ windowNavigation
-                  $ renamed [Replace "BSP"]
-                  $ addTabs shrinkText myTabTheme
-                  $ subLayout [] Simplest
-                  $ myGaps
-                  $ addSpace (BSP.emptyBSP)
-                )
-                ||| tab
-               )
-
-myLayout     = smartBorders
-              $ mkToggle (NOBORDERS ?? FULL ?? EOT)
-              $ layouts
-
-myNav2DConf = def
-    { defaultTiledNavigation    = centerNavigation
-    , floatNavigation           = centerNavigation
-    , screenNavigation          = lineNavigation
-    , layoutNavigation          = [("Full",          centerNavigation)
-    -- line/center same results   ,("Tabs", lineNavigation)
-    --                            ,("Tabs", centerNavigation)
-                                  ]
-    , unmappedWindowRect        = [("Full", singleWindowRect)
-    -- works but breaks tab deco  ,("Tabs", singleWindowRect)
-    -- doesn't work but deco ok   ,("Tabs", fullScreenRect)
-                                  ]
-    }
+--
+myLayout = avoidStruts (
+    ThreeColMid 1 (3/100) (1/2) |||
+    Tall 1 (3/100) (1/2) |||
+    Mirror (Tall 1 (3/100) (1/2)) |||
+    tabbed shrinkText tabConfig |||
+    Full |||
+    spiral (6/7)) |||
+    noBorders (fullscreenFull Full)
 
 
 ------------------------------------------------------------------------
 -- Colors and borders
+-- Currently based on the ir_black theme.
+--
+myNormalBorderColor  = "#7c7c7c"
+myFocusedBorderColor = "#ffb6b0"
+
+-- Colors for text and backgrounds of each tab when in "Tabbed" layout.
+tabConfig = def
+    { activeBorderColor     = "#7C7C7C"
+    , activeTextColor       = "#CEFFAC"
+    , activeColor           = "#000000"
+    , inactiveBorderColor   = "#7C7C7C"
+    , inactiveTextColor     = "#EEEEEE"
+    , inactiveColor         = "#000000"
+    }
 
 -- Color of current window title in xmobar.
+-- xmobarTitleColor = "#FFB6B0"
 xmobarTitleColor = "#C678DD"
 
 -- Color of current workspace in xmobar.
+-- xmobarCurrentWorkspaceColor = "#CEFFAC"
 xmobarCurrentWorkspaceColor = "#51AFEF"
 
 -- Width of the window border in pixels.
-myBorderWidth = 0
+myBorderWidth = 1
 
-myNormalBorderColor     = "#000000"
-myFocusedBorderColor    = active
-
-base03  = "#002b36"
-base02  = "#073642"
-base01  = "#586e75"
-base00  = "#657b83"
-base0   = "#839496"
-base1   = "#93a1a1"
-base2   = "#eee8d5"
-base3   = "#fdf6e3"
-yellow  = "#b58900"
-orange  = "#cb4b16"
-red     = "#dc322f"
-magenta = "#d33682"
-violet  = "#6c71c4"
-blue    = "#268bd2"
-cyan    = "#2aa198"
-green   = "#859900"
-
--- sizes
-gap         = 10
-topbar      = 10
-border      = 0
-prompt      = 20
-status      = 20
-
-active      = blue
-activeWarn  = red
-inactive    = base02
-focusColor  = blue
-unfocusColor = base02
-
--- myFont      = "-*-Zekton-medium-*-*-*-*-160-*-*-*-*-*-*"
--- myBigFont   = "-*-Zekton-medium-*-*-*-*-240-*-*-*-*-*-*"
-myFont      = "xft:Zekton:size=9:bold:antialias=true"
-myBigFont   = "xft:Zekton:size=9:bold:antialias=true"
-myWideFont  = "xft:Eurostar Black Extended:"
-            ++ "style=Regular:pixelsize=180:hinting=true"
-
--- this is a "fake title" used as a highlight bar in lieu of full borders
--- (I find this a cleaner and less visually intrusive solution)
-topBarTheme = def
-    {
-      fontName              = myFont
-    , inactiveBorderColor   = base03
-    , inactiveColor         = base03
-    , inactiveTextColor     = base03
-    , activeBorderColor     = active
-    , activeColor           = active
-    , activeTextColor       = active
-    , urgentBorderColor     = red
-    , urgentTextColor       = yellow
-    , decoHeight            = topbar
-    }
-
-addTopBar =  noFrillsDeco shrinkText topBarTheme
-
-myTabTheme = def
-    { fontName              = myFont
-    , activeColor           = active
-    , inactiveColor         = base02
-    , activeBorderColor     = active
-    , inactiveBorderColor   = base02
-    , activeTextColor       = base03
-    , inactiveTextColor     = base00
-    }
 
 ------------------------------------------------------------------------
 -- Key bindings
@@ -241,14 +140,16 @@ myTabTheme = def
 -- ("right alt"), which does not conflict with emacs keybindings. The
 -- "windows key" is usually mod4Mask.
 --
+-- myModMask = mod1Mask
 myModMask = mod4Mask
 altMask = mod1Mask
 
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   ----------------------------------------------------------------------
-  -- Customo key bindings
+  -- Custom key bindings
   --
 
+  -- Start a terminal.  Terminal to start is specified by myTerminal variable.
   [ ((modMask .|. shiftMask, xK_Return),
      spawn $ XMonad.terminal conf)
 
@@ -276,11 +177,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask , xK_Print),
      spawn "scrot -e 'mv $f ~/Pictures/'")
 
-  -- Toggle current focus window to fullscreen
-  , ((modMask, xK_f), sendMessage $ Toggle FULL)
-
-  -- Refresh
-  , ((modMask, xK_n), refresh)
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
@@ -308,6 +204,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Eject CD tray.
   -- , ((0, 0x1008FF2C), spawn "eject -T")
 
+
   --------------------------------------------------------------------
   -- "Standard" xmonad key bindings
   --
@@ -327,6 +224,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Resize viewed windows to the correct size.
   , ((modMask, xK_n),
      refresh)
+
+  -- Move focus to the next window.
+  , ((modMask, xK_Tab),
+     windows W.focusDown)
 
   -- Move focus to the next window.
   , ((modMask, xK_j),
@@ -385,6 +286,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Recompile and Restart xmonad without killing any process
   , ((modMask .|. altMask, xK_q), spawn $ "xmonad --recompile && xmonad --restart")
+
+  -- Forcefully kill an application
+  , ((modMask, xK_Escape), spawn $ "xkill" )
   ]
   ++
 
@@ -401,61 +305,21 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
-  ++
+
+  -- ++
   -- For multi monitor
   --
-  [ ((modMask .|. mod1Mask, xK_o), swapNextScreen)
-  , ((modMask .|. shiftMask, xK_o), shiftNextScreen)
-  ]
-
-
-  ++
-  -- Bindings for manage sub tabs in layouts please checkout the link below for reference
-  -- https://hackage.haskell.org/package/xmonad-contrib-0.13/docs/XMonad-Layout-SubLayouts.html
-  [
-    -- Tab current focused window with the window to the left
-    ((modMask .|. controlMask, xK_h), sendMessage $ pullGroup L)
-    -- Tab current focused window with the window to the right
-  , ((modMask .|. controlMask, xK_l), sendMessage $ pullGroup R)
-    -- Tab current focused window with the window above
-  , ((modMask .|. controlMask, xK_k), sendMessage $ pullGroup U)
-    -- Tab current focused window with the window below
-  , ((modMask .|. controlMask, xK_j), sendMessage $ pullGroup D)
-
-  -- Tab all windows in the current workspace with current window as the focus
-  , ((modMask .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
-  -- Group the current tabbed windows
-  , ((modMask .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
-
-  -- Toggle through tabes from the right
-  , ((modMask, xK_Tab), onGroup W.focusDown')
-
-  -- Forcefully kill an application
-  , ((modMask, xK_Escape), spawn $ "xkill" )
-  ]
-
-  ++
-  -- Some bindings for BinarySpacePartition
-  -- https://github.com/benweitzman/BinarySpacePartition
-  [
-    ((modMask .|. controlMask,               xK_Right ), sendMessage $ ExpandTowards R)
-  , ((modMask .|. controlMask .|. shiftMask, xK_Right ), sendMessage $ ShrinkFrom R)
-  , ((modMask .|. controlMask,               xK_Left  ), sendMessage $ ExpandTowards L)
-  , ((modMask .|. controlMask .|. shiftMask, xK_Left  ), sendMessage $ ShrinkFrom L)
-  , ((modMask .|. controlMask,               xK_Down  ), sendMessage $ ExpandTowards D)
-  , ((modMask .|. controlMask .|. shiftMask, xK_Down  ), sendMessage $ ShrinkFrom D)
-  , ((modMask .|. controlMask,               xK_Up    ), sendMessage $ ExpandTowards U)
-  , ((modMask .|. controlMask .|. shiftMask, xK_Up    ), sendMessage $ ShrinkFrom U)
-  , ((modMask,                               xK_r     ), sendMessage BSP.Rotate)
-  , ((modMask,                               xK_s     ), sendMessage BSP.Swap)
-  -- , ((modMask,                               xK_n     ), sendMessage BSP.FocusParent)
-  -- , ((modMask .|. controlMask,               xK_n     ), sendMessage BSP.SelectNode)
-  -- , ((modMask .|. shiftMask,                 xK_n     ), sendMessage BSP.MoveNode)
-  ]
+  -- [ ((modMask .|. mod1Mask, xK_o), swapNextScreen)
+  -- , ((modMask .|. shiftMask, xK_o), shiftNextScreen)
+  -- ]
 
 ------------------------------------------------------------------------
 -- Mouse bindings
 --
+-- Focus rules
+-- True if your focus should follow your mouse cursor.
+myFocusFollowsMouse :: Bool
+myFocusFollowsMouse = True
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   [
@@ -474,25 +338,39 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
   ]
 
+
+------------------------------------------------------------------------
+-- Status bars and logging
+-- Perform an arbitrary action on each internal state change or X event.
+-- See the 'DynamicLog' extension for examples.
+--
+-- To emulate dwm's status bar
+--
+-- > logHook = dynamicLogDzen
+--
+
 ------------------------------------------------------------------------
 -- setTransparentHook
 --
 
-setTransparentHook :: Event -> X All
-setTransparentHook ConfigureEvent{ev_event_type = createNotify, ev_window = id} = do
-  setOpacity id opacity
-  return (All True) where
-    opacityFloat = 0.9
-    opacity = floor $ fromIntegral (maxBound :: Word32) * opacityFloat
-    setOpacity id op = spawn $ "xprop -id " ++ show id ++ " -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY " ++ show op
-setTransparentHook _ = return (All True)
+-- setTransparentHook :: Event -> X All
+-- setTransparentHook ConfigureEvent{ev_event_type = createNotify, ev_window = id} = do
+--   setOpacity id opacity
+--   return (All True) where
+--     opacityFloat = 0.9
+--     opacity = floor $ fromIntegral (maxBound :: Word32) * opacityFloat
+--     setOpacity id op = spawn $ "xprop -id " ++ show id ++ " -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY " ++ show op
+-- setTransparentHook _ = return (All True)
+--
+
 ------------------------------------------------------------------------
 -- Startup hook
 -- Perform an arbitrary action each time xmonad starts or is restarted
 -- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
--- per-workspace layout choices./start
+-- per-workspace layout choices.
 --
 -- By default, do nothing.
+-- myStartupHook = return ()
 myStartupHook = do
   -- setWMName "LG3D"
   -- spawn     "bash ~/.xmonad/startup.sh"
@@ -503,56 +381,44 @@ myStartupHook = do
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
 --
---
 main = do
-  xmproc <- spawnPipe "xmobar"
-  -- xmproc <- spawnPipe "taffybar"
+  xmproc <- spawnPipe ("xmobar " ++ myXmobarrc)
   xmonad $ defaults {
-         logHook = dynamicLogWithPP xmobarPP {
-                  ppCurrent = xmobarColor xmobarCurrentWorkspaceColor "" . wrap "[" "]"
-                , ppTitle = xmobarColor xmobarTitleColor "" . shorten 50
-                , ppSep = "   "
-                , ppOutput = hPutStrLn xmproc
-         } >> updatePointer (0.75, 0.75) (0.75, 0.75)
+      logHook = dynamicLogWithPP $ xmobarPP {
+            ppOutput = hPutStrLn xmproc
+          , ppTitle = xmobarColor xmobarTitleColor "" . shorten 100
+          , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
+          , ppSep = "   "
       }
+  }
 
--- main = xmonad =<< xmobar defaults
-defaults =  docks
-         $ withNavigation2DConfig myNav2DConf
-         $ additionalNav2DKeys (xK_Up, xK_Left, xK_Down, xK_Right)
-                               [
-                                  (mod4Mask,               windowGo  )
-                                , (mod4Mask .|. shiftMask, windowSwap)
-                               ]
-                               False
-         $ ewmh myDefaults
 
 ------------------------------------------------------------------------
+-- Combine it all together
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
 -- use the defaults defined in xmonad/XMonad/Config.hs
 --
 -- No need to modify this.
 --
+defaults = def 
+    -- simple stuff
+    { terminal           = myTerminal
+    , focusFollowsMouse  = myFocusFollowsMouse
+    , borderWidth        = myBorderWidth
+    , modMask            = myModMask
+    , workspaces         = myWorkspaces
+    , normalBorderColor  = myNormalBorderColor
+    , focusedBorderColor = myFocusedBorderColor
 
-myDefaults = def {
-          terminal            = myTerminal
-        , focusFollowsMouse   = myFocusFollowsMouse
-        , borderWidth         = myBorderWidth
-        , modMask             = myModMask
-        , workspaces          = myWorkspaces
-        , normalBorderColor   = myNormalBorderColor
-        , focusedBorderColor  = myFocusedBorderColor
+    -- key bindings
+    , keys               = myKeys
+    , mouseBindings      = myMouseBindings
 
-        -- key bindings
-        , keys                = myKeys
-        , mouseBindings       = myMouseBindings
-
-        -- hooks, layouts
-        , layoutHook          = myLayout
-        , handleEventHook     = fullscreenEventHook <+> docksEventHook <+> setTransparentHook
-        -- , handleEventHook     = fullscreenEventHook <+> docksEventHook <+> minimizeEventHook
-        , manageHook          = manageDocks <+> myManageHook <+> manageHook def
-        , startupHook         = myStartupHook
-        }
-
+    -- hooks, layouts
+    , layoutHook         = smartBorders $ myLayout
+    , manageHook         = manageDocks <+> myManageHook
+    , handleEventHook    = docksEventHook
+    -- , handleEventHook    = fullscreenEventHook <+> docksEventHook <+> setTransparentHook
+    , startupHook        = myStartupHook
+}
