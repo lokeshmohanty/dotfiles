@@ -76,13 +76,15 @@
     wget -qO- https://get.haskellstack.org/ | sh
   ```
 
-# Ubuntu
+# Linux
 
 ## Process
   - check process
   ```
     sudo netstat -tnpl
   ```
+
+  - Application exists when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
 
 ## neovim
 
@@ -137,6 +139,24 @@
   - Get WM_CLASS for manageHook
   ```
     xprop | grep WM_CLASS
+  ```
+## Npm errors
+
+  - For Error: EACCESS: permission denied, use the following argument
+  ```sh
+    --unsafe-perm=true --allow-root
+    ```
+    
+## locate command
+
+  - Update the database
+  ```sh
+    sudo updatedb
+  ```
+
+  - locate with permissions
+  ```sh
+    ls -l $(locate -e <fileName>)
   ```
 
 # Tips
