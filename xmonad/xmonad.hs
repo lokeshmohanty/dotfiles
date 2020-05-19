@@ -1,13 +1,12 @@
 import System.IO (hPutStrLn)
 import System.Exit
 import XMonad
+
+-- Hooks
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers (doFullFloat, doCenterFloat, isFullscreen, isDialog)
 import XMonad.Hooks.SetWMName
-
-import XMonad.Util.Run (spawnPipe)
-import XMonad.Util.Cursor (setDefaultCursor)
 
 import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
@@ -25,15 +24,13 @@ import Graphics.X11.Xlib.Extras
 import Data.Monoid
 import Data.Word (Word32)
 
+import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.Cursor (setDefaultCursor)
+
 -- Scratch Pad (--contrib)
 -- import XMonad.Util.Scratchpad
 import XMonad.Util.NamedScratchpad (namedScratchpadManageHook, NamedScratchpad(NS), customFloating, namedScratchpadAction)
 
-------------------------------------------------------------------------
--- Terminal
--- The preferred terminal program, which is used in a binding below and by
--- certain contrib modules.
---
 myTerminal = "st"
 
 -- Location of your xmobar.hs / xmobarrc
@@ -73,7 +70,6 @@ myManageHook = composeAll
     -- Java because of dbeaver
     , className =? "Java"           --> doShift "4:OTHER"
     , className =? "DBeaver"        --> doShift "4:OTHER"
-
     , className =? "ringcentral"    --> doShift "7"
 
     , resource  =? "desktop_window" --> doIgnore
@@ -83,6 +79,7 @@ myManageHook = composeAll
     , resource  =? "gpicview"       --> doFloat
     , className =? "MPlayer"        --> doFloat
     -- , className =? "MPlayer"        --> doCenterFloat
+    -- , className =? "URxvt" <&&> title =? "neomutt" --> doShift "net"
     , className =? "feh"            --> doFloat
     , className =? "VirtualBox"     --> doShift "4:vm"
     , className =? "stalonetray"    --> doIgnore
@@ -97,14 +94,20 @@ myManageHook = composeAll
 --
 -- scratchPad = scratchpadSpawnActionTerminal "urxvt"
 
-myScratchPads = [ NS "terminal" spawnTerm  findTerm  manageTerm 
+myScratchPads = [ NS "terminal" spawnTerm  findTerm  manageTerm   -- scratchpad
+                , NS "aerc"     spawnAerc  findAerc  manageAerc   -- email client
                 ]
   where
     spawnTerm  = myTerminal ++ " -n scratchpad"              -- tilte can be set instead of name, keep the syntax in mind
-    findTerm   = resource  =? "scratchpad"                   -- use title if title is set
+    findTerm   = resource   =? "scratchpad"                   -- use title if title is set
     manageTerm = customFloating $ W.RationalRect 0 0.9 1 0.1 -- position and size
 
+    spawnAerc  = myTerminal ++ " -n aerc -e aerc"
+    findAerc   = resource   =? "aerc"
+    manageAerc = customFloating $ W.RationalRect 0.1 0.1 0.8 0.8
+
 scratchTerm = namedScratchpadAction myScratchPads "terminal"
+scratchAerc = namedScratchpadAction myScratchPads "aerc"
 
 ------------------------------------------------------------------------
 -- Layouts
@@ -191,6 +194,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   [ ((modMask, xK_0), spawn lockScreen)
   , ((modMask, xK_p), spawn launcher)
   , ((modMask .|. shiftMask, xK_t), scratchTerm)
+  , ((modMask .|. shiftMask, xK_e), scratchAerc)
 
   , ((0, xK_Print), spawn selectScreenshot)
   , ((modMask , xK_Print), spawn screenshot)
@@ -248,6 +252,7 @@ myStartupHook = do
   spawn "picom -b -d :0"
   spawn "setxkbmap -option caps:swapescape"
   setDefaultCursor xC_left_ptr
+  spawn "dunst"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
