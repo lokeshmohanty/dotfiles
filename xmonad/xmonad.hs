@@ -31,6 +31,13 @@ import XMonad.Util.Cursor (setDefaultCursor)
 -- import XMonad.Util.Scratchpad
 import XMonad.Util.NamedScratchpad (namedScratchpadManageHook, NamedScratchpad(NS), customFloating, namedScratchpadAction)
 
+-- Prompt
+import XMonad.Prompt
+import XMonad.Prompt.Pass (passPrompt, passGeneratePrompt, passRemovePrompt)
+import XMonad.Prompt.Shell (shellPrompt)
+import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
+-- import XMonad.Prompt.DirExec (dirExecPrompt)
+
 myTerminal = "st"
 
 -- Location of your xmobar.hs / xmobarrc
@@ -85,29 +92,38 @@ myManageHook = composeAll
     , className =? "stalonetray"    --> doIgnore
     , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
 
--- manageScratchPad :: ManageHook
--- manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
---   where h = 0.1     -- terminal height, 10%
---         w = 1       -- terminal width, 100%
---         t = 1 - h   -- distance from top edge, 90%
---         l = 1 - w   -- distance from left edge, 0%
---
--- scratchPad = scratchpadSpawnActionTerminal "urxvt"
-
 myScratchPads = [ NS "terminal" spawnTerm  findTerm  manageTerm   -- scratchpad
-                , NS "aerc"     spawnAerc  findAerc  manageAerc   -- email client
+                , NS "email"     spawnEmail  findEmail  manageEmail 
+                , NS "irc"     spawnIrc  findIrc  manageIrc   
                 ]
   where
     spawnTerm  = myTerminal ++ " -n scratchpad"              -- tilte can be set instead of name, keep the syntax in mind
     findTerm   = resource   =? "scratchpad"                   -- use title if title is set
     manageTerm = customFloating $ W.RationalRect 0 0.9 1 0.1 -- position and size
 
-    spawnAerc  = myTerminal ++ " -n aerc -e aerc"
-    findAerc   = resource   =? "aerc"
-    manageAerc = customFloating $ W.RationalRect 0.1 0.1 0.8 0.8
+    spawnEmail  = "xfce4-terminal" ++ " -T email -e neomutt"
+    findEmail   = title   =? "email"
+    manageEmail = customFloating $ W.RationalRect 0.1 0.1 0.8 0.8
 
-scratchTerm = namedScratchpadAction myScratchPads "terminal"
-scratchAerc = namedScratchpadAction myScratchPads "aerc"
+    spawnIrc  = "xfce4-terminal" ++ " -T irc -e weechat"
+    findIrc   = title   =? "irc"
+    manageIrc = customFloating $ W.RationalRect 0.1 0.1 0.8 0.8
+
+scratchTerm  = namedScratchpadAction myScratchPads "terminal"
+scratchEmail = namedScratchpadAction myScratchPads "email"
+scratchIrc   = namedScratchpadAction myScratchPads "irc"
+
+-- My Xmonad Prompt Config
+myXPConfig = def
+  { font        = "xft:Source Code Pro:pixelsize=12"
+  , borderColor = "#1e2320"
+  , fgColor     = "#dddddd"
+  , fgHLight    = "#ffffff"
+  , bgColor     = "#1e2320"
+  , bgHLight    = "#5f5f5f"
+  , height      = 18
+  , position    = Top
+  }
 
 ------------------------------------------------------------------------
 -- Layouts
@@ -168,7 +184,10 @@ altMask = mod1Mask
 
 lockScreen = "slimlock"
 launcher   = "dmenu_run -l 15"
+launchShell = shellPrompt myXPConfig
+launchPrompt = runOrRaisePrompt myXPConfig
 selectScreenshot = "sleep 0.5s; scrot -sf -e 'mv $f ~/Pictures/ && xdg-open ~/Pictures/$f'"
+copyScreenshot = "sleep 0.5s; scrot '/tmp/%F_%T_$wx$h.png' -se 'xclip -selection clipboard -target image/png -i $f'"
 lowQualityScreenshot = "sleep 0.5s; scrot -sf -e 'mv $f ~/Pictures/ && xdg-open ~/Pictures/$f'' --quality 100"
 windowScreenshot = "sleep 0.5s; scrot -sf -e 'mv $f ~/Pictures/ && xdg-open ~/Pictures/$f'' --quality 10"
 screenshot = "scrot -e 'mv $f ~/Pictures/ && xdg-open ~/Pictures/$f'"
@@ -192,12 +211,21 @@ prev = "playerctl stop"
 
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   [ ((modMask, xK_0), spawn lockScreen)
-  , ((modMask, xK_p), spawn launcher)
-  , ((modMask .|. shiftMask, xK_t), scratchTerm)
-  , ((modMask .|. shiftMask, xK_e), scratchAerc)
+  -- , ((modMask .|. shiftMask, xK_p), spawn launcher)
+  , ((modMask .|. shiftMask, xK_p), launchShell)
+  , ((modMask, xK_p), launchPrompt)
 
-  , ((0, xK_Print), spawn selectScreenshot)
+  , ((modMask .|. altMask                   , xK_p), passPrompt myXPConfig)
+  , ((modMask .|. controlMask               , xK_p), passGeneratePrompt myXPConfig)
+  , ((modMask .|. controlMask  .|. shiftMask, xK_p), passRemovePrompt myXPConfig)
+
+  , ((modMask .|. shiftMask, xK_t), scratchTerm)
+  , ((modMask .|. shiftMask, xK_e), scratchEmail)
+  , ((modMask .|. shiftMask, xK_i), scratchIrc)
+
+  , ((0, xK_Print), spawn copyScreenshot)
   , ((modMask , xK_Print), spawn screenshot)
+  , ((modMask .|. controlMask, xK_Print), spawn selectScreenshot)
   , ((modMask .|. shiftMask, xK_Print), spawn lowQualityScreenshot)
   , ((modMask .|. altMask, xK_Print), spawn windowScreenshot)
 
@@ -249,7 +277,8 @@ setTransparentHook _ = return (All True)
 myStartupHook = do
   setWMName "LG3D"
   -- spawn     "bash ~/.xmonad/startup.sh"
-  spawn "picom -b -d :0"
+  -- spawn "picom -b -d :0"
+  spawn "picom -bcCGf -i 0.8 -e 0.8 --no-fading-openclose --sw-opti"
   spawn "setxkbmap -option caps:swapescape"
   setDefaultCursor xC_left_ptr
   spawn "dunst"
