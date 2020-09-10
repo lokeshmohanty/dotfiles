@@ -173,9 +173,20 @@
     sudo netstat -tnlp
   ```
 
+  - Find pid of a process(i -> internet related, t -> only process id, :9000 -> only on this
+    port)(lsof -> list of files(/proc files))
+  ```
+    sudo lsof -t -i:9000
+  ```
+
   - Kill a process with pid
   ```
     sudo kill -9 <pid>
+  ```
+
+  - Find and kill a process(k -> kill, n tcp -> namespace tcp, 3000 -> port)
+  ```
+    fuser -k -n tcp 3000
   ```
 
   - View running process
