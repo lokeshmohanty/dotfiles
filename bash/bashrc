@@ -662,3 +662,6 @@ function __setprompt
 PROMPT_COMMAND='__setprompt'
 
 alias gtp="cd /home/lokesh/Shared/Projects/"
+
+export NVM_DIR="/home/lokesh/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
