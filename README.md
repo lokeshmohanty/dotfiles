@@ -9,24 +9,17 @@ My configuration files for linux.
     sh ./install.sh
 
 ## Necessary Apps
-    1. Git
-    2. Neovim
-    3. Mupdf
-    4. Aria2
-    5. Xpad
-    6. Redshift
-    7. Firefox-developer-edition
-    8. Zsh
-    9. FlashPlugin
-    10. gdb
-    11. ntfs-3g
-    12. os-prober
-    12. proxychains
-    13. samba
-    14. mutt
-    15. youtube-dl
-    16. nerd-fonts-complete
-    17. LibreOffice
+    - `git`
+    - `neovim`
+    - `mupdf`
+    - `aria2`
+    - `redshift`
+    - `ntfs-3g`
+    - `os-prober`
+    - `haskell stack`
+    - `mplayer`(video player)
+    - `feh`(image viewer)
+    - `krita`(image editor)
 
 ## TODO
 
@@ -35,6 +28,6 @@ My configuration files for linux.
     3. Create a script to restore backed up dotfiles
     4. Add functionality to update dotfiles
 
-## Troubleshooting
+## [Troubleshooting](./Troubleshoot.md)
     
     1. for python errors run `pip install neovim` as root

@@ -6,11 +6,4 @@ set -x VISUAL nvim
 
 nvm use v12.13.0
 
-
-# if test -S ~/.ssh/ssh_auth_sock 
-# else
-#   eval (ssh-agent -c)
-#   ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
-# end
-# set -x SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
-# ssh-add -l > /dev/null || ssh-add
+alias mplayer="mplayer -af scaletempo -vf screenshot"
