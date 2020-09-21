@@ -140,6 +140,19 @@
   ```
     xprop | grep WM_CLASS
   ```
+
+## Pulse audio
+
+  - Mute(toggle) application sound
+  ```
+    pactl set-sink-input-mute <sink input index> toggle
+  ```
+
+  - Get list of input sinks
+  ```
+    pactl list sink-inputs
+  ```
+
 ## Npm errors
 
   - For Error: EACCESS: permission denied, use the following argument
@@ -158,6 +171,7 @@
   ```sh
     ls -l $(locate -e <fileName>)
   ```
+
 
 # Tips
 
