@@ -72,6 +72,7 @@ myManageHook = composeAll
     [ className =? "Chromium"       --> doShift "2:WEB"
     , className =? "Firefox"        --> doShift "2:WEB"
     , className =? "Google-chrome"  --> doShift "2:WEB"
+    , className =? "google-chrome"  --> doShift "2:WEB"
     , className =? "Code - OSS"     --> doShift "3:CODE"
     , className =? "PostmanCanary"  --> doShift "4:OTHER"
     -- Java because of dbeaver
@@ -101,7 +102,7 @@ myScratchPads = [ NS "terminal" spawnTerm  findTerm  manageTerm   -- scratchpad
     findTerm   = resource   =? "scratchpad"                   -- use title if title is set
     manageTerm = customFloating $ W.RationalRect 0 0.9 1 0.1 -- position and size
 
-    spawnEmail  = "xfce4-terminal" ++ " -T email -e neomutt"
+    spawnEmail  = "xfce4-terminal" ++ " -T email -e aerc"
     findEmail   = title   =? "email"
     manageEmail = customFloating $ W.RationalRect 0.1 0.1 0.8 0.8
 

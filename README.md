@@ -8,7 +8,7 @@ My configuration files for linux.
     cd dotfiles
     sh ./install.sh
 
-## Necessary Apps
+## Necessary Applications
     - `git`
     - `neovim`
     - `mupdf`

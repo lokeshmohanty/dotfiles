@@ -18,10 +18,12 @@ if dein#load_state(expand('~/.local/share/dein'))
 
     " " Autocomplete
     call dein#add('Shougo/deoplete.nvim', { 'build': ':UpdateRemotePlugins' })       " Requires :UpdateRemotePlugins
-    call dein#add('Shougo/denite.nvim', { 'build': ':UpdateRemotePlugins' })         " Unites all interfaces, a bit like fuzzy finder but more
     " call dein#add('neoclide/coc.nvim', {'merge':0, 'rev': 'release'})
     " call dein#add('Quramy/tsuquyomi')
 
+    " Fuzzy finders
+    call dein#add('Shougo/denite.nvim', { 'build': ':UpdateRemotePlugins' })         " Unites all interfaces, a bit like fuzzy finder but more
+    call dein#add('Yggdroot/LeaderF', { 'build': './install.sh' })         " fuzzy finder
 
     call dein#add('itchyny/lightline.vim')
     call dein#add('tomtom/tcomment_vim')                " gc{movement}, gcc{single line}, gcp{paragraph}
@@ -35,7 +37,7 @@ if dein#load_state(expand('~/.local/share/dein'))
     call dein#add('kristijanhusak/defx-git')
     call dein#add('kristijanhusak/defx-icons')
 
-    " call dein#add('tpope/vim-surround')
+    call dein#add('tpope/vim-surround')
     " call dein#add('mattn/webapi-vim')
 
     " For git tools within vim
@@ -56,12 +58,20 @@ if dein#load_state(expand('~/.local/share/dein'))
     " call dein#add('LucHermitte/VimFold4C')
     " call dein#add('LucHermitte/lh-vim-lib')
     " call dein#add('sgeb/vim-diff-fold')
+    call dein#add('tmhedberg/SimpylFold')
 
     " For live preview of latex
     " call dein#add('xuhdev/vim-latex-live-preview')
 
     " For live preview of markdown
     " call dein#add('suan/vim-instant-markdown')
+
+    " generate table of contents for markdown(:GenTocGFM)
+    call dein#add('mzlogin/vim-markdown-toc')
+    
+    " use MarkdownPreview
+    call dein#add('iamcco/markdown-preview.nvim', {'on_ft': ['markdown', 'pandoc.markdown', 'rmd'],
+					\ 'build': 'sh -c "cd app & yarn install"' })
 
     " For markdown syntax highlighting
     " call dein#add('tpope/vim-markdown')
@@ -71,7 +81,13 @@ if dein#load_state(expand('~/.local/share/dein'))
     " call dein#add('lifepillar/vim-solarized8')
     " call dein#add('dikiaap/minimalist')
     " call dein#add('owickstrom/vim-colors-paramount')
+    " call dein#add('romainl/Apprentice')
+    " call dein#add('romainl/flattened')
     call dein#add('nightsense/carbonized')
+
+
+    call dein#add('junegunn/limelight.vim')
+    call dein#add('junegunn/goyo.vim')
 
     call dein#add('kristijanhusak/vim-hybrid-material') 
     " call dein#add('vim-syntastic/syntastic')
@@ -79,9 +95,14 @@ if dein#load_state(expand('~/.local/share/dein'))
 
     " Javascript Linter
     call dein#add('dense-analysis/ale')
-    " call dein#add('leafgarland/typescript-vim')
-    " call dein#add('mhartington/nvim-typescript', {'build': './install.sh'})   " Requires :UpdateRemotePlugins, :TSDoc 
-    " call dein#add('HerringtonDarkholme/yats.vim')   " syntax file required by mharington/nvim-typescript
+    call dein#add('leafgarland/typescript-vim')
+    call dein#add('pangloss/vim-javascript')
+    call dein#add('maxmellon/vim-jsx-pretty')
+    call dein#add('mhartington/nvim-typescript', {'build': './install.sh'})   " Requires :UpdateRemotePlugins, :TSDoc 
+    call dein#add('HerringtonDarkholme/yats.vim')   " syntax file required by mharington/nvim-typescript
+
+    " Debuggers
+    call dein#add('puremourning/vimspector')
 
     " Plugins to try
     " call dein#add('junegunn/fzf')
@@ -103,8 +124,12 @@ endif
 " ----------Normal Mode-------------
 " *, # => search for the word under the cursor
 " g*, g# => partial search
+" gd => go to declaration
+" gf => find file with filename as word under cursor
 " ^U, ^D => scroll half page up/down/up
 " ^F, ^B => scroll full page forward/backward
+"
+" /{search-string} => adding \c ignores case and \C restricts case
 " 
 " ^O, ^I => move backward/forward cursor positions
 " ``, '' => move to last cursor position
@@ -140,6 +165,7 @@ endif
 " CTRL-w H/J/K/L => moves the current window to far left/down/up/right
 " CTRL-L => redraw screen
 "
+" q: => go to command line mode
 "
 " ----------Visual Block Mode-------------
 "
@@ -228,7 +254,15 @@ endif
 nnoremap <Space> <Nop>
 let mapleader=" "
 
+inoremap /**<CR> /**o/ko
+
+nnoremap <Leader>gg :Goyo<CR>
+nnoremap <Leader>ll :Limelight!!<CR>
+nnoremap <Leader>td :TSDef<CR>
+nnoremap <Leader>tp :TSDefPreview<CR>
+
 inoremap {<CR> {}<ESC>i<CR><ESC>O
+" inoremap /**<CR> /**<ESC>o/<ESC>O
 nnoremap <M-b> :buffers<CR>:buffer<Space>
 nnoremap <M-v> :buffers<CR>:vsplit<Space>#
 nnoremap <M-s> :buffers<CR>:split<Space>#
@@ -307,23 +341,29 @@ let g:instant_markdown_autostart = 0
 
 "-----------  Javascript Plugins  -----------
 let g:ale_linters = {
-      \ 'javascript': ['eslint'],
-      \ 'typescript': ['tsserver', 'tslint'],
-      \ 'vue': ['eslint']
-      \ }
+  \ 'javascript': ['eslint'],
+  \ 'typescript': ['tsserver', 'tslint'],
+  \ 'vue': ['eslint'],
+  \ 'json': ['fixjson']
+  \ }
 
 let g:ale_fixers = {
-       \ 'javascript': ['eslint'],
-       \ 'typescript': ['prettier'],
-       \ 'vue': ['eslint'],
-       \ 'scss': ['prettier'],
-       \ 'html': ['prettier']
-       \ }
+  \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+  \ 'javascript': ['eslint'],
+  \ 'typescript': ['prettier'],
+  \ 'vue': ['eslint'],
+  \ 'scss': ['prettier'],
+  \ 'html': ['prettier']
+  \ }
 " let g:ale_fix_on_save = 1
 
 " autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 " --------------------------------------------
 
+"-----------  Javascript Plugins  -----------
+let g:vimspector_enable_mappings = 'HUMAN'
+
+"--------------------------------------------
 
 " ------------------------------- Tsuquyomi -------------------------------------
 "
@@ -362,112 +402,20 @@ let g:tsuquyomi_use_local_typescript = 0
 " autocmd FileType typescript nmap <buffer> <Leader>q : <C-u>echo tsuquyomi#hint()<CR> 
 " --------------------------------------------------------------------------------
 
-
-
-"-----------------------------  Denite -------------------------------------------
-
-nnoremap <C-p> :Denite -direction=topleft -start-filter file/rec<CR>
-nnoremap <Leader>/ :Denite -direction=topleft -start-filter grep<CR>
-nnoremap <Leader>F :Denite -direction=topleft -no-quit -mode=normal -start-filter grep:.<CR>
-nnoremap <Leader>s :Denite -direction=topleft -start-filter buffer<CR>
-
-autocmd FileType denite call s:denite_my_settings()
-function! s:denite_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> p denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> q denite#do_map('quit')
-  nnoremap <silent><buffer><expr> <C-[> denite#do_map('quit')
-  nnoremap <silent><buffer><expr> <Space> denite#do_map('toggle_select').'j'
-endfunction
-
-autocmd FileType denite-filter call s:denite_filter_my_settings()
-function! s:denite_filter_my_settings() abort
-  inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
-
-  " quit _everything_ instead of just closing filter window with denite_filter_quit
-  imap <silent><buffer><expr> <C-[> denite#do_map('quit')
-  imap <silent><buffer><expr> <Esc> denite#do_map('quit')
-
-  " C-j/C-k to navigate denite buffer from filter
-  inoremap <silent><buffer> <C-j> <Esc><C-w>p:call cursor(line('.')+1,0)<CR><C-w>pA
-  inoremap <silent><buffer> <C-k> <Esc><C-w>p:call cursor(line('.')-1,0)<CR><C-w>pA
-endfunction
-
-
-"---------------------------------------------------------------------------------
-
-"-------------------------------  Defx -------------------------------------------
-
-" [c => goes to next file with git status
-" ]c => goes to previous file with git status
-
-let g:loaded_netrwPlugin = 1     " disable netrw.vim
-
-" nnoremap <Leader>f :Defx
-"       \ -split=vertical
-"       \ -winwidth=30 -direction=topleft
-"       \ -columns=git:icons:indent:filename:type
-"       \ `expand('%:p:h')` -search=`expand('%:p')`<CR>
-nnoremap <Leader>f :Defx -split=vertical -winwidth=30 -direction=topleft -columns=git:icons:indent:filename:type `expand('%:p:h')` -search=`expand('%:p')`<CR>
-
-augroup defxConfig
-  autocmd!
-  autocmd FileType defx call s:defx_my_settings()
-augroup END
-
-function! s:defx_my_settings() abort
-	  nnoremap <silent><buffer><expr> <CR> defx#do_action('drop')
-	  nnoremap <silent><buffer><expr> c defx#do_action('copy')
-	  nnoremap <silent><buffer><expr> m defx#do_action('move')
-	  nnoremap <silent><buffer><expr> p defx#do_action('paste')
-	  nnoremap <silent><buffer><expr> l defx#do_action('open')
-	  nnoremap <silent><buffer><expr> E defx#do_action('open', 'vsplit')
-	  nnoremap <silent><buffer><expr> P defx#do_action('open', 'pedit')
-	  nnoremap <silent><buffer><expr> o defx#do_action('open_or_close_tree')
-	  nnoremap <silent><buffer><expr> K defx#do_action('new_directory')
-	  nnoremap <silent><buffer><expr> N defx#do_action('new_file')
-	  nnoremap <silent><buffer><expr> M defx#do_action('new_multiple_files')
-	  nnoremap <silent><buffer><expr> C
-	  \ defx#do_action('toggle_columns',
-	  \                'mark:indent:icon:filename:type:size:time')
-	  nnoremap <silent><buffer><expr> S defx#do_action('toggle_sort', 'time')
-	  nnoremap <silent><buffer><expr> d defx#do_action('remove')
-	  nnoremap <silent><buffer><expr> r defx#do_action('rename')
-	  nnoremap <silent><buffer><expr> ! defx#do_action('execute_command')
-	  nnoremap <silent><buffer><expr> x defx#do_action('execute_system')
-	  nnoremap <silent><buffer><expr> yy defx#do_action('yank_path')
-	  nnoremap <silent><buffer><expr> . defx#do_action('toggle_ignored_files')
-	  nnoremap <silent><buffer><expr> ; defx#do_action('repeat')
-	  nnoremap <silent><buffer><expr> h defx#do_action('cd', ['..'])
-	  nnoremap <silent><buffer><expr> ~ defx#do_action('cd')
-	  nnoremap <silent><buffer><expr> q defx#do_action('quit')
-	  nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
-	  nnoremap <silent><buffer><expr> * defx#do_action('toggle_select_all')
-	  nnoremap <silent><buffer><expr> j line('.') == line('$') ? 'gg' : 'j'
-	  nnoremap <silent><buffer><expr> k line('.') == 1 ? 'G' : 'k'
-	  nnoremap <silent><buffer><expr> <C-l> defx#do_action('redraw')
-	  nnoremap <silent><buffer><expr> <C-g> defx#do_action('print')
-	  nnoremap <silent><buffer><expr> cd defx#do_action('change_vim_cwd')
-  " nnoremap <silent><buffer><expr> <CR> defx#do_action('open', 'wincmd w \| drop')
-  " nnoremap <silent><buffer><expr> M defx#do_action('new_multiple_files')
-  " nnoremap <silent><buffer><expr> ~ defx#do_action('cd', [getcwd()])
-  " nnoremap <silent><buffer><expr> C defx#do_action('toggle_columns', 'mark:filename:type:size:time')
-  " nnoremap <silent><buffer><expr> S defx#do_action('toggle_sort', 'time')
-  " nnoremap <silent><buffer><expr> e defx#do_action('call', 'OpenRanger')
-  " nnoremap <silent><buffer><expr> e defx#do_action('call', 'DefxExternalExplorer')
-endfunction
-" ----------------------------------------------------------------------------------------
-
-
-"-----------  Texlive  ----------------------
+" ----------  Texlive  ----------------------
 " " Decrease updatetime to a smaller value
 " autocmd Filetype tex setl updatetime=1
 " let g:livepreview_previewer = 'evince'
 " -------------------------------------------------------
 
 
-"-------------------------------  Plulgin ------------------------------
-" -----------------------------------------------------------------------------
+" ------------------------------  Limelight ------------------------------
+let g:limelight_conceal_ctermfg = 'gray'
+" ----------------------------------------------------------------------
+
+
+" ------------------------------  Plulgin ------------------------------
+" ----------------------------------------------------------------------
 
 " =========================Plugins[End]================================"
 
@@ -486,7 +434,7 @@ set ruler				                  " Show line and column number
 set wildmenu				              " Show the nice autocomplete menu
 set encoding=utf-8				        " Set enciding to utf-8
 set autoread				              " Reload unchanged files automatically
-set autochdir                     " Automatically change directory to file location
+" set autochdir                     " Automatically change directory to file location
 
 " Enable persistent undo
 set undodir=~/.nvimundo/
@@ -540,6 +488,8 @@ set sidescroll=1
 " colorscheme solarized8
 " colorscheme minimalist
 " colorscheme paramount
+" colorscheme apprentice
+" colorscheme flattened_dark
 colorscheme carbonized-dark
 " set background=dark
 " let g:enable_bold_font = 1
@@ -618,7 +568,7 @@ autocmd VimResized * :wincmd =
 
 
 "update dir to current file
-autocmd BufEnter * silent! cd %:p:h
+" autocmd BufEnter * silent! cd %:p:h
 
 " When editing a file, always jump tr the last known cursor position.
 " Don't do it for commit messages, when the position is invalid, or when
@@ -632,10 +582,6 @@ autocmd BufReadPost *
 augroup vimrcEx
     autocmd!
 
-    " When editing a file, always jump to the last known cursor position.
-    " Don't do it for commit messages, when the position is invalid, or when
-    " inside an event handler (happens when dropping a file on gvim).
-
     " Set syntax highlighting for specific file types
     autocmd BufRead,BufNewFile *.md set filetype=markdown
 
@@ -646,13 +592,42 @@ augroup vimrcEx
     autocmd FileType markdown setlocal spell
 
     " Automatically wrap at 100 characters for Markdown
-    " autocmd BufRead,BufNewFile *.md setlocal textwidth=100
+    autocmd BufRead,BufNewFile *.md setlocal textwidth=100
 
     " Automatically wrap at 100 characters and spell check git commit messages
-    " autocmd FileType gitcommit setlocal textwidth=100
+    autocmd FileType gitcommit setlocal textwidth=100
     autocmd FileType gitcommit setlocal spell
 
     " Allow stylesheets to autocomplete hyphenated words
     autocmd FileType css,scss,sass,less setlocal iskeyword+=-
 augroup END
 
+au BufNewFile,BufRead *.py
+  \ set tabstop=4 |
+  \ set softtabstop=4 |
+  \ set shiftwidth=4 |
+  \ set textwidth=79 |
+  \ set expandtab |
+  \ set autoindent |
+  \ set fileformat=unix
+
+" au BufNewfile,BufRead *.js, *.ts, *.html, *.css
+"   \ set tabstop=2 |
+"   \ set softtabstop=2 |
+"   \ set shiftwidth=2
+
+
+
+" =================================================================
+"                              Language Specific
+" =================================================================
+
+" python with virtualenv support
+" py << EOF
+" import os
+" import sys
+" if 'VIRTUAL_ENV' in os.environ:
+"   project_base_dir = os.environ['VIRTUAL_ENV']
+"   activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"   execfile(activate_this, dict(__file__=activate_this))
+" EOF

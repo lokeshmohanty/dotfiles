@@ -29,7 +29,7 @@ Config {
     , Run Date "<fc=#ECBE7B><fn=1></fn></fc> %a %b %_d %I:%M" "date" 300
 
     , Run DynNetwork ["-t"
-      , "<fc=#4db5bd><fn=1></fn></fc> <rx>, <fc=#c678dd><fn=1></fn></fc> <tx>"
+      , "<action=`st nmtui`><fc=#4db5bd><fn=1></fn></fc> <rx>, <fc=#c678dd><fn=1></fn></fc> <tx></action>"
       ,"-H","200"
       ,"-L","10"
       ,"-h","#bbc2cf"

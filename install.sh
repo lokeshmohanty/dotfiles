@@ -34,6 +34,13 @@ for file in ${dotfiles[@]} ; do
     ln -sv ${DOTFILES_DIR}/*/${file} ${HOME}/.${file}
 done
 
+# Fish config files
+if [ -d ${HOME}/.config/fish ] ; then
+    mv -f ${HOME}/.config/fish ${BACKUP_DIR}
+fi
+mkdir -p ${HOME}/.config/fish
+ln -sv ${DOTFILES_DIR}/fish ${HOME}/.config/fish
+
 # Neovim config files
 if [ -d ${HOME}/.config/nvim ] ; then
     mv -f ${HOME}/.config/nvim ${BACKUP_DIR}
@@ -47,13 +54,21 @@ echo "Installing neovim..."
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 sh ./installer.sh ~/.local/share/dein > /dev/null 2>&1
 rm installer.sh
-if hash pip3 2>/dev/null; then
+
+if hash python3 2>/dev/null; then
     python3 -m pip install --user neovim
     python3 -m pip install --user pynvim
     # pip3 install --user pynvim
 else
     echo "Install pip for python3"
 fi
+
+if which npm >/dev/null; then
+	npm install -g neovim
+else
+  echo "mharington/nvim-typescript requires neovim installed by node"
+fi
+
 # nvim -c ":call dein#install()"
 # nvim -c ":UpdateRemotePlugins"
 # nvim -c ":wq"
