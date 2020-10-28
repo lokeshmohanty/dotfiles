@@ -38,8 +38,7 @@ done
 if [ -d ${HOME}/.config/fish ] ; then
     mv -f ${HOME}/.config/fish ${BACKUP_DIR}
 fi
-mkdir -p ${HOME}/.config/fish
-ln -sv ${DOTFILES_DIR}/fish ${HOME}/.config/fish
+ln -sv ${DOTFILES_DIR}/fish ${HOME}/.config/
 
 # Neovim config files
 if [ -d ${HOME}/.config/nvim ] ; then
