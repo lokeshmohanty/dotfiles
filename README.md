@@ -8,7 +8,7 @@ My configuration files for linux.
     cd dotfiles
     sh ./install.sh
 
-## Necessary Applications
+## Good Applications
     - `git`
     - `neovim`
     - `mupdf`
@@ -20,6 +20,9 @@ My configuration files for linux.
     - `mplayer`(video player)
     - `feh`(image viewer)
     - `krita`(image editor)
+    - `node`
+    - `surge`(instant site publish)(`npm i -g surge`)
+    - `ngrok`(make a port public temporarily)
 
 ## TODO
 
@@ -30,4 +33,4 @@ My configuration files for linux.
 
 ## [Troubleshooting](./Troubleshoot.md)
     
-    1. for python errors run `pip install neovim` as root
+    1. for python errors in `neovim` run `pip install neovim` as root
