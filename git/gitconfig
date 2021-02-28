@@ -3,6 +3,11 @@
 	name = Lokesh Mohanty
 	email = lokesh1197@gmail.com
 
+[includeIf "gitdir:~/Repositories/Office/"]
+    path = ~/Repositories/Office/.gitconfig
+
 [url "https://github.com/"]
 	insteadOf = git://github.com/
 
+[pull]
+	rebase = true
