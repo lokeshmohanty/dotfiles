@@ -23,6 +23,7 @@ My configuration files for linux.
     - `node`
     - `surge`(instant site publish)(`npm i -g surge`)
     - `ngrok`(make a port public temporarily)
+    - `rclone`(for syncing/download-upload from cloud)
 
 ## TODO
 
