@@ -165,6 +165,8 @@ endif
 " CTRL-w H/J/K/L => moves the current window to far left/down/up/right
 " CTRL-L => redraw screen
 "
+" CTRL-w T => moves the current window to a new tab
+"
 " q: => go to command line mode
 "
 " ----------Visual Block Mode-------------

@@ -268,3 +268,8 @@
     scrot --quality <num>
   ```
 
+## Swap escape and capslock
+  - In gnome based desktop environment
+  ```
+    dconf write "/org/gnome/desktop/input-sources/xkb-options" "['caps:swapescape']"
+  ```
