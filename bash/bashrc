@@ -1,6 +1,6 @@
 #!/bin/bash
 iatest=$(expr index "$-" i)
-exec fish
+# exec fish
 
 #######################################################
 # SOURCED ALIAS'S AND SCRIPTS BY zachbrowne.me

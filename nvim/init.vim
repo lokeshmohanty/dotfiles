@@ -313,8 +313,8 @@ autocmd FileType denite-filter
 
 
 "-------------------------------  Fugitive ------------------------------
-nnoremap <Leader>gs :Gstatus<CR>
-nnoremap <Leader>gp :Gpush<CR>
+nnoremap <Leader>gs :Git<CR>
+nnoremap <Leader>gp :Git push<CR>
 
 " -----------------------------------------------------------------------------
 
