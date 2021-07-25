@@ -273,3 +273,26 @@
   ```
     dconf write "/org/gnome/desktop/input-sources/xkb-options" "['caps:swapescape']"
   ```
+  - Or
+  ```
+    setxkbmap -option caps:swapescape
+  ```
+
+## Change boot runlevel to multi user(used graphical instead of multi-user to revert)
+
+  - To change for the next boot
+  ```
+    systemctl enable multi-user.target
+    systemctl set-default multi-user.target
+  ```
+
+  - To change for the current boot
+  ```
+    systemctl isolate multi-user.target
+  ```
+
+  - Manual way(not recommended)
+  ```
+    rm -f /etc/systemd/system/default.target
+    ln -s /lib/systemd/system/multi-user.target /etc/systemd/system/default.target
+  ```
