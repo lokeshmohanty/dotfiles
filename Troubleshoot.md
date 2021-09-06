@@ -70,6 +70,16 @@
     git request-pull <start> <url> <end, default: HEAD>
   ```
 
+  - To ignore line ending errors between windows and linux
+    - For Windows
+    ```
+      git config --global core.autocrlf true
+    ```
+    - For Linux
+    ```
+      git config --global core.autocrlf input
+    ```
+
 ## Haskell
   - Install haskell
   ```
@@ -82,6 +92,10 @@
   - check process
   ```
     sudo netstat -tnpl
+  ```
+  - get process by port
+  ```
+    sudo netstat -pna | grep <PORT>
   ```
 
   - Application exists when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
@@ -295,4 +309,21 @@
   ```
     rm -f /etc/systemd/system/default.target
     ln -s /lib/systemd/system/multi-user.target /etc/systemd/system/default.target
+  ```
+
+## ffmpeg
+
+  - Concatenate 2 videos of same format(out.mp4 -> output file)(list.txt contains the file names -> file 'first.mp4' (next line) file 'second.mp4')
+  ```
+    ffmpeg -f concat -i list.txt -c copy out.mp4
+  ```
+
+  - Extract audio from video file(video.mp4 -> video file, output.mp3 -> extracted audio file)
+  ```
+    ffmpeg -i video.mp4 -vn -ac 2 -ar 44100 -ab 320k -f mp3 output.mp3
+  ```
+
+  - Compress video file(lower crf value has higher quality, 24 to 30 in general)
+  ```
+    ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4
   ```
