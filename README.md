@@ -16,14 +16,18 @@ My configuration files for linux.
     - `redshift`
     - `ntfs-3g`
     - `os-prober`
-    - `haskell stack`
-    - `mplayer`(video player)
+    - `qutebrowser`(web browser)
+    - `mplayer`, `mpv`(video player)
     - `feh`(image viewer)
     - `krita`(image editor)
-    - `node`
+    - `audacity`(audio editor)
+    - `kdenlive`(video editor)
     - `surge`(instant site publish)(`npm i -g surge`)
     - `ngrok`(make a port public temporarily)
     - `rclone`(for syncing/download-upload from cloud)
+    - Gemini protocol tools -> `amfora`(client), `agate`(server)
+    - `node`
+    - `haskell stack`
 
 ## TODO
 
