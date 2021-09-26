@@ -10,16 +10,17 @@ My configuration files for linux.
 
 ## Good Applications
     - `git`
-    - `neovim`
+    - `neovim`/`doom-emacs`
     - `mupdf`
     - `aria2`
     - `redshift`
     - `ntfs-3g`
     - `os-prober`
+    - `stacer`(cpu monitor)
     - `qutebrowser`(web browser)
     - `mplayer`, `mpv`(video player)
     - `feh`(image viewer)
-    - `krita`(image editor)
+    - `krita`/`gimp`(image editor)
     - `audacity`(audio editor)
     - `kdenlive`(video editor)
     - `surge`(instant site publish)(`npm i -g surge`)
@@ -28,6 +29,13 @@ My configuration files for linux.
     - Gemini protocol tools -> `amfora`(client), `agate`(server)
     - `node`
     - `haskell stack`
+    - `guix`(package manager)
+    
+    ### To try
+    - App Outlet
+    - Open broadcast software
+    
+
 
 ## TODO
 
