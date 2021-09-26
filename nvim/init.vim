@@ -9,6 +9,7 @@ if dein#load_state(expand('~/.local/share/dein'))
 
     " Plugin Manager
     call dein#add('Shougo/dein.vim')
+    call dein#add('wsdjeg/dein-ui.vim') " ui to update plugins, not mandatory
     if !has('nvim')
         call dein#add('roxma/nvim-yarp')
         call dein#add('roxma/vim-hug-neovim-rpc')
@@ -99,7 +100,8 @@ if dein#load_state(expand('~/.local/share/dein'))
     call dein#add('pangloss/vim-javascript')
     call dein#add('maxmellon/vim-jsx-pretty')
     call dein#add('mhartington/nvim-typescript', {'build': './install.sh'})   " Requires :UpdateRemotePlugins, :TSDoc 
-    call dein#add('HerringtonDarkholme/yats.vim')   " syntax file required by mharington/nvim-typescript
+    " call dein#add('HerringtonDarkholme/yats.vim')   " syntax file required by mharington/nvim-typescript
+    call dein#add('neoclide/vim-jsx-improve')
 
     " Debuggers
     call dein#add('puremourning/vimspector')
@@ -290,20 +292,21 @@ tnoremap <ESC> <C-\><C-n>
 nnoremap <Leader>q :bwipe!<CR>
 " nnoremap <Leader>vt :vsplit|terminal<CR>
 " nnoremap <Leader>ht :split|terminal<CR>
-nnoremap <Leader>tv :vsplit term://fish<CR>
-nnoremap <Leader>th :split term://fish<CR>
-nnoremap <Leader>tt :tabnew term://fish<CR>
-nnoremap <Leader>te :edit term://fish<CR>
+nnoremap <Leader>tv :vsplit term://bash<CR>
+nnoremap <Leader>th :split term://bash<CR>
+nnoremap <Leader>tt :tabnew term://bash<CR>
+nnoremap <Leader>te :edit term://bash<CR>
 
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
-
 
 " =========================Plugins[Start]================================"
 
 " -----------------Deoplete----------------
 " Enable deoplete at startup
 let g:deoplete#enable_at_startup = 1
+let g:python_host_prog = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/bin/python'
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Disable deoplete for denite buffer
@@ -549,7 +552,7 @@ hi Normal guibg=NONE ctermbg=NONE
 au FocusGained,BufEnter * :silent! !
 
 " Automatically go to insert mode in terminal
-au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+" au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 
 " Below is to fix issues with the ABOVE mappings in quickfix window
 autocmd CmdwinEnter * nnoremap <CR> <CR>
@@ -594,10 +597,10 @@ augroup vimrcEx
     autocmd FileType markdown setlocal spell
 
     " Automatically wrap at 100 characters for Markdown
-    autocmd BufRead,BufNewFile *.md setlocal textwidth=100
+    " autocmd BufRead,BufNewFile *.md setlocal textwidth=100
 
     " Automatically wrap at 100 characters and spell check git commit messages
-    autocmd FileType gitcommit setlocal textwidth=100
+    " autocmd FileType gitcommit setlocal textwidth=100
     autocmd FileType gitcommit setlocal spell
 
     " Allow stylesheets to autocomplete hyphenated words
@@ -608,7 +611,7 @@ au BufNewFile,BufRead *.py
   \ set tabstop=4 |
   \ set softtabstop=4 |
   \ set shiftwidth=4 |
-  \ set textwidth=79 |
+  " \ set textwidth=79 |
   \ set expandtab |
   \ set autoindent |
   \ set fileformat=unix
