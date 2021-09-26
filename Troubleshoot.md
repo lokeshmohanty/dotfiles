@@ -327,3 +327,18 @@
   ```
     ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4
   ```
+
+## gpg
+
+  - gpg basic commands(armor flag outputs to ascii text instead of binary)
+  ```
+    gpg --full-generate-key
+    gpg --list-keys
+    gpg --encrypt --receipent <receipent name/any string> <file>
+    gpg --encrypt --armor --receipent <receipent name/any string> <file> 
+    gpg --decrypt <file>
+    gpg --output <file> --decrypt <encrypted-file>
+    gpg --sign <file>
+    gpg --clearsign <file>
+    gpg --detach-sign <file>
+  ```
