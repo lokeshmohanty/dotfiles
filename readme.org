@@ -1,5 +1,15 @@
-Configuration Files
-===================
+#+TITLE: Dotfiles (Configuration files for GNU/Linux based OS)
+#+AUTHOR: Lokesh Mohanty
+
+* Installation
+
+git clone https://github.com/lokesh1197/dotfiles.git
+cd dotfiles
+sh ./install.sh
+
+* Applicatoin Wise Readme
+** Zsh
+*** Configuration Files
 
 Zsh has several system-wide and user-local configuration files.
 
@@ -13,8 +23,7 @@ but are prefixed with a dot (hidden). Zsh looks for these files in the path
 stored in the `$ZDOTDIR` environmental variable. However, if said variable is
 not defined, Zsh will use the user's home directory.
 
-File Descriptions
------------------
+*** File Descriptions
 
 The configuration files are read in the following order:
 
@@ -30,12 +39,12 @@ The configuration files are read in the following order:
   10. ~/.zlogout
   11. /etc/zlogout
 
-### zshenv
+**** zshenv
 
 This file is sourced by all instances of Zsh, and thus, it should be kept as
 small as possible and should only define environment variables.
 
-### zprofile
+**** zprofile
 
 This file is similar to zlogin, but it is sourced before zshrc. It was added
 for [KornShell][1] fans. See the description of zlogin below for what it may
@@ -43,16 +52,16 @@ contain.
 
 zprofile and zlogin are not meant to be used concurrently but can be done so.
 
-### zshrc
+**** zshrc
 
 This file is sourced by interactive shells. It should define aliases,
 functions, shell options, and key bindings.
 
-### zpreztorc
+**** zpreztorc
 
 This file configures Prezto.
 
-### zlogin
+**** zlogin
 
 This file is sourced by login shells after zshrc, and thus, it should contain
 commands that need to execute at login. It is usually used for messages such as
@@ -61,13 +70,12 @@ commands that need to execute at login. It is usually used for messages such as
 This is not the file to define aliases, functions, shell options, and key
 bindings. It should not change the shell environment.
 
-### zlogout
+**** zlogout
 
 This file is sourced by login shells during logout. It should be used for
 displaying messages and the deletion of files.
 
-Authors
--------
+*** Authors
 
 *The authors of these files should be contacted via the [issue tracker][4].*
 
@@ -78,11 +86,11 @@ Authors
 [3]: http://www.manpagez.com/man/1/msgs
 [4]: https://github.com/sorin-ionescu/prezto/issues
 
-# TODO
+*** TODOs
 01. Understand powerlevel9k plugin properly
 02. Try grml-zsh-config
 
-## Themes to try
+*** Themes to try
 01. adam2
 02. bart
 03. steeef
@@ -90,4 +98,86 @@ Authors
 05. minimal
 06. redhat
 07. zefram
-08. suse
+08. sus
+** Xmonad
+*** Location
+ - xmonad: `~/.xmonad/`
+ - xinitrc : `~/.xinitrc`
+
+*** Commands
+
+  - Install GHC with stack
+  ```
+    stack setup
+  ```
+  
+  - Create `stack.yaml` file if it doesn't exist
+  ```
+    stack init
+  ```
+
+  - To build and install or update
+  ```
+    stack install
+  ```
+
+  - Recompile `xmonad.hs`
+  ```
+    xmonad --recompile
+  ```
+
+  - Restart `xmonad.hs`
+  ```
+    xmonad --restart
+  ```
+
+*** Dependencies (Voidlinux) (To be updated)
+
+**** For xmonad
+  - stack
+  - libXft-devel
+  - libXinerama-devel, libXrandr-devel, libXScrnSaver-devel
+  - pkg-config
+
+**** For xmobar
+  - alsa-lib-devel
+  - wireless_tools-devel
+  - libXpm-devel
+* Bookmarked Applications
+- `git`
+- `neovim`/`doom-emacs`
+- `mupdf`
+- `aria2`
+- `redshift`
+- `ntfs-3g`
+- `os-prober`
+- `stacer`(cpu monitor)
+- `qutebrowser`(web browser)
+- `mplayer`, `mpv`(video player)
+- `feh`(image viewer)
+- `krita`/`gimp`(image editor)
+- `audacity`(audio editor)
+- `kdenlive`(video editor)
+- `surge`(instant site publish)(`npm i -g surge`)
+- `ngrok`(make a port public temporarily)
+- `rclone`(for syncing/download-upload from cloud)
+- Gemini protocol tools -> `amfora`(client), `agate`(server)
+- `node`
+- `haskell stack`
+- `guix`(package manager)
+
+  ### To try
+  - App Outlet
+  - Open broadcast software
+    
+
+* TODOs 
+
+1. Add functionality to automate including new dotfiles
+2. Create a script to install my preferred apps
+3. Create a script to restore backed up dotfiles
+4. Add functionality to update dotfiles
+
+* Troubleshooting
+1. for python errors in `neovim` run `pip install neovim` as root
+See [[file:troubleshoot.org][troubleshoot.org]] for more.
