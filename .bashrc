@@ -137,7 +137,12 @@ alias exec-redshift='redshift -l 55.7:12.6 -t 5700:3600 -g 0.8 -m randr -v &'
 # Show all logs in /var/log
 alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
 
+# Add alias to manage dotfiles
+alias cfg='/usr/bin/git --git-dir=/home/lokesh/.cfg/ --work-tree=/home/lokesh'
+
+# Add .local/bin and .bin to path
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.bin"
 
 # Load guix paths
 export GUIX_PROFILE="/home/lokesh/.guix-profile"
