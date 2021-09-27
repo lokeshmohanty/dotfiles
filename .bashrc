@@ -156,8 +156,7 @@ export NVM_DIR="/home/lokesh/.nvm"
 
 
 # Start commands
-setxkbmap -option caps:swapescape
-setxkbmap -option ctrl:swap_lalt_lctl
+setxkbmap -option ctrl:swapcaps
 
 # Use starship to set prompt
 eval "$(starship init bash)"

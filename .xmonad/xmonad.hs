@@ -534,7 +534,7 @@ myKeys =
     -- KB_GROUP Kill windows
         , ("M-x", kill1)     -- Kill the currently focused client
         , ("M-S-x", killAll)   -- Kill all windows on current workspace
-        , ("M-C-x", spawn "xkill") -- Select a window to kill forcefully
+        , ("M-M1-x", spawn "xkill") -- Select a window to kill forcefully
 
     -- KB_GROUP Workspaces
         , ("M-.", nextScreen)  -- Switch focus to next monitor
@@ -554,9 +554,9 @@ myKeys =
         , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
 
     -- -- KB_GROUP Grid Select (CTR-g followed by a key)
-        , ("C-g g", spawnSelected' myAppGrid)                 -- grid select favorite apps
-        , ("C-g t", goToSelected $ mygridConfig myColorizer)  -- goto selected window
-        , ("C-g b", bringSelected $ mygridConfig myColorizer) -- bring selected window
+        , ("M1-g g", spawnSelected' myAppGrid)                 -- grid select favorite apps
+        , ("M1-g t", goToSelected $ mygridConfig myColorizer)  -- goto selected window
+        , ("M1-g b", bringSelected $ mygridConfig myColorizer) -- bring selected window
 
     -- KB_GROUP Windows navigation
         , ("M-m", windows W.focusMaster)  -- Move focus to the master window
@@ -567,7 +567,7 @@ myKeys =
         , ("M-S-k", windows W.swapUp)     -- Swap focused window with prev window
         , ("M-<Backspace>", promote)      -- Moves focused window to master, others maintain order
         , ("M-S-<Tab>", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
-        , ("M-C-<Tab>", rotAllDown)       -- Rotate all the windows in the current stack
+        , ("M-M1-<Tab>", rotAllDown)       -- Rotate all the windows in the current stack
 
     -- KB_GROUP Layouts
         , ("M-<Tab>", sendMessage NextLayout)           -- Switch to next layout
@@ -576,8 +576,8 @@ myKeys =
     -- KB_GROUP Increase/decrease windows in the master pane or the stack
         , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
         , ("M-S-<Down>", sendMessage (IncMasterN (-1))) -- Decrease # of clients master pane
-        , ("M-C-<Up>", increaseLimit)                   -- Increase # of windows
-        , ("M-C-<Down>", decreaseLimit)                 -- Decrease # of windows
+        , ("M-M1-<Up>", increaseLimit)                   -- Increase # of windows
+        , ("M-M1-<Down>", decreaseLimit)                 -- Decrease # of windows
 
     -- KB_GROUP Window resizing
         , ("M-h", sendMessage Shrink)                   -- Shrink horiz window width
@@ -587,15 +587,15 @@ myKeys =
 
     -- KB_GROUP Sublayouts
     -- This is used to push windows to tabbed sublayouts, or pull them out of it.
-        , ("M-C-h", sendMessage $ pullGroup L)
-        , ("M-C-l", sendMessage $ pullGroup R)
-        , ("M-C-k", sendMessage $ pullGroup U)
-        , ("M-C-j", sendMessage $ pullGroup D)
-        , ("M-C-m", withFocused (sendMessage . MergeAll))
-        , ("M-C-u", withFocused (sendMessage . UnMerge))
-        , ("M-C-/", withFocused (sendMessage . UnMergeAll))
-        , ("M-C-.", onGroup W.focusUp')    -- Switch focus to next tab
-        , ("M-C-,", onGroup W.focusDown')  -- Switch focus to prev tab
+        , ("M-M1-h", sendMessage $ pullGroup L)
+        , ("M-M1-l", sendMessage $ pullGroup R)
+        , ("M-M1-k", sendMessage $ pullGroup U)
+        , ("M-M1-j", sendMessage $ pullGroup D)
+        , ("M-M1-m", withFocused (sendMessage . MergeAll))
+        , ("M-M1-u", withFocused (sendMessage . UnMerge))
+        , ("M-M1-/", withFocused (sendMessage . UnMergeAll))
+        , ("M-M1-.", onGroup W.focusUp')    -- Switch focus to next tab
+        , ("M-M1-,", onGroup W.focusDown')  -- Switch focus to prev tab
 
     -- KB_GROUP Scratchpads
     -- Toggle show/hide these programs.  They run on a hidden workspace.
@@ -607,23 +607,22 @@ myKeys =
 
     -- KB_GROUP Set wallpaper
     -- Set wallpaper with either 'xwallwaper'. Type 'SUPER+F1' to launch sxiv in the
-    -- wallpapers directory; then in sxiv, type 'C-x x' to set the wallpaper that you
+    -- wallpapers directory; then in sxiv, type 'M1-x x' to set the wallpaper that you
     -- choose.  Or, type 'SUPER+F2' to set a random wallpaper.
         , ("M-<F1>", spawn "sxiv -r -q -t -o /home/lokesh/Pictures/Wallpapers/*")
         , ("M-<F2>", spawn "find /home/lokesh/Pictures/Wallpapers// -type f | shuf -n 1 | xargs xwallpaper --stretch")
 
     -- KB_GROUP Emacs (CTRL-e followed by a key)
-        , ("C-e e", spawn myEmacs)                 -- start emacs
-        -- , ("C-e e", spawn (myEmacs ++ ("--eval '(dashboard-refresh-buffer)'")))   -- emacs dashboard
-        , ("C-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
-        , ("C-e d", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
-        , ("C-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
-        , ("C-e m", spawn (myEmacs ++ ("--eval '(mu4e)'")))      -- mu4e email
-        , ("C-e n", spawn (myEmacs ++ ("--eval '(elfeed)'")))    -- elfeed rss
-        , ("C-e s", spawn (myEmacs ++ ("--eval '(eshell)'")))    -- eshell
-        , ("C-e v", spawn (myEmacs ++ ("--eval '(+vterm/here nil)'"))) -- vterm if on Doom Emacs
-        -- , ("C-e w", spawn (myEmacs ++ ("--eval '(eww \"distrotube.com\")'"))) -- eww browser if on GNU Emacs
-        , ("C-e w", spawn (myEmacs ++ ("--eval '(doom/window-maximize-buffer(eww \"distrotube.com\"))'"))) -- eww browser if on Doom Emacs
+        , ("M1-e e", spawn myEmacs)                 -- start emacs
+        , ("M1-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
+        , ("M1-e d", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
+        , ("M1-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
+        , ("M1-e m", spawn (myEmacs ++ ("--eval '(mu4e)'")))      -- mu4e email
+        , ("M1-e n", spawn (myEmacs ++ ("--eval '(elfeed)'")))    -- elfeed rss
+        , ("M1-e s", spawn (myEmacs ++ ("--eval '(eshell)'")))    -- eshell
+        , ("M1-e v", spawn (myEmacs ++ ("--eval '(+vterm/here nil)'"))) -- vterm if on Doom Emacs
+        -- , ("M1-e w", spawn (myEmacs ++ ("--eval '(eww \"distrotube.com\")'"))) -- eww browser if on GNU Emacs
+        , ("M1-e w", spawn (myEmacs ++ ("--eval '(doom/window-maximize-buffer(eww \"distrotube.com\"))'"))) -- eww browser if on Doom Emacs
 
     -- KB_GROUP Function Keys
         -- TODO: write a script to show the current brightness
@@ -657,7 +656,7 @@ myKeys =
 
 main :: IO ()
 main = do
-    xmproc <- spawnPipe "xmobar /home/lokesh/.xmonad/xmobarrc"
+    xmproc <- spawnPipe "xmobar $HOME/.xmonad/xmobarrc"
     xmonad $ ewmh def
         { manageHook         = manageDocks <+> myManageHook <+> namedScratchpadManageHook myScratchPads
         -- -- Run xmonad commands from command line with "xmonadctl command". Commands include:

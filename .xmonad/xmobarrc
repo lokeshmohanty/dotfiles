@@ -60,7 +60,7 @@ Config {
         , Run Date "<icon=calendar-clock-icon_24.xpm/> <fc=#ee9a00>%a, %0d %b, %H:%M:%S</fc>" "date" 10
         , Run DiskU [("/", "hdd: <free> free")] [] 600
         , Run Uptime ["-t", "uptime: <hours>h <minutes>m"] 600
-        , Run Com "/home/lokesh/.dotfiles/xmonad/trayer-padding-icon.sh" [] "trayerpad" 20
+        , Run Com "/home/lokesh/.xmonad/trayer-padding-icon.sh" [] "trayerpad" 20
         , Run StdinReader
 
         -- Other plugins(not being used right now)
