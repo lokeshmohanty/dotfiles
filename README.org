@@ -3,7 +3,7 @@
 
 * Installation
 
-Run the below command in terminal. It clones the bare repository at $HOME/.cfg and creates a backup of conflicting files at .config-backup. You can read the source [[file:bin/install-dotfiles.sh][here]].
+Run the below command in terminal. It clones the bare repository at $HOME/.cfg and creates a backup of conflicting files at .config-backup. You can read the source [[file:.bin/install-dotfiles.sh][here]].
 #+begin_src shell
 curl -Lks http://bit.do/lokesh-dotfiles | /bin/bash
 #+end_src
