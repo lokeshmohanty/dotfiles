@@ -3,9 +3,15 @@
 
 * Installation
 
-git clone https://github.com/lokesh1197/dotfiles.git
-cd dotfiles
-sh ./install.sh
+Run the below command in terminal. It clones the bare repository at $HOME/.cfg and creates a backup of conflicting files at .config-backup. You can read the source [[file:bin/install-dotfiles.sh][here]].
+#+begin_src shell
+curl -Lks http://bit.do/install-dotfiles-sh | /bin/bash
+#+end_src
+
+Run the below command if the above doesn't work.
+#+begin_src shell
+curl -Lks https://raw.githubusercontent.com/lokesh1197/dotfiles/master/bin/install-dotfiles.sh | /bin/bash
+#+end_src
 
 * Applicatoin Wise Readme
 ** Zsh
@@ -170,7 +176,6 @@ displaying messages and the deletion of files.
   - App Outlet
   - Open broadcast software
     
-
 * TODOs 
 
 1. Add functionality to automate including new dotfiles
