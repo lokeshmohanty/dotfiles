@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
+GIT_CLONE_URL="git@github.com:lokesh1197/dotfiles.git"
+TARGET_DIR="$HOME/.cfg"
+
 if [ "$1" = "http" ];
 then
-  git clone --bare https://github.com/lokesh1197/dotfiles.git "$HOME/.cfg"
-else
-  git clone --bare git@github.com:lokesh1197/dotfiles.git "$HOME/.cfg"
+    GIT_CLONE_URL="https://github.com/lokesh1197/dotfiles.git"
 fi
+
+git clone --bare --recurse-submodules $GIT_CLONE_URL $TARGET_DIR
 
 function config {
    /usr/bin/git --git-dir="$HOME/.cfg/" --work-tree="$HOME" "$@"
