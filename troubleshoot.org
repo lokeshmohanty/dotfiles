@@ -3,340 +3,345 @@
 
 * Linux
 ** Process
-  - check process
-  ```
-    sudo netstat -tnpl
-  ```
+- check process
+  #+begin_src shell
+  sudo netstat -tnpl
+  ,#+begin_src shell
   - get process by port
-  ```
-    sudo netstat -pna | grep <PORT>
-  ```
+  ,#+begin_src shell
+  sudo netstat -pna | grep <PORT>
+  #+end_src
 
-  - Application exists when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
+- Application exists when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
 
 ** neovim
 
-  - Build from source
-  ```
-    make CMAKE_BUILD_TYPE=RelWithDebInfo
-    sudo make install
-  ```
+- Build from source
+  #+begin_src shell
+  make CMAKE_BUILD_TYPE=RelWithDebInfo
+  sudo make install
+  #+end_src
 
   - Dependencies
-  ```
-    sudo apt install cmake pkg-config libtool libtool-bin m4 automake gettext
-  ```
+  #+begin_src shell
+  sudo apt install cmake pkg-config libtool libtool-bin m4 automake gettext
+  #+end_src
 ** dpkg
 
-  - Resolve `trying to overwrite error`
-  ```
-    sudo dpkg -i --force-overwrite <pkg-name>
-    sudo apt -f install
-  ```
+- Resolve `trying to overwrite error`
+  #+begin_src shell
+  sudo dpkg -i --force-overwrite <pkg-name>
+  sudo apt -f install
+  #+end_src
 
 ** Firewall
 
-  - Check allowed ports
-  ```
+- Check allowed ports
+  #+begin_src shell
   sudo ufw status verbose
-  ```
+  #+end_src
 
-  - Allow a port
-  ```
+- Allow a port
+  #+begin_src shell
   sudo ufw allow 3000/tcp
-  ```
+  #+end_src
 
 ** Youtube-dl
 
-  - Download audio of a video from youtube
-  ```
-    youtube-dl --extract-audio --audio-format mp3 <url>
-  ```
+- Download audio of a video from youtube
+  #+begin_src shell
+  youtube-dl --extract-audio --audio-format mp3 <url>
+  #+end_src
 
 ** Stack (haskell)
 
-  - Uninstall stack
-  ```
-    rm -rf ~/.stack
-    rm -rf /usr/local/bin/stack
-  ```
+- Uninstall stack
+  #+begin_src shell
+  rm -rf ~/.stack
+  rm -rf /usr/local/bin/stack
+  #+end_src
   - Install stack
 
 ** Xmonad
 
-  - Get WM_CLASS for manageHook
-  ```
-    xprop | grep WM_CLASS
-  ```
+- Get WM_CLASS for manageHook
+  #+begin_src shell
+  xprop | grep WM_CLASS
+  #+end_src
 
 ** Pulse audio
 
-  - Mute(toggle) application sound
-  ```
-    pactl set-sink-input-mute <sink input index> toggle
-  ```
+- Mute(toggle) application sound
+  #+begin_src shell
+  pactl set-sink-input-mute <sink input index> toggle
+  #+end_src
 
-  - Get list of input sinks
-  ```
-    pactl list sink-inputs
-  ```
+- Get list of input sinks
+  #+begin_src shell
+  pactl list sink-inputs
+  #+end_src
 
 ** Npm errors
 
-  - For Error: EACCESS: permission denied, use the following argument
-  ```sh
-    --unsafe-perm=true --allow-root
-    ```
+- For Error: EACCESS: permission denied, use the following argument
+  #+begin_src shell
+  --unsafe-perm=true --allow-root
+  #+end_src
     
 ** locate command
 
-  - Update the database
-  ```sh
-    sudo updatedb
-  ```
+- Update the database
+  #+begin_src shell
+  sudo updatedb
+  #+end_src
 
-  - locate with permissions
-  ```sh
-    ls -l $(locate -e <fileName>)
-  ```
+- locate with permissions
+  #+begin_src shell
+  ls -l $(locate -e <fileName>)
+  #+end_src
 
 * Others
 ** SSH
 *** Generate a new SSH key
 
-  ```
-    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-  ```
+#+begin_src shell
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+#+end_src
 
 *** Add key to ssh-agent
 
-  - Start ssh-agent in background(bash)
-  ```
-    eval "$(ssh-agent -s)"
-  ```
+- Start ssh-agent in background(bash)
+  #+begin_src shell
+  eval "$(ssh-agent -s)"
+  #+end_src
 
-  - Start ssh-agent in background(fish)
-  ```
-    eval (ssh-agent -c)
-  ```
+- Start ssh-agent in background(fish)
+  #+begin_src shell
+  eval (ssh-agent -c)
+  #+end_src
 
-  - Add key to the agent(private)
-  ```
-    ssh-add ~/.ssh/id_rsa
-  ```
+- Add key to the agent(private)
+  #+begin_src shell
+  ssh-add ~/.ssh/id_rsa
+  #+end_src
 
-  - List added keys to ssh-agent
-  ```
-    ssh-add -l
-  ```
+- List added keys to ssh-agent
+  #+begin_src shell
+  ssh-add -l
+  #+end_src
 
 ** Font
 
-  - Download a [font](http://nerdfonts.com/)
-  - Unzip and copy to `~/fonts/`
-  - Run `fc-cache -fv` to manually rebuild the font cache
+- Download a [font](http://nerdfonts.com/)
+- Unzip and copy to `~/fonts/`
+- Run `fc-cache -fv` to manually rebuild the font cache
 
-  - If icons appear as rectangles then install Font-awesome and restart
+- If icons appear as rectangles then install Font-awesome and restart
 
 ** Git
 
-  - To set upstream branch
-  ```
-    git branch --set-upstream-to <remote/branch-name>
-  ```
+- To set upstream branch
+  #+begin_src shell
+  git branch --set-upstream-to <remote/branch-name>
+  #+end_src
 
-  - To force pull a remote in git
-  ```
-    git fetch origin master
-    git reset --hard origin/master
-  ```
-  - To force a pull from remote while maintaining local commits(local commits stored in new-branch)
-  ```
-    git checkout master
-    git branch new-branch
-    git fetch --all
-    git reset --hard origin/master
-  ```
+- To force pull a remote in git
+  #+begin_src shell
+  git fetch origin master
+  git reset --hard origin/master
+  #+end_src
+- To force a pull from remote while maintaining local commits(local commits stored in new-branch)
+  #+begin_src shell
+  git checkout master
+  git branch new-branch
+  git fetch --all
+  git reset --hard origin/master
+  #+end_src
 
-  - To stash uncommitted changes
-  ```
-    git stash
-  ```
-  - To reapply stashed changes
-  ```
-    git stash pop
-  ```
-  - To send a pull request to upstream (start is the commit from where you last pulled)
-  ```
-    git request-pull <start> <url> <end, default: HEAD>
-  ```
+- To stash uncommitted changes
+  #+begin_src shell
+  git stash
+  #+end_src
+- To reapply stashed changes
+  #+begin_src shell
+  git stash pop
+  #+end_src
+- To send a pull request to upstream (start is the commit from where you last pulled)
+  #+begin_src shell
+  git request-pull <start> <url> <end, default: HEAD>
+  #+end_src
 
-  - To ignore line ending errors between windows and linux
-    - For Windows
-    ```
-      git config --global core.autocrlf true
-    ```
+- To ignore line ending errors between windows and linux
+  - For Windows
+    #+begin_src shell
+    git config --global core.autocrlf true
+    #+end_src
     - For Linux
-    ```
-      git config --global core.autocrlf input
-    ```
+    #+begin_src shell
+    git config --global core.autocrlf input
+    #+end_src
 
 ** Haskell
-  - Install haskell
-  ```
-    wget -qO- https://get.haskellstack.org/ | sh
-  ```
+- Install haskell
+  #+begin_src shell
+  wget -qO- https://get.haskellstack.org/ | sh
+  #+end_src
 
 * Tips
 ** Miscellaneous
 
-  - Hardware Info
-  ```
-    inxi -Fxz
-  ```
+- Hardware Info
+  #+begin_src shell
+  inxi -Fxz
+  #+end_src
 
-  - Find processes
-  ```
-    sudo netstat -tnlp
-  ```
+- Find processes
+  #+begin_src shell
+  sudo netstat -tnlp
+  #+end_src
 
-  - Find pid of a process(i -> internet related, t -> only process id, :9000 -> only on this
-    port)(lsof -> list of files(/proc files))
-  ```
-    sudo lsof -t -i:9000
-  ```
+- Find pid of a process(i -> internet related, t -> only process id, :9000 -> only on this
+port)(lsof -> list of files(/proc files))
+#+begin_src shell
+sudo lsof -t -i:9000
+#+end_src
 
-  - Kill a process with pid
-  ```
-    sudo kill -9 <pid>
-  ```
+- Kill a process with pid
+  #+begin_src shell
+  sudo kill -9 <pid>
+  #+end_src
 
-  - Find and kill a process(k -> kill, n tcp -> namespace tcp, 3000 -> port)
-  ```
-    fuser -k -n tcp 3000
-  ```
+- Find and kill a process(k -> kill, n tcp -> namespace tcp, 3000 -> port)
+  #+begin_src shell
+  fuser -k -n tcp 3000
+  #+end_src
 
-  - View running process
-  ```
-    ps -aux
-  ```
+- View running process
+  #+begin_src shell
+  ps -aux
+  #+end_src
 
-  - Get window information
-  ```
-    xwininfo
-  ```
+- Get window information
+  #+begin_src shell
+  xwininfo
+  #+end_src
 
-  - Find graphics card model
-  ```
-    lspci | grep -i vga
-  ```
+- Find graphics card model
+  #+begin_src shell
+  lspci | grep -i vga
+  #+end_src
 
-  - Find hardware info (display)
-  ```
-    lshw -class display
-  ```
+- Find hardware info (display)
+  #+begin_src shell
+  lshw -class display
+  #+end_src
 
-  - View installed locale: `locale -a`
-  - Setup locale: `echo "LANG=en_US.UTF-8" > /etc/locale.conf`
+- View installed locale: `locale -a`
+- Setup locale: `echo "LANG=en_US.UTF-8" > /etc/locale.conf`
 
-  - Splitting/Compression
-  ```
-    * create archives
-    $ tar cz my_large_file_1 my_large_file_2 | split -b 1024MiB - myfiles_split.tgz_
-    * uncompress
-    $ cat myfiles_split.tgz_* | tar xz
-  ```
+- Splitting/Compression
+  #+begin_src shell
+  ,* create archives
+  $ tar cz my_large_file_1 my_large_file_2 | split -b 1024MiB - myfiles_split.tgz_
+  ,* uncompress
+  $ cat myfiles_split.tgz_* | tar xz
+  #+end_src
+  
+- Remove dangling symbolic links
+  #+begin_src shell
+  find . -xtype l 2>/dev/null -exec rm {} \
+  #+end_src
 
 * Handy Commands
 ** Ubuntu
-  - Lock user
-  ```
-    gnome-screensaver-command -l
-  ```
+- Lock user
+  #+begin_src shell
+  gnome-screensaver-command -l
+  #+end_src
 
-  - Unlock user
-  ```
-    loginctl unlock-session <session-id>
-  ```
+- Unlock user
+  #+begin_src shell
+  loginctl unlock-session <session-id>
+  #+end_src
 
-  - Get all sessions
-  ```
-    loginctl list-sessions --no-legend | while read id rest; do echo; loginctl show-session $id; done
-  ```
+- Get all sessions
+  #+begin_src shell
+  loginctl list-sessions --no-legend | while read id rest; do echo; loginctl show-session $id; done
+  #+end_src
 
 ** Scrot
-  - Generate thumbnail, <num> is percentage of original size
-  ```
-    scrot --thumb <num>
-  ``` 
+- Generate thumbnail, <num> is percentage of original size
+  #+begin_src shell
+  scrot --thumb <num>
+  #+end_src 
 
-  - Execute operations on saved images
-  ```
-    scrot -e 'mv $f ~/Pictures/'
-  ```
+- Execute operations on saved images
+  #+begin_src shell
+  scrot -e 'mv $f ~/Pictures/'
+  #+end_src
 
-  - Adjust quality of screenshot, <num> is in the scale of 1-100
-  ```
-    scrot --quality <num>
-  ```
+- Adjust quality of screenshot, <num> is in the scale of 1-100
+  #+begin_src shell
+  scrot --quality <num>
+  #+end_src
 
 ** Swap escape and capslock
-  - In gnome based desktop environment
-  ```
-    dconf write "/org/gnome/desktop/input-sources/xkb-options" "['caps:swapescape']"
-  ```
-  - Or
-  ```
-    setxkbmap -option caps:swapescape
-  ```
+- In gnome based desktop environment
+  #+begin_src shell
+  dconf write "/org/gnome/desktop/input-sources/xkb-options" "['caps:swapescape']"
+  #+end_src
+- Or
+  #+begin_src shell
+  setxkbmap -option caps:swapescape
+  #+end_src
 
 ** Change boot runlevel to multi user(used graphical instead of multi-user to revert)
 
-  - To change for the next boot
-  ```
-    systemctl enable multi-user.target
-    systemctl set-default multi-user.target
-  ```
+- To change for the next boot
+  #+begin_src shell
+  systemctl enable multi-user.target
+  systemctl set-default multi-user.target
+  #+end_src
 
-  - To change for the current boot
-  ```
-    systemctl isolate multi-user.target
-  ```
+- To change for the current boot
+  #+begin_src shell
+  systemctl isolate multi-user.target
+  #+end_src
 
-  - Manual way(not recommended)
-  ```
-    rm -f /etc/systemd/system/default.target
-    ln -s /lib/systemd/system/multi-user.target /etc/systemd/system/default.target
-  ```
+- Manual way(not recommended)
+  #+begin_src shell
+  rm -f /etc/systemd/system/default.target
+  ln -s /lib/systemd/system/multi-user.target /etc/systemd/system/default.target
+  #+end_src
 
 ** ffmpeg
 
-  - Concatenate 2 videos of same format(out.mp4 -> output file)(list.txt contains the file names -> file 'first.mp4' (next line) file 'second.mp4')
-  ```
-    ffmpeg -f concat -i list.txt -c copy out.mp4
-  ```
+- Concatenate 2 videos of same format(out.mp4 -> output file)(list.txt contains the file names -> file 'first.mp4' (next line) file 'second.mp4')
+  #+begin_src shell
+  ffmpeg -f concat -i list.txt -c copy out.mp4
+  #+end_src
 
-  - Extract audio from video file(video.mp4 -> video file, output.mp3 -> extracted audio file)
-  ```
-    ffmpeg -i video.mp4 -vn -ac 2 -ar 44100 -ab 320k -f mp3 output.mp3
-  ```
+- Extract audio from video file(video.mp4 -> video file, output.mp3 -> extracted audio file)
+  #+begin_src shell
+  ffmpeg -i video.mp4 -vn -ac 2 -ar 44100 -ab 320k -f mp3 output.mp3
+  #+end_src
 
-  - Compress video file(lower crf value has higher quality, 24 to 30 in general)
-  ```
-    ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4
-  ```
+- Compress video file(lower crf value has higher quality, 24 to 30 in general)
+  #+begin_src shell
+  ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4
+  #+end_src
 
 ** gpg
 
-  - gpg basic commands(armor flag outputs to ascii text instead of binary)
-  ```
-    gpg --full-generate-key
-    gpg --list-keys
-    gpg --encrypt --receipent <receipent name/any string> <file>
-    gpg --encrypt --armor --receipent <receipent name/any string> <file> 
-    gpg --decrypt <file>
-    gpg --output <file> --decrypt <encrypted-file>
-    gpg --sign <file>
-    gpg --clearsign <file>
-    gpg --detach-sign <file>
-  ```
+- gpg basic commands(armor flag outputs to ascii text instead of binary)
+  #+begin_src shell
+  gpg --full-generate-key
+  gpg --list-keys
+  gpg --encrypt --receipent <receipent name/any string> <file>
+  gpg --encrypt --armor --receipent <receipent name/any string> <file> 
+  gpg --decrypt <file>
+  gpg --output <file> --decrypt <encrypted-file>
+  gpg --sign <file>
+  gpg --clearsign <file>
+  gpg --detach-sign <file>
+  #+end_src
