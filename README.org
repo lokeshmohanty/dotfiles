@@ -10,7 +10,7 @@ curl -Lks http://bit.do/lokesh-dotfiles | /bin/bash
 
 Run the below command if the above doesn't work.
 #+begin_src shell
-curl -Lks https://raw.githubusercontent.com/lokesh1197/dotfiles/master/bin/install-dotfiles.sh | /bin/bash
+curl -Lks https://raw.githubusercontent.com/lokesh1197/dotfiles/master/.bin/install-dotfiles.sh | /bin/bash
 #+end_src
 
 * Applicatoin Wise Readme
