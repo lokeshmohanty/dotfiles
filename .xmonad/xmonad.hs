@@ -657,10 +657,7 @@ myKeys =
 
 main :: IO ()
 main = do
-    xmproc <- spawnPipe "xmobar /home/lokesh/.dotfiles/xmonad/xmobarrc"
-    -- xmproc <- spawnPipe "xmobar /home/lokesh/.dotfiles/xmonad/xmobarrc.back"
-    -- xmproc <- spawnPipe "xmobar /home/lokesh/.dotfiles/xmonad/xmobarrc.dino"
-    -- xmproc <- spawnPipe "xmobar /home/lokesh/.dotfiles/xmonad/xmobarrc.vona"
+    xmproc <- spawnPipe "xmobar /home/lokesh/.xmonad/xmobarrc"
     xmonad $ ewmh def
         { manageHook         = manageDocks <+> myManageHook <+> namedScratchpadManageHook myScratchPads
         -- -- Run xmonad commands from command line with "xmonadctl command". Commands include:
