@@ -1,12 +1,114 @@
-## SSH
+#+TITLE: Troubleshoot (troubleshooting tips)
+#+AUTHOR: Lokesh Mohanty
 
-### Generate a new SSH key
+* Linux
+** Process
+  - check process
+  ```
+    sudo netstat -tnpl
+  ```
+  - get process by port
+  ```
+    sudo netstat -pna | grep <PORT>
+  ```
+
+  - Application exists when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
+
+** neovim
+
+  - Build from source
+  ```
+    make CMAKE_BUILD_TYPE=RelWithDebInfo
+    sudo make install
+  ```
+
+  - Dependencies
+  ```
+    sudo apt install cmake pkg-config libtool libtool-bin m4 automake gettext
+  ```
+** dpkg
+
+  - Resolve `trying to overwrite error`
+  ```
+    sudo dpkg -i --force-overwrite <pkg-name>
+    sudo apt -f install
+  ```
+
+** Firewall
+
+  - Check allowed ports
+  ```
+  sudo ufw status verbose
+  ```
+
+  - Allow a port
+  ```
+  sudo ufw allow 3000/tcp
+  ```
+
+** Youtube-dl
+
+  - Download audio of a video from youtube
+  ```
+    youtube-dl --extract-audio --audio-format mp3 <url>
+  ```
+
+** Stack (haskell)
+
+  - Uninstall stack
+  ```
+    rm -rf ~/.stack
+    rm -rf /usr/local/bin/stack
+  ```
+  - Install stack
+
+** Xmonad
+
+  - Get WM_CLASS for manageHook
+  ```
+    xprop | grep WM_CLASS
+  ```
+
+** Pulse audio
+
+  - Mute(toggle) application sound
+  ```
+    pactl set-sink-input-mute <sink input index> toggle
+  ```
+
+  - Get list of input sinks
+  ```
+    pactl list sink-inputs
+  ```
+
+** Npm errors
+
+  - For Error: EACCESS: permission denied, use the following argument
+  ```sh
+    --unsafe-perm=true --allow-root
+    ```
+    
+** locate command
+
+  - Update the database
+  ```sh
+    sudo updatedb
+  ```
+
+  - locate with permissions
+  ```sh
+    ls -l $(locate -e <fileName>)
+  ```
+
+* Others
+** SSH
+*** Generate a new SSH key
 
   ```
     ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
   ```
 
-### Add key to ssh-agent
+*** Add key to ssh-agent
 
   - Start ssh-agent in background(bash)
   ```
@@ -28,7 +130,7 @@
     ssh-add -l
   ```
 
-## Font
+** Font
 
   - Download a [font](http://nerdfonts.com/)
   - Unzip and copy to `~/fonts/`
@@ -36,8 +138,7 @@
 
   - If icons appear as rectangles then install Font-awesome and restart
 
-
-## Git
+** Git
 
   - To set upstream branch
   ```
@@ -80,116 +181,14 @@
       git config --global core.autocrlf input
     ```
 
-## Haskell
+** Haskell
   - Install haskell
   ```
     wget -qO- https://get.haskellstack.org/ | sh
   ```
 
-# Linux
-
-## Process
-  - check process
-  ```
-    sudo netstat -tnpl
-  ```
-  - get process by port
-  ```
-    sudo netstat -pna | grep <PORT>
-  ```
-
-  - Application exists when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
-
-## neovim
-
-  - Build from source
-  ```
-    make CMAKE_BUILD_TYPE=RelWithDebInfo
-    sudo make install
-  ```
-
-  - Dependencies
-  ```
-    sudo apt install cmake pkg-config libtool libtool-bin m4 automake gettext
-  ```
-## dpkg
-
-  - Resolve `trying to overwrite error`
-  ```
-    sudo dpkg -i --force-overwrite <pkg-name>
-    sudo apt -f install
-  ```
-
-## Firewall
-
-  - Check allowed ports
-  ```
-  sudo ufw status verbose
-  ```
-
-  - Allow a port
-  ```
-  sudo ufw allow 3000/tcp
-  ```
-
-## Youtube-dl
-
-  - Download audio of a video from youtube
-  ```
-    youtube-dl --extract-audio --audio-format mp3 <url>
-  ```
-
-## Stack (haskell)
-
-  - Uninstall stack
-  ```
-    rm -rf ~/.stack
-    rm -rf /usr/local/bin/stack
-  ```
-  - Install stack
-
-## Xmonad
-
-  - Get WM_CLASS for manageHook
-  ```
-    xprop | grep WM_CLASS
-  ```
-
-## Pulse audio
-
-  - Mute(toggle) application sound
-  ```
-    pactl set-sink-input-mute <sink input index> toggle
-  ```
-
-  - Get list of input sinks
-  ```
-    pactl list sink-inputs
-  ```
-
-## Npm errors
-
-  - For Error: EACCESS: permission denied, use the following argument
-  ```sh
-    --unsafe-perm=true --allow-root
-    ```
-    
-## locate command
-
-  - Update the database
-  ```sh
-    sudo updatedb
-  ```
-
-  - locate with permissions
-  ```sh
-    ls -l $(locate -e <fileName>)
-  ```
-
-
-# Tips
-
-## Miscellaneous
+* Tips
+** Miscellaneous
 
   - Hardware Info
   ```
@@ -242,15 +241,14 @@
 
   - Splitting/Compression
   ```
-    # create archives
+    * create archives
     $ tar cz my_large_file_1 my_large_file_2 | split -b 1024MiB - myfiles_split.tgz_
-    # uncompress
+    * uncompress
     $ cat myfiles_split.tgz_* | tar xz
   ```
 
-# Handy Commands
-
-## Ubuntu
+* Handy Commands
+** Ubuntu
   - Lock user
   ```
     gnome-screensaver-command -l
@@ -266,7 +264,7 @@
     loginctl list-sessions --no-legend | while read id rest; do echo; loginctl show-session $id; done
   ```
 
-## Scrot
+** Scrot
   - Generate thumbnail, <num> is percentage of original size
   ```
     scrot --thumb <num>
@@ -282,7 +280,7 @@
     scrot --quality <num>
   ```
 
-## Swap escape and capslock
+** Swap escape and capslock
   - In gnome based desktop environment
   ```
     dconf write "/org/gnome/desktop/input-sources/xkb-options" "['caps:swapescape']"
@@ -292,7 +290,7 @@
     setxkbmap -option caps:swapescape
   ```
 
-## Change boot runlevel to multi user(used graphical instead of multi-user to revert)
+** Change boot runlevel to multi user(used graphical instead of multi-user to revert)
 
   - To change for the next boot
   ```
@@ -311,7 +309,7 @@
     ln -s /lib/systemd/system/multi-user.target /etc/systemd/system/default.target
   ```
 
-## ffmpeg
+** ffmpeg
 
   - Concatenate 2 videos of same format(out.mp4 -> output file)(list.txt contains the file names -> file 'first.mp4' (next line) file 'second.mp4')
   ```
@@ -328,7 +326,7 @@
     ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4
   ```
 
-## gpg
+** gpg
 
   - gpg basic commands(armor flag outputs to ascii text instead of binary)
   ```
