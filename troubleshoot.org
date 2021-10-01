@@ -345,3 +345,13 @@ sudo lsof -t -i:9000
   gpg --clearsign <file>
   gpg --detach-sign <file>
   #+end_src
+  
+- Start gpg-agent
+#+begin_src shell
+# Check if gpg-agent is already running
+pgrep gpg-agent
+
+# If it's not running, you can start it with this command
+gpg-connect-agent /bye
+#+end_src
+
