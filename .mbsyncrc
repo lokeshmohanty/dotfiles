@@ -1,0 +1,159 @@
+# mbsyncrc based on
+# http://www.ict4g.net/adolfo/notes/2014/12/27/EmacsIMAP.html
+
+# ACCOUNT INFORMATION
+IMAPAccount lokesh-gmail
+# Address to connect to
+Host imap.gmail.com
+User lokesh1197@gmail.com
+PassCmd "pass mu4e/lokesh-gmail"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+# THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
+# - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE
+#   SPECIFICATION OF AN IMAP ACCOUNT)
+# - THE LOCAL STORAGE IS WHERE WE STORE THE EMAIL ON OUR COMPUTER
+
+# REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)
+IMAPStore lokesh-gmail-remote
+Account lokesh-gmail
+
+# LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p ~/Maildir/lokesh-gmail)
+MaildirStore lokesh-gmail-local
+Path ~/Maildir/lokesh-gmail/
+Inbox ~/Maildir/lokesh-gmail/INBOX
+# REQUIRED ONLY IF YOU WANT TO DOWNLOAD ALL SUBFOLDERS; SYNCING SLOWS DOWN
+SubFolders Verbatim
+
+# CONNECTIONS SPECIFY LINKS BETWEEN REMOTE AND LOCAL FOLDERS
+#
+# CONNECTIONS ARE SPECIFIED USING PATTERNS, WHICH MATCH REMOTE MAIL
+# FOLDERS. SOME COMMONLY USED PATTERS INCLUDE:
+#
+# 1 "*" TO MATCH EVERYTHING
+# 2 "!DIR" TO EXCLUDE "DIR"
+# 3 "DIR" TO MATCH DIR
+
+Channel lokesh-gmail
+Far :lokesh-gmail-remote:
+Near :lokesh-gmail-local:
+Patterns *
+Create Both
+Expunge Both
+SyncState *
+
+# ================================================================================
+
+IMAPAccount office-arc
+# Address to connect to
+Host outlook.office365.com
+User lokesh.mohanty@e-arc.com
+PassCmd "pass office/mail"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore office-arc-remote
+Account office-arc
+
+MaildirStore office-arc-local
+Path ~/Maildir/office-arc/
+Inbox ~/Maildir/office-arc/INBOX
+SubFolders Verbatim
+
+Channel office-arc
+Far :office-arc-remote:
+Near :office-arc-local:
+Patterns *
+Create Both
+Expunge Both
+SyncState *
+
+# ================================================================================
+
+IMAPAccount befreier-gmail
+Host imap.gmail.com
+User befreier19@gmail.com
+PassCmD "pass gmail/befreier"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore befreier-gmail-remote
+Account befreier-gmail
+
+MaildirStore befreier-gmail-local
+Path ~/Maildir/befreier-gmail/
+Inbox ~/Maildir/befreier-gmail/INBOX
+SubFolders Verbatim
+
+Channel befreier-gmail
+Far :befreier-gmail-remote:
+Near :befreier-gmail-local:
+Patterns *
+Create Both
+Expunge Both
+SyncState *
+
+
+# ================================================================================
+
+IMAPAccount ineffable-gmail
+# Address to connect to
+Host imap.gmail.com
+User ineffable97@gmail.com
+PassCmd "pass gmail/ineffable"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore ineffable-gmail-remote
+Account ineffable-gmail
+
+MaildirStore ineffable-gmail-local
+Path ~/Maildir/ineffable-gmail/
+Inbox ~/Maildir/ineffable-gmail/INBOX
+SubFolders Verbatim
+
+Channel ineffable-gmail
+Far :ineffable-gmail-remote:
+Near :ineffable-gmail-local:
+Patterns *
+Create Both
+Expunge Both
+SyncState *
+
+
+# ================================================================================
+
+IMAPAccount lokesh-yahoo
+# Address to connect to
+Host imap.mail.yahoo.com
+User lokesh1197@yahoo.com
+PassCmd "pass mu4e/lokesh-yahoo"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore lokesh-yahoo-remote
+Account lokesh-yahoo
+
+MaildirStore lokesh-yahoo-local
+Path ~/Maildir/lokesh-yahoo/
+Inbox ~/Maildir/lokesh-yahoo/INBOX
+SubFolders Verbatim
+
+Channel lokesh-yahoo
+Far :lokesh-yahoo-remote:
+Near :lokesh-yahoo-local:
+Patterns *
+Create Both
+Expunge Both
+SyncState *
