@@ -4,5 +4,3 @@
 
 PATH=$PATH:$HOME/.local/bin
 export PATH
-
-setxkbmap -option caps:swapescape
