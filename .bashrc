@@ -156,6 +156,10 @@ export NVM_DIR="/home/lokesh/.nvm"
 
 
 # Start commands
+## Unset previous key options
+setxkbmap -option
+
+## Swap ctrl and capslock
 setxkbmap -option ctrl:swapcaps
 
 # Use starship to set prompt
