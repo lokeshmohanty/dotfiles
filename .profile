@@ -29,4 +29,4 @@ fi
 ## Others
 
 # Swap Capslock and ESC
-setxkbmap -option caps:swapescape
+setxkbmap -option ctrl:swapcaps
