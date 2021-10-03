@@ -794,197 +794,98 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 
 #+begin_src emacs-lisp
 
-;; (use-package pyvenv
-;;   :after python-mode
-;;   :config
-;;   (pyvenv-mode 1))
+  ;; (use-package pyvenv
+  ;;   :after python-mode
+  ;;   :config
+  ;;   (pyvenv-mode 1))
 
 #+end_src
 
-* PROJECTILE
+** PROJECTILE
 
 Enable projectile mode
 #+begin_src emacs-lisp
-(use-package projectile
-  ;; :diminish projectile-mode
-  :config (projectile-mode)
-  ;; (projectile-global-mode 1) ;; automatically add projects whose files are accessed
-  :init
-  (setq projectile-switch-project-action #'projectile-dired)
-) 
-(leader-keys
-  "p"   '(projectile-command-map :which-key "projectile"))
+  (use-package projectile
+    ;; :diminish projectile-mode
+    :config (projectile-mode)
+    ;; (projectile-global-mode 1) ;; automatically add projects whose files are accessed
+    :init
+    (setq projectile-switch-project-action #'projectile-dired)
+    ) 
+  (leader-keys
+    "p"   '(projectile-command-map :which-key "projectile"))
 #+end_src
 
 Adds extra commands to M-o inside ivy-buffer
 #+begin_src emacs-lisp
-;; (use-package counsel-projectile
-;;   :after projectile
-;;   :config (counsel-projectile-mode))
+  ;; (use-package counsel-projectile
+  ;;   :after projectile
+  ;;   :config (counsel-projectile-mode))
 #+end_src
 
 Key Bindings
 | SPC p | projectile-command-map |
 
-* MAGIT
-
-Git client.
-
-#+begin_src emacs-lisp
-  ;; (setq bare-git-dir (concat "--git-dir=" (expand-file-name "~/.cfg")))
-  ;; (setq bare-work-tree (concat "--work-tree=" (expand-file-name "~")))
-  ;; ;; use maggit on git bare repos like dotfiles repos, don't forget to change `bare-git-dir' and `bare-work-tree' to your needs
-  ;; (defun me/magit-status-bare ()
-  ;;  "set --git-dir and --work-tree in `magit-git-global-arguments' to `bare-git-dir' and `bare-work-tree' and calls `magit-status'"
-  ;;  (interactive)
-  ;;  (require 'magit-git)
-  ;;  (add-to-list 'magit-git-global-arguments bare-git-dir)
-  ;;  (add-to-list 'magit-git-global-arguments bare-work-tree)
-  ;;  (call-interactively 'magit-status))
-
-  ;; ;; (setq 'magit-git-global-arguments (concat "--git-dir=" (expand-file-name "~/.cfg")))
-  ;; ;; (setq 'magit-git-global-arguments (concat "--work-tree=" (expand-file-name "~")))
-
-  ;; ;; if you use `me/magit-status-bare' you cant use `magit-status' on other other repos you have to unset `--git-dir' and `--work-tree'
-  ;; use `me/magit-status' insted it unsets those before calling `magit-status'
-  ;; (defun me/magit-status ()
-  ;;  "removes --git-dir and --work-tree in `magit-git-global-arguments' and calls `magit-status'"
-  ;;  (interactive)
-  ;;  (require 'magit-git)
-
-  (use-package magit)
-  (leader-keys
-    "g"      '(:ignore t :which-key "git")
-    "g s"    '(magit-status :which-key "git status")
-    "g l"    '(magit-log :which-key "git log")
-    "g b"    '(magit-status :which-key "git blame")
-  )
-#+end_src
-Key Bindings
-| C-x g | magit-status |
-
-* TREEMACS
+** TREEMACS
 
 File tree viewer.
 [[https://github.com/Alexander-Miller/treemacs][Documentation]]
 
 #+begin_src emacs-lisp
-(use-package treemacs)
+  (use-package treemacs)
 
-;; Add :after if needed
-(use-package treemacs-evil)
-(use-package treemacs-projectile)
+  ;; Add :after if needed
+  (use-package treemacs-evil)
+  (use-package treemacs-projectile)
 
-;; show hidden files
-;; (setq-default neo-show-hidden-files t)
+  ;; show hidden files
+  ;; (setq-default neo-show-hidden-files t)
 
-(leader-keys 
-  "d"    '(:ignore t :which-key "directory viewer")
-  ;; "d t"  '(treemacs :which-key "treemacs(file viewer)")
-  "d t"  '(treemacs-add-and-display-current-project :which-key "treemacs")
-  "d e"  '(treemacs-display-current-project-exclusively :which-key "treemacs")
-)
+  (leader-keys 
+    "d"    '(:ignore t :which-key "directory viewer")
+    ;; "d t"  '(treemacs :which-key "treemacs(file viewer)")
+    "d t"  '(treemacs-add-and-display-current-project :which-key "treemacs")
+    "d e"  '(treemacs-display-current-project-exclusively :which-key "treemacs")
+    )
 #+end_src
 
-* ORG MODE
+** MAGIT
 
-| Commands                | binding |
-| org-insert-link         | C-c C-l |
-| org-toggle-link-dislpay |         |
+Git client.
 
 #+begin_src emacs-lisp
-;; Drag and drop images to org files
-;; (use-package org-download)
-;; (add-hook 'dired-mode-hook 'org-download-enable)
+  (setq bare-git-dir (concat "--git-dir=" (expand-file-name "~/.cfg")))
+  (setq bare-work-tree (concat "--work-tree=" (expand-file-name "~")))
 
-(add-hook 'org-mode-hook 'org-indent-mode)
-(setq org-directory "~/Org/"
-      org-agenda-files '("~/Org/agenda.org")
-      org-default-notes-file (expand-file-name "notes.org" org-directory)
-      org-ellipsis " ▼ "
-      org-log-done 'time
-      org-journal-dir "~/Org/journal/"
-      org-journal-date-format "%B %d, %Y (%A) "
-      org-journal-file-format "%Y-%m-%d.org"
-      org-hide-emphasis-markers t)
-(setq org-src-preserve-indentation nil
-      org-src-tab-acts-natively t
-      org-edit-src-content-indentation 0)
+  ;; use maggit on git bare repos like dotfiles repos, don't forget to change `bare-git-dir' and `bare-work-tree' to your needs
+  (defun me/magit-status-bare ()
+    "set --git-dir and --work-tree in `magit-git-global-arguments' to `bare-git-dir' and `bare-work-tree' and calls `magit-status'"
+    (interactive)
+    (require 'magit-git)
+    (add-to-list 'magit-git-global-arguments bare-git-dir)
+    (add-to-list 'magit-git-global-arguments bare-work-tree)
+    (call-interactively 'magit-status))
+
+  ;; if you use `me/magit-status-bare' you cant use `magit-status' on other other repos you have to unset `--git-dir' and `--work-tree'
+  use `me/magit-status' insted it unsets those before calling `magit-status'
+  (defun me/magit-status ()
+    "removes --git-dir and --work-tree in `magit-git-global-arguments' and calls `magit-status'"
+    (interactive)
+    (require 'magit-git)
+
+    (use-package magit)
+    (leader-keys
+      "g"      '(:ignore t :which-key "git")
+      "g s"    '(magit-status :which-key "git status")
+      "g l"    '(magit-log :which-key "git log")
+      "g b"    '(magit-status :which-key "git blame")
+      )
+    )
 #+end_src
+Key Bindings
+| C-x g | magit-status |
 
-Show bullets instead of asterisks.
-
-#+begin_src emacs-lisp
-(use-package org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-#+end_src
-
-Use abbreviations instead of lengthy URL.
-
-#+begin_src emacs-lisp
-;; An example of how this works.
-;; [[arch-wiki:Name_of_Page][Description]]
-(setq org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
-      '(("google" . "http://www.google.com/search?q=")
-        ("ddg" . "https://duckduckgo.com/?q=")
-        ("wiki" . "https://en.wikipedia.org/wiki/")))
-#+end_src
-
-TODO keywords
-
-#+begin_src emacs-lisp
-(setq org-todo-keywords        ; This overwrites the default Doom org-todo-keywords
-      '((sequence
-         "TODO(t)"           ; A task that is ready to be tackled
-         "INPROGRESS(i)"     ; A project that contains other tasks
-         "WAITING(w)"        ; Something is holding up this task
-         "|"                 ; The pipe necessary to separate "active" states and "inactive" states
-         "DONE(d)"           ; Task has been completed
-         "CANCELLED(c)" )))  ; Task has been cancelled
-#+end_src
-
-Syntax highlighting for source code blocks
-
-#+begin_src emacs-lisp
-(setq org-src-fontify-natively t
-      org-src-tab-acts-natively t
-      org-confirm-babel-evaluate nil
-      org-edit-src-content-indentation 0)
-#+end_src
-
-Evil key bindings for org mode
-
-#+begin_src emacs-lisp
-(use-package evil-org
-  :after org
-  :hook (org-mode . (lambda () evil-org-mode))
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-#+end_src
-
-Toc-org helps you to have an up-to-date table of contents in org files without exporting (useful useful for README files on GitHub).  Use :TOC: to create the table.
-
-#+begin_src emacs-lisp
-(use-package toc-org
-  :commands toc-org-enable
-  :init (add-hook 'org-mode-hook 'toc-org-enable))
-#+end_src
-
-Prevent M-Ret from adding blank lines
-
-#+begin_src emacs-lisp
-(setq org-blank-before-new-entry (quote ((heading . nil)
-                                         (plain-list-item . nil))))
-#+end_src
-
-Export org to manpage format
-
-#+begin_src emacs-lisp
-(use-package ox-man
-  :ensure nil)
-#+end_src
-* PERSPECTIVE
+** PERSPECTIVE
 
 Similar to workspaces. Each perspective has its own buffer list and
 window layout.
@@ -996,6 +897,338 @@ window layout.
 #   :config
 #   (persp-mode))
 # #+end_src
+
+* ORG MODE
+*** Tips
+|-------------------------+---------|
+| Commands                | binding |
+|-------------------------+---------|
+| org-insert-link         | C-c C-l |
+| org-toggle-link-dislpay |         |
+| org-todo                | C-c C-t |
+|-------------------------+---------|
+
+|----------------------+--------------------------|
+| M-<up>               | Move the title up        |
+| M-<down>             |                          |
+| M-<left>             | Increase heading         |
+| M-<rignt>            | Decrease heading         |
+| C-c C-o              | org-open-at-point        |
+| C-c C-j              | org-goto                 |
+| C-c C-t              | org-todo                 |
+| Shift-<left>,<right> | org-todo                 |
+| C-c C-l              | org-insert-link          |
+| M-<enter>            |                          |
+|----------------------+--------------------------|
+| C-c C-s              | org-schedule             |
+| C-c C-d              | org-deadline             |
+| C-c C-x e            | org-set-effort           |
+| C-c C-x p            | org-set-property         |
+| C-c M-:              | repeat-complex-command   |
+| C-c *                | org-ctrl-c-star          |
+| C-c -                | org-ctrl-c-minus         |
+|                      | counsel-org-goto         |
+|                      | org-export-dispatch      |
+|                      | org-footnote-new         |
+|                      | org-toggle-heading       |
+|                      | org-toggle-item          |
+|                      | org-toggle-checkbox      |
+|                      | org-babel-tangle         |
+|                      | org-toggle-inline-images |
+|                      | org-todo-list            |
+# | C-c ESC ESC          | repeat-complex-command |
+
+M-<Enter> -> Continue adding tags in add tag minibuffer
+
+*** Config
+**** Basic
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (setq org-directory "~/Org/")
+  (setq org-ellipsis " ▾"
+        org-hide-emphasis-markers t     ;; hide rich text markers      
+        org-hide-block-startup nil
+        org-startup-folded 'content
+        org-cycle-separator-lines 2
+        org-capture-bookmark nil
+
+        ;; Org Source indentation
+        org-src-fontify-natively t       
+        org-src-tab-acts-natively t
+        org-edit-src-content-indentation 2
+        org-src-preserve-indentation nil
+        org-fontify-quote-and-verse-blocks t
+        ;; org-confirm-babel-evaluate nil
+        )
+#+end_src
+
+**** Modules
+
+#+begin_src emacs-lisp
+  (setq org-modules '(
+                      ;; org-crypt
+                      org-agenda
+                      org-habit
+                      ;; org-bookmark
+                      ;; org-eshell
+                      ;; org-irc
+                      ))
+#+end_src
+
+**** Todo
+#+begin_src emacs-lisp
+  (setq org-todo-keywords '(
+                            (sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+                            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")
+                            ))
+  ;; )
+#+end_src
+
+**** Journal
+#+begin_src emacs-lisp
+  ;; (setq org-journal-dir "~/Org/journal/")
+  ;; (setq org-journal-date-format "%B %d, %Y (%A) ")
+  ;; (setq org-journal-file-format "%Y-%m-%d.org")
+#+end_src
+
+**** Agenda
+#+begin_src emacs-lisp
+  (setq org-agenda-files '(
+                           "~/Org/Agenda.org"
+                           "~/Org/Tasks.org"
+                           "~/Org/Journal.org"
+                           "~/Org/Birthdays.org"
+                           "~/Org/Habits.org"
+                           ))
+  (setq org-agenda-start-with-log-mode t)
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+#+end_src
+**** Agenda Custom 
+#+begin_src emacs-lisp
+  ;; Configure custom agenda views
+  (setq org-agenda-custom-commands
+        '(("d" "Dashboard"
+           ((agenda "" ((org-deadline-warning-days 7)))
+            (todo "NEXT"
+                  ((org-agenda-overriding-header "Next Tasks")))
+            (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+
+          ("n" "Next Tasks"
+           ((todo "NEXT"
+                  ((org-agenda-overriding-header "Next Tasks")))))
+
+          ("W" "Work Tasks" tags-todo "+work-email")
+
+          ;; Low-effort next actions
+          ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+           ((org-agenda-overriding-header "Low Effort Tasks")
+            (org-agenda-max-todos 20)
+            (org-agenda-files org-agenda-files)))
+
+          ("w" "Workflow Status"
+           ((todo "WAIT"
+                  ((org-agenda-overriding-header "Waiting on External")
+                   (org-agenda-files org-agenda-files)))
+            (todo "REVIEW"
+                  ((org-agenda-overriding-header "In Review")
+                   (org-agenda-files org-agenda-files)))
+            (todo "PLAN"
+                  ((org-agenda-overriding-header "In Planning")
+                   (org-agenda-todo-list-sublevels nil)
+                   (org-agenda-files org-agenda-files)))
+            (todo "BACKLOG"
+                  ((org-agenda-overriding-header "Project Backlog")
+                   (org-agenda-todo-list-sublevels nil)
+                   (org-agenda-files org-agenda-files)))
+            (todo "READY"
+                  ((org-agenda-overriding-header "Ready for Work")
+                   (org-agenda-files org-agenda-files)))
+            (todo "ACTIVE"
+                  ((org-agenda-overriding-header "Active Projects")
+                   (org-agenda-files org-agenda-files)))
+            (todo "COMPLETED"
+                  ((org-agenda-overriding-header "Completed Projects")
+                   (org-agenda-files org-agenda-files)))
+            (todo "CANC"
+                  ((org-agenda-overriding-header "Cancelled Projects")
+                   (org-agenda-files org-agenda-files)))))))
+#+end_src
+
+**** Habit
+#+begin_src emacs-lisp
+  (require 'org-habit)
+  ;; (add-to-list 'org-modules 'org-habit)
+  ;; (setq org-habit-graph-column 60)
+#+end_src
+**** Tag
+#+begin_src emacs-lisp
+  (setq org-tag-alist
+        '((:startgroup)
+                                          ; Put mutually exclusive tags here
+          (:endgroup)
+          ("@home" . ?H)
+          ("@work" . ?W)
+          ("org-config" . ?o)
+          ("agenda" . ?a)
+          ("planning" . ?p)
+          ("publish" . ?P)
+          ("batch" . ?b)
+          ("note" . ?n)
+          ("idea" . ?i)))
+#+end_src
+
+**** Refile
+#+begin_src emacs-lisp
+  (setq org-refile-targets '(
+                             (nil :maxlevel . 1)
+                             (org-agenda-files :maxlevel . 1)
+                             ;; ("Archive.org" :maxlevel . 1)
+                             ;; ("Tasks.org" :maxlevel . 1)
+                             ))
+
+  ;; Save Org buffers after refiling!
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+#+end_src
+
+**** Capture Templates
+#+begin_src emacs-lisp
+  (setq org-capture-templates `(
+                                ("t" "Tasks / Projects")
+                                ("tt" "Task" entry 
+                                 (file+olp "~/Org/Tasks.org" "Inbox")
+                                 "* TODO %?\n  %U\n  %a\n  %i" 
+                                 :empty-lines 1)
+
+                                ("j" "Journal Entries")
+                                ("jj" "Journal" entry
+                                 (file+olp+datetree "~/Org/Journal.org")
+                                 "\n* %<%I:%M %p> - %^{Journal Title} :journal:\n\n%?\n\n"
+                                 :clock-in :clock-resume
+                                 :empty-lines 1)
+                                ("jm" "Meeting" entry
+                                 (file+olp+datetree "~/Org/Journal.org")
+                                 "* %<%I:%M %p> - %^{Meeting Title} :meetings:\n\n%?\n\n"
+                                 :clock-in :clock-resume
+                                 :empty-lines 1)
+
+                                ("w" "Workflows")
+                                ("we" "Checking Email" entry (file+olp+datetree "~/Org/Journal.org")
+                                 "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+
+                                ("m" "Metrics Capture")
+                                ("mw" "Weight" table-line (file+headline "~/Org/Metrics.org" "Weight")
+                                 "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
+                                ))
+#+end_src
+
+**** Show bullets instead of asterisks.
+
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode)
+    )
+#+end_src
+
+**** Evil key bindings for org mode
+
+#+begin_src emacs-lisp
+  (use-package evil-org
+    :after org
+    :hook ((org-mode . evil-org-mode)
+           (org-agenda-mode . evil-org-mode)
+           (evil-org-mode . (lambda () (evil-org-set-key-theme '(navigation todo insert textobjects additional)))))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys)
+    )
+#+end_src
+
+
+**** Toc
+It helps to have an up-to-date table of contents in org files without
+exporting. Use :TOC: to create the table.
+
+#+begin_src emacs-lisp
+  ;; (use-package toc-org :commands toc-org-enable :init (add-hook
+  ;;   'org-mode-hook 'toc-org-enable)) 
+#+end_src
+
+**** Configure Babel Languages
+
+To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with =org-babel=.
+
+#+begin_src emacs-lisp
+
+  ;; (with-eval-after-load 'org
+  ;;   (org-babel-do-load-languages
+  ;;       'org-babel-load-languages
+  ;;       '((emacs-lisp . t)
+  ;;       (python . t)))
+
+  ;;   (push '("conf-unix" . conf-unix) org-src-lang-modes))
+
+#+end_src
+
+**** Auto-tangle Configuration Files
+
+This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
+
+#+begin_src emacs-lisp
+
+  ;; ;; Automatically tangle our Emacs.org config file when we save it
+  ;; (defun efs/org-babel-tangle-config ()
+  ;;   (when (string-equal (file-name-directory (buffer-file-name))
+  ;;                       (expand-file-name user-emacs-directory))
+  ;;     ;; Dynamic scoping to the rescue
+  ;;     (let ((org-confirm-babel-evaluate nil))
+  ;;       (org-babel-tangle))))
+
+  ;; (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+
+#+end_src
+
+
+**** Use abbreviations instead of lengthy URL.
+
+#+begin_src emacs-lisp
+  ;; ;; An example of how this works.
+  ;; ;; [[arch-wiki:Name_of_Page][Description]]
+  ;; (setq org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
+  ;;       '(("google" . "http://www.google.com/search?q=")
+  ;;         ("ddg" . "https://duckduckgo.com/?q=")
+  ;;         ("wiki" . "https://en.wikipedia.org/wiki/")))
+#+end_src
+
+**** Syntax highlighting for source code blocks
+
+#+begin_src emacs-lisp
+#+end_src
+
+**** Prevent M-Ret from adding blank lines
+
+#+begin_src emacs-lisp
+  ;; (setq org-blank-before-new-entry (quote ((heading . nil)
+  ;;                                          (plain-list-item . nil))))
+#+end_src
+
+**** Export to manpage format
+
+#+begin_src emacs-lisp
+  ;; (use-package ox-man
+  ;;   :ensure nil)
+#+end_src
+
+**** Drag and drop into org files
+#+begin_src emacs-lisp
+  ;; Drag and drop images to org files
+  ;; (use-package org-download)
+  ;; (add-hook 'dired-mode-hook 'org-download-enable)
+#+end_src
+
+*** Related Packages
+
+- org-wild-notifier
 
 * ELFEED
 
