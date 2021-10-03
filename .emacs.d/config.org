@@ -737,18 +737,28 @@ This is a basic configuration for the TypeScript language so that =.ts= files ac
 
 #+begin_src shell :tangle no
 
-npm install -g typescript-language-server typescript
+  npm install -g typescript-language-server typescript
 
 #+end_src
 
 This will install the [[https://github.com/theia-ide/typescript-language-server][typescript-language-server]] and the TypeScript compiler package.
 
-**** Angular
+*** Angular
 #+begin_src shell
-
-npm install -g @angular/language-service@next @angular/language-server
-
+  npm install -g @angular/language-service@next typescript  @angular/language-server
 #+end_src
+
+#+begin_src emacs-lisp
+  (setq lsp-clients-angular-language-server-command
+        '("node"
+          "/home/lokesh/.nvm/versions/node/v14.16.0/lib/node_modules/@angular/language-server"
+          "--ngProbeLocations"
+          "/home/lokesh/.nvm/versions/node/v14.16.0/lib/node_modules"
+          "--tsProbeLocations"
+          "/home/lokesh/.nvm/versions/node/v14.16.0/lib/node_modules"
+          "--stdio"))
+#+end_src
+
 
 *** Python
 
