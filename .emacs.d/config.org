@@ -227,159 +227,136 @@ Minor mode for Emacs that displays the key bindings following your currently ent
 ** Install general.el to define keybindings
 
 #+begin_src emacs-lisp
-(use-package general
-  :config
-  (general-create-definer leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
+  (use-package general
+    :config
+    (general-create-definer leader-keys
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
 
-  (general-evil-setup t)
+    (general-evil-setup t)
 
-  ;; general-simulate-key should not be quoted as it is supposed to be evaluated before assigning
-  (leader-keys
-    "SPC" '(counsel-M-x :which-key "M-x")
-    "r"    (general-simulate-key "C-x r" :which-key "+register/bookmark") 
-    "t"    (general-simulate-key "C-x t" :which-key "+tab")
-    "o"   '(:ignore t :which-key "open")
-    "oa"   '(org-agenda :which-key "org-agenda")
-    "oc"   '(org-capture :which-key "org-capture")
-    "oe"   '(eshell :which-key "eshell")
-    "ot"   '(vterm :which-key "vterm")
-    "hrr" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
-    "hpc" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/config.org"))))
-)
-#+end_src
-
-#+begin_src emacs-lisp
-;; (nvmap :keymaps 'override :prefix "SPC"
-;;   "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines"))
-;; (nvmap :keymaps 'override :prefix "SPC"
-;;   "m"     '(:ignore t :which-key "mode")
-;;   "m *"   '(org-ctrl-c-star :which-key "Org-ctrl-c-star")
-;;   "m +"   '(org-ctrl-c-minus :which-key "Org-ctrl-c-minus")
-;;   "m ."   '(counsel-org-goto :which-key "Counsel org goto")
-;;   "m e"   '(org-export-dispatch :which-key "Org export dispatch")
-;;   "m f"   '(org-footnote-new :which-key "Org footnote new")
-;;   "m h"   '(org-toggle-heading :which-key "Org toggle heading")
-;;   "m i"   '(org-toggle-item :which-key "Org toggle item")
-;;   "m n"   '(org-store-link :which-key "Org store link")
-;;   "m o"   '(org-set-property :which-key "Org set property")
-;;   "m t"   '(org-todo :which-key "Org todo")
-;;   "m x"   '(org-toggle-checkbox :which-key "Org toggle checkbox")
-;;   "m B"   '(org-babel-tangle :which-key "Org babel tangle")
-;;   "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
-;;   "m T"   '(org-todo-list :which-key "Org todo list")
-;;   "o a"   '(org-agenda :which-key "Org agenda")
-;;   )
+    ;; general-simulate-key should not be quoted as it is supposed to be evaluated before assigning
+    (leader-keys
+      "SPC" '(counsel-M-x :which-key "M-x")
+      "r"    (general-simulate-key "C-x r" :which-key "+register/bookmark") 
+      "t"    (general-simulate-key "C-x t" :which-key "+tab")
+      "o"   '(:ignore t :which-key "open")
+      "oa"   '(org-agenda :which-key "org-agenda")
+      "oc"   '(org-capture :which-key "org-capture")
+      "oe"   '(eshell :which-key "eshell")
+      "ot"   '(vterm :which-key "vterm")
+      "hrr" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
+      "hpc" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/config.org"))))
+    )
 #+end_src
 
 ** Buffer
 
 #+begin_src emacs-lisp
-(leader-keys
-  "b"     '(:ignore t :which-key "buffer")
-  "b b"   '(ibuffer :which-key "Ibuffer")
-  "b s"   '(switch-to-buffer :which-key "switch buffer")
-  "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
-  "b k"   '(kill-current-buffer :which-key "Kill current buffer")
-  "b n"   '(next-buffer :which-key "Next buffer")
-  "b p"   '(previous-buffer :which-key "Previous buffer")
-  "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
-  "b K"   '(kill-buffer :which-key "Kill buffer"))
+  (leader-keys
+    "b"     '(:ignore t :which-key "buffer")
+    "b b"   '(ibuffer :which-key "Ibuffer")
+    "b s"   '(switch-to-buffer :which-key "switch buffer")
+    "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
+    "b k"   '(kill-current-buffer :which-key "Kill current buffer")
+    "b n"   '(next-buffer :which-key "Next buffer")
+    "b p"   '(previous-buffer :which-key "Previous buffer")
+    "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
+    "b K"   '(kill-buffer :which-key "Kill buffer"))
 #+end_src
 
 ** File
 
 #+begin_src emacs-lisp
-(leader-keys
-;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-  "."     '(find-file :which-key "Find file")
-  "f"     '(:ignore t :which-key "file")
-  "f f"   '(find-file :which-key "Find file")
-  "f r"   '(counsel-recentf :which-key "Recent files")
-  "f s"   '(save-buffer :which-key "Save file")
-  "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
-  "f C"   '(copy-file :which-key "Copy file")
-  "f D"   '(delete-file :which-key "Delete file")
-  "f R"   '(rename-file :which-key "Rename file")
-  "f S"   '(write-file :which-key "Save file as...")
-  "f U"   '(sudo-edit :which-key "Sudo edit file"))
+  (leader-keys
+    ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
+    "."     '(find-file :which-key "Find file")
+    "f"     '(:ignore t :which-key "file")
+    "f f"   '(find-file :which-key "Find file")
+    "f r"   '(counsel-recentf :which-key "Recent files")
+    "f s"   '(save-buffer :which-key "Save file")
+    "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
+    "f C"   '(copy-file :which-key "Copy file")
+    "f D"   '(delete-file :which-key "Delete file")
+    "f R"   '(rename-file :which-key "Rename file")
+    "f S"   '(write-file :which-key "Save file as...")
+    "f U"   '(sudo-edit :which-key "Sudo edit file"))
 #+end_src
 
 ** Window
 
 #+begin_src emacs-lisp
-(winner-mode 1)
-(leader-keys
-  "w"     '(:ignore t :which-key "window")
-  "w c"   '(evil-window-delete :which-key "Close window")
-  "w n"   '(evil-window-new :which-key "New window")
-  "w s"   '(evil-window-split :which-key "Horizontal split window")
-  "w v"   '(evil-window-vsplit :which-key "Vertical split window")
-  ;; Window motions
-  "w h"   '(evil-window-left :which-key "Window left")
-  "w j"   '(evil-window-down :which-key "Window down")
-  "w k"   '(evil-window-up :which-key "Window up")
-  "w l"   '(evil-window-right :which-key "Window right")
-  "w w"   '(evil-window-next :which-key "Goto next window")
-  ;; winner mode
-  "w <left>"  '(winner-undo :which-key "Winner undo")
-  "w <right>" '(winner-redo :which-key "Winner redo"))
+  (winner-mode 1)
+  (leader-keys
+    "w"     '(:ignore t :which-key "window")
+    "w c"   '(evil-window-delete :which-key "Close window")
+    "w n"   '(evil-window-new :which-key "New window")
+    "w s"   '(evil-window-split :which-key "Horizontal split window")
+    "w v"   '(evil-window-vsplit :which-key "Vertical split window")
+    ;; Window motions
+    "w h"   '(evil-window-left :which-key "Window left")
+    "w j"   '(evil-window-down :which-key "Window down")
+    "w k"   '(evil-window-up :which-key "Window up")
+    "w l"   '(evil-window-right :which-key "Window right")
+    "w w"   '(evil-window-next :which-key "Goto next window")
+    ;; winner mode
+    "w <left>"  '(winner-undo :which-key "Winner undo")
+    "w <right>" '(winner-redo :which-key "Winner redo"))
 #+end_src
 
 ** Register
 
 #+begin_src emacs-lisp
-;; (nvmap :prefix "SPC"
-;;   "r c"   '(copy-to-register :which-key "Copy to register")
-;;   "r f"   '(frameset-to-register :which-key "Frameset to register")
-;;   "r i"   '(insert-register :which-key "Insert register")
-;;   "r j"   '(jump-to-register :which-key "Jump to register")
-;;   "r l"   '(list-registers :which-key "List registers")
-;;   "r n"   '(number-to-register :which-key "Number to register")
-;;   "r r"   '(counsel-register :which-key "Choose a register")
-;;   "r v"   '(view-register :which-key "View a register")
-;;   "r w"   '(window-configuration-to-register :which-key "Window configuration to register")
-;;   "r +"   '(increment-register :which-key "Increment register")
-;;   "r SPC" '(point-to-register :which-key "Point to register"))
+  ;; (nvmap :prefix "SPC"
+  ;;   "r c"   '(copy-to-register :which-key "Copy to register")
+  ;;   "r f"   '(frameset-to-register :which-key "Frameset to register")
+  ;;   "r i"   '(insert-register :which-key "Insert register")
+  ;;   "r j"   '(jump-to-register :which-key "Jump to register")
+  ;;   "r l"   '(list-registers :which-key "List registers")
+  ;;   "r n"   '(number-to-register :which-key "Number to register")
+  ;;   "r r"   '(counsel-register :which-key "Choose a register")
+  ;;   "r v"   '(view-register :which-key "View a register")
+  ;;   "r w"   '(window-configuration-to-register :which-key "Window configuration to register")
+  ;;   "r +"   '(increment-register :which-key "Increment register")
+  ;;   "r SPC" '(point-to-register :which-key "Point to register"))
 #+end_src
 
 ** Evaluate Elisp
 
 #+begin_src emacs-lisp
-;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-;;   "e b"   '(eval-buffer :which-key "Eval elisp in buffer")
-;;   "e d"   '(eval-defun :which-key "Eval defun")
-;;   "e e"   '(eval-expression :which-key "Eval elisp expression")
-;;   "e l"   '(eval-last-sexp :which-key "Eval last sexression")
-;;   "e r"   '(eval-region :which-key "Eval region"))
+  ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
+  ;;   "e b"   '(eval-buffer :which-key "Eval elisp in buffer")
+  ;;   "e d"   '(eval-defun :which-key "Eval defun")
+  ;;   "e e"   '(eval-expression :which-key "Eval elisp expression")
+  ;;   "e l"   '(eval-last-sexp :which-key "Eval last sexression")
+  ;;   "e r"   '(eval-region :which-key "Eval region"))
 #+end_src
 
 ** Zooming In and Out
 
 #+begin_src emacs-lisp
-;; (global-set-key (kbd "C-=") 'text-scale-increase)
-;; (global-set-key (kbd "C--") 'text-scale-decrease)
-;; (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-;; (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+  ;; (global-set-key (kbd "C-=") 'text-scale-increase)
+  ;; (global-set-key (kbd "C--") 'text-scale-decrease)
+  ;; (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+  ;; (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 #+end_src
 
 ** Hydra
 
 Hydra helps in desgning transient key bindings to run commands easily 
 #+begin_src emacs-lisp
-;; (use-package hydra
-;;   :defer t)
+  ;; (use-package hydra
+  ;;   :defer t)
 
-;; (defhydra hydra-text-scale (:timeout 4)
-;;   "scale text"
-;;   ("j" text-scale-increase "in")
-;;   ("k" text-scale-decrease "out")
-;;   ("f" nil "finished" :exit t))
+  ;; (defhydra hydra-text-scale (:timeout 4)
+  ;;   "scale text"
+  ;;   ("j" text-scale-increase "in")
+  ;;   ("k" text-scale-decrease "out")
+  ;;   ("f" nil "finished" :exit t))
 
-;; (leader-keys
-;;   "ts" '(hydra-text-scale/body :which-key "scale text"))
+  ;; (leader-keys
+  ;;   "ts" '(hydra-text-scale/body :which-key "scale text"))
 #+end_src
 
 * EVIL MODE
