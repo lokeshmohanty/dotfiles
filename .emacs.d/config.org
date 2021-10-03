@@ -9,49 +9,49 @@ Setup package.el to work with MELPA. And initialize it.
 Run M-x list-packages to update packages list
 
 #+begin_src emacs-lisp
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+  (require 'package)
+  (add-to-list 'package-archives 
+               '("melpa" . "https://melpa.org/packages/"))  ;; It has many packages
 
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
 #+end_src
 
 ** Installing use-package
 
 #+begin_src emacs-lisp
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
 #+end_src
 
 Globally enable use-package ensure(install package if not present)
 It doesn't update the packages
 #+begin_src emacs-lisp
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
+  (require 'use-package-ensure)
+  (setq use-package-always-ensure t)
 #+end_src
 
 Update packages automatically
 #+begin_src emacs-lisp
-(use-package auto-package-update
-  :custom
-  (auto-package-update-interval 7)
-  (auto-package-update-prompt-before-update t)
-  :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe))
+  (use-package auto-package-update
+    :custom
+    (auto-package-update-interval 7)
+    (auto-package-update-prompt-before-update t)
+    :config
+    (setq auto-package-update-delete-old-versions t)
+    (setq auto-package-update-hide-results t)
+    (auto-package-update-maybe))
 #+end_src
 
 ** Don't place autosave files in the same directory as the actual file
 #+begin_src emacs-lisp
-(use-package no-littering)
+  (use-package no-littering)
 
-;; no-littering doesn't set this by default so we must place
-;; auto save files in the same path as it uses for sessions
-(setq auto-save-file-name-transforms
-      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+  ;; no-littering doesn't set this by default so we must place
+  ;; auto save files in the same path as it uses for sessions
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
 
 * STARTUP PERFORMANCE
@@ -60,122 +60,122 @@ Update packages automatically
 Reduce the frequency of garbage collection
 
 #+begin_src emacs-lisp
-;; Using garbage magic hack.
-(use-package gcmh
-  :config
-  (gcmh-mode 1))
-;; Setting garbage collection threshold
-(setq gc-cons-threshold 402653184
-      gc-cons-percentage 0.6)
+  ;; Using garbage magic hack.
+  (use-package gcmh
+    :config
+    (gcmh-mode 1))
+  ;; Setting garbage collection threshold
+  (setq gc-cons-threshold 402653184
+        gc-cons-percentage 0.6)
 
-;; Profile emacs startup
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (message "*** Emacs loaded in %s with %d garbage collections."
-                     (format "%.2f seconds"
-                             (float-time
-                              (time-subtract after-init-time before-init-time)))
-                     gcs-done)))
+  ;; Profile emacs startup
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (message "*** Emacs loaded in %s with %d garbage collections."
+                       (format "%.2f seconds"
+                               (float-time
+                                (time-subtract after-init-time before-init-time)))
+                       gcs-done)))
 
-;; Silence compiler warnings as they can be pretty disruptive (setq comp-async-report-warnings-errors nil)
+  ;; Silence compiler warnings as they can be pretty disruptive (setq comp-async-report-warnings-errors nil)
 #+end_src
 
 Decrease garbase collection thresold to increase frequency but decrease the total time taken.
 It increases runtime performance
 
 #+begin_src emacs-lisp
-;; Make gc pauses faster by decreasing the threshold.
-(setq gc-cons-threshold (* 2 1000 1000))
+  ;; Make gc pauses faster by decreasing the threshold.
+  (setq gc-cons-threshold (* 2 1000 1000))
 #+end_src
 
 ** Native Compile
 
 #+begin_src emacs-lisp
-;; Silence compiler warnings as they can be pretty disruptive
-(if (boundp 'comp-deferred-compilation)
-    (setq comp-deferred-compilation nil)
-  (setq native-comp-deferred-compilation nil))
-;; In noninteractive sessions, prioritize non-byte-compiled source files to
-;; prevent the use of stale byte-code. Otherwise, it saves us a little IO time
-;; to skip the mtime checks on every *.elc file.
-(setq load-prefer-newer noninteractive)
+  ;; Silence compiler warnings as they can be pretty disruptive
+  (if (boundp 'comp-deferred-compilation)
+      (setq comp-deferred-compilation nil)
+    (setq native-comp-deferred-compilation nil))
+  ;; In noninteractive sessions, prioritize non-byte-compiled source files to
+  ;; prevent the use of stale byte-code. Otherwise, it saves us a little IO time
+  ;; to skip the mtime checks on every *.elc file.
+  (setq load-prefer-newer noninteractive)
 #+end_src
 
 * GRAPHICAL USER INTERFACE SETTINGS
 ** Disable Menubar, Toolbars and Scrollbars
 #+begin_src emacs-lisp
-(menu-bar-mode -1)          ; Disable the menu bar
-(scroll-bar-mode -1)        ; Disable visible scrollbar
-(tool-bar-mode -1)          ; Disable the toolbar
-(tooltip-mode -1)           ; Disable tooltips
-;; (set-fringe-mode 10)        ; Give some breathing room
+  (menu-bar-mode -1)          ; Disable the menu bar
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  ;; (set-fringe-mode 10)        ; Give some breathing room
 #+end_src
 
 ** Display Line Numbers and Truncated Lines
 #+begin_src emacs-lisp
-(column-number-mode)
-(global-display-line-numbers-mode 1)
-(global-visual-line-mode t)
+  (column-number-mode)
+  (global-display-line-numbers-mode 1)
+  (global-visual-line-mode t)
 
-;; Disable line numbers for some modes
-(dolist (mode '(vterm-mode-hook
-                shell-mode-hook
-                neotree-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  ;; Disable line numbers for some modes
+  (dolist (mode '(vterm-mode-hook
+                  shell-mode-hook
+                  neotree-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 
 ** Scrolling
 #+begin_src emacs-lisp
-(setq scroll-conservatively 101) ;; value greater than 100 gets rid of half page jumping
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 3))) ;; how many lines at a time
-(setq mouse-wheel-progressive-speed t) ;; accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+  (setq scroll-conservatively 101) ;; value greater than 100 gets rid of half page jumping
+  (setq mouse-wheel-scroll-amount '(3 ((shift) . 3))) ;; how many lines at a time
+  (setq mouse-wheel-progressive-speed t) ;; accelerate scrolling
+  (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 #+end_src
 
 ** Theme
 
 You can test themes by using the counsel-load-theme.
 #+begin_src emacs-lisp
-(use-package doom-themes
-                                        ;:ensure t
-  :config
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-gruvbox t)
-  (doom-themes-org-config))
+  (use-package doom-themes
+                                          ;:ensure t
+    :config
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+    (load-theme 'doom-gruvbox t)
+    (doom-themes-org-config))
 #+end_src
 
 ** Fonts
 
 #+begin_src emacs-lisp
-(set-face-attribute 'default nil
-                    :font "Inconsolata"
-                    :height 110
-                    :weight 'medium)
-(set-face-attribute 'variable-pitch nil
-  :font "DejaVu Serif"
-  :height 120
-  :weight 'medium)
-(set-face-attribute 'fixed-pitch nil
-  :font "Inconsolata"
-  :height 110
-  :weight 'medium)
-;; Makes commented text and keywords italics.
-;; This is working in emacsclient but not emacs.
-;; Your font must have an italic face available.
-(set-face-attribute 'font-lock-comment-face nil
-                    :slant 'italic)
-(set-face-attribute 'font-lock-keyword-face nil
-                    :slant 'italic)
+  (set-face-attribute 'default nil
+                      :font "Inconsolata"
+                      :height 110
+                      :weight 'medium)
+  (set-face-attribute 'variable-pitch nil
+                      :font "DejaVu Serif"
+                      :height 120
+                      :weight 'medium)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "Inconsolata"
+                      :height 110
+                      :weight 'medium)
+  ;; Makes commented text and keywords italics.
+  ;; This is working in emacsclient but not emacs.
+  ;; Your font must have an italic face available.
+  (set-face-attribute 'font-lock-comment-face nil
+                      :slant 'italic)
+  (set-face-attribute 'font-lock-keyword-face nil
+                      :slant 'italic)
 
-;; Uncomment the following line if line spacing needs adjusting.
-;; (setq-default line-spacing 0.12)
+  ;; Uncomment the following line if line spacing needs adjusting.
+  ;; (setq-default line-spacing 0.12)
 
-;; Needed if using emacsclient. Otherwise, your fonts will be smaller than expected.
-(add-to-list 'default-frame-alist '(font . "Inconsolata-11"))
-;; changes certain keywords to symbols, such as lamda!
-(setq global-prettify-symbols-mode t)
+  ;; Needed if using emacsclient. Otherwise, your fonts will be smaller than expected.
+  (add-to-list 'default-frame-alist '(font . "Inconsolata-11"))
+  ;; changes certain keywords to symbols, such as lamda!
+  (setq global-prettify-symbols-mode t)
 #+end_src
 
 ** Icons
@@ -183,19 +183,19 @@ You can test themes by using the counsel-load-theme.
 Icon set that can be used with dashboard, dired, ibuffer and other Emacs programs.
 
 #+begin_src emacs-lisp
-(use-package all-the-icons)
+  (use-package all-the-icons)
 #+end_src
 
 ** Change Modeline To Doom's Modeline
 #+begin_src emacs-lisp
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 25)) ;; lower height messes up the text vertical alignment
-)
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-height 25)) ;; lower height messes up the text vertical alignment
+    )
 
-;; Decrease modeline font height
-(set-face-attribute 'mode-line nil :height 100)
-(set-face-attribute 'mode-line-inactive nil :height 100)
+  ;; Decrease modeline font height
+  (set-face-attribute 'mode-line nil :height 100)
+  (set-face-attribute 'mode-line-inactive nil :height 100)
 #+end_src
 
 * WHICH KEY
@@ -203,13 +203,13 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 Minor mode for Emacs that displays the key bindings following your currently entered incomplete command (a prefix) in a popup.
 
 #+begin_src emacs-lisp
-(use-package which-key
-  ;; :defer 0
-  ;; :diminish which-key-mode
-  :config
-  (which-key-mode)
-  ;; (setq which-key-idle-delay 0.7)
-)
+  (use-package which-key
+    ;; :defer 0
+    ;; :diminish which-key-mode
+    :config
+    (which-key-mode)
+    ;; (setq which-key-idle-delay 0.7)
+    )
 #+end_src
 
 * KEY BINDINGS
@@ -365,42 +365,42 @@ Extensible Vi layer for Emacs
 
 Setup evil mode to use vim like keybindings
 #+begin_src emacs-lisp
-(use-package evil
-  :after general
-  :init      ;; config before the package loads
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-vsplit-window-right t)
-  (setq evil-split-window-below t)
-  (setq evil-want-C-u-scroll t)
-  ;; (setq evil-want-C-i-jump nil)
-  :config
-  (evil-mode)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (use-package evil
+    :after general
+    :init      ;; config before the package loads
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    (setq evil-vsplit-window-right t)
+    (setq evil-split-window-below t)
+    (setq evil-want-C-u-scroll t)
+    ;; (setq evil-want-C-i-jump nil)
+    :config
+    (evil-mode)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 
-  ;; ;; Use visual line motions even outside of visual-line-mode buffers(replacement for gj, gk)
-  ;; (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  ;; (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+    ;; ;; Use visual line motions even outside of visual-line-mode buffers(replacement for gj, gk)
+    ;; (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+    ;; (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
+    (evil-set-initial-state 'messages-buffer-mode 'normal)
+    (evil-set-initial-state 'dashboard-mode 'normal))
 
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package evil-commentary
-  :config
-  (evil-commentary-mode))
+  (use-package evil-commentary
+    :config
+    (evil-commentary-mode))
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package evil-surround
-  :config
-  (global-evil-surround-mode 1))
+  (use-package evil-surround
+    :config
+    (global-evil-surround-mode 1))
 #+end_src
 
 * MODES
@@ -409,7 +409,7 @@ Setup evil mode to use vim like keybindings
 Visually select and replace text. (Probably not required)
 
 #+begin_src emacs-lisp
-;; (delete-selection-mode t)
+  ;; (delete-selection-mode t)
 #+end_src
 
 ** Writer room mode
@@ -417,7 +417,7 @@ Visually select and replace text. (Probably not required)
 Distraction free writing mode
 
 #+begin_src emacs-lisp
-;; (use-package writeroom-mode)
+  ;; (use-package writeroom-mode)
 #+end_src
 
 ** Yasnippet global mode
@@ -425,21 +425,21 @@ Distraction free writing mode
 Enable snippets globally. Add more snippets from [[https://github.com/AndreaCrotti/yasnippet-snippets][AndreaCrotti/yasnippet-snippets]]
 
 #+begin_src emacs-lisp
-(use-package yasnippet
-  :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  (yas-global-mode 1)   ;; enables yasnippet globally
-  ;; ;; enable yasnippet as a non-global minor mode
-  ;; (yas-reload-all)
-  ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
-)
+  (use-package yasnippet
+    :config
+    (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+    (yas-global-mode 1)   ;; enables yasnippet globally
+    ;; ;; enable yasnippet as a non-global minor mode
+    ;; (yas-reload-all)
+    ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
+    )
 #+end_src
 
 * FILE
 
 Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o r)
 #+begin_src emacs-lisp
-;; (use-package sudo-edit) ;; Utilities for opening files with sudo
+  ;; (use-package sudo-edit) ;; Utilities for opening files with sudo
 #+end_src
 
 * DIRED
@@ -449,61 +449,68 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
 | dired-hide-details-mode | (   |
 ---------------------------------
 #+begin_src emacs-lisp
-(use-package all-the-icons-dired)
-;; (use-package dired-open)
-;; (use-package peep-dired)
+  (use-package all-the-icons-dired)
+  ;; (use-package dired-open)
+  ;; (use-package peep-dired)
 
-(leader-keys
-  "d d" '(dired :which-key "Open dired")
-  "d j" '(dired-jump :which-key "Dired jump to current")
-  ;; "d p" '(peep-dired :which-key "Peep-dired")
-)
+  (leader-keys
+    "d d" '(dired :which-key "Open dired")
+    "d j" '(dired-jump :which-key "Dired jump to current")
+    ;; "d p" '(peep-dired :which-key "Peep-dired")
+    )
 
-;; (with-eval-after-load 'dired
-;;   ;;(define-key dired-mode-map (kbd "M-p") 'peep-dired)
+  ;; Custom function for dired
+  ;; (progn
+  ;;   (dired-jump-other-window)
+  ;;   (dired-hide-details-mode)
+  ;;   (evil-window-decrease-width 50)
+  ;; )
+
+  ;; (with-eval-after-load 'dired
+  ;;   ;;(define-key dired-mode-map (kbd "M-p") 'peep-dired)
   (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
-  (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file) ; use dired-find-file instead if not using dired-open package
+  (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-find-file) ; use dired-find-file instead if not using dired-open package
   ;; (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
-;;   (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
+  ;;   (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
 
-;; (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
-;; ;; Get file icons in dired
-;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-;; ;; With dired-open plugin, you can launch external programs for certain extensions
-;; ;; For example, I set all .png files to open in 'sxiv' and all .mp4 files to open in 'mpv'
-;; (setq dired-open-extensions '(("gif" . "sxiv")
-;;                               ("jpg" . "sxiv")
-;;                               ("png" . "sxiv")
-;;                               ("mkv" . "mpv")
-;;                               ("mp4" . "mpv")))
+  ;; (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+  ;; ;; Get file icons in dired
+  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  ;; ;; With dired-open plugin, you can launch external programs for certain extensions
+  ;; ;; For example, I set all .png files to open in 'sxiv' and all .mp4 files to open in 'mpv'
+  ;; (setq dired-open-extensions '(("gif" . "sxiv")
+  ;;                               ("jpg" . "sxiv")
+  ;;                               ("png" . "sxiv")
+  ;;                               ("mkv" . "mpv")
+  ;;                               ("mp4" . "mpv")))
 #+end_src
 
 * DASHBOARD
 ** Setup
 #+begin_src emacs-lisp
-(use-package dashboard
-  :init      ;; tweak dashboard config before loading it
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
-  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  (setq dashboard-startup-banner "~/.emacs.d/emacs-dash.png")  ;; use custom image as banner
-  (setq dashboard-center-content nil) ;; set to 't' for centered content
-  (setq dashboard-items '((recents . 5)
-                          (agenda . 5 )
-                          (bookmarks . 3)
-                          (projects . 3)
-                          (registers . 3)))
-  :config
-  (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '((recents . "file-text")
-                                    (bookmarks . "book"))))
+  (use-package dashboard
+    :init      ;; tweak dashboard config before loading it
+    (setq dashboard-set-heading-icons t)
+    (setq dashboard-set-file-icons t)
+    (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
+    ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+    (setq dashboard-startup-banner "~/.emacs.d/emacs-dash.png")  ;; use custom image as banner
+    (setq dashboard-center-content nil) ;; set to 't' for centered content
+    (setq dashboard-items '((recents . 5)
+                            (agenda . 5 )
+                            (bookmarks . 3)
+                            (projects . 3)
+                            (registers . 3)))
+    :config
+    (dashboard-setup-startup-hook)
+    (dashboard-modify-heading-icons '((recents . "file-text")
+                                      (bookmarks . "book"))))
 #+end_src
 
 ** Open dashboard in emacsclient instead of scratch
 
 #+begin_src emacs-lisp
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
 
 * IVY (COUNSEL/SWIPER)
@@ -511,91 +518,106 @@ Generic completion mechanism for Emacs.
 ** Ivy
 
 #+begin_src emacs-lisp
-(use-package ivy
-  :diminish                          ;; doesn't show ivy minor mode in the modeline
-  :bind (("C-c C-r" . ivy-resume)
-         ("C-x B" . ivy-switch-buffer-other-window)
-         :map ivy-minibuffer-map
-         ;; ("TAB" . ivy-alt-done)	
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  ;; :custom
-  ;; (setq ivy-count-format "(%d/%d) ")
-  ;; (setq ivy-use-virtual-buffers t)
-  ;; (setq enable-recursive-minibuffers t)
-  :config
-  (ivy-mode))
+  (use-package ivy
+    :diminish                          ;; doesn't show ivy minor mode in the modeline
+    :bind (("C-c C-r" . ivy-resume)
+           ("C-x B" . ivy-switch-buffer-other-window)
+           :map ivy-minibuffer-map
+           ;; ("TAB" . ivy-alt-done)	
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    ;; :custom
+    ;; (setq ivy-count-format "(%d/%d) ")
+    ;; (setq ivy-use-virtual-buffers t)
+    ;; (setq enable-recursive-minibuffers t)
+    :config
+    (ivy-mode))
 #+end_src
 
 ** Counsel
 
 #+begin_src emacs-lisp
-(use-package counsel
-  ;; :after ivy                     ;; commented as I don't know if it's required
-  ;; :bind (("C-M-j" . 'counsel-switch-buffer)
-  ;;        :map minibuffer-local-map
-  ;;        ("C-r" . 'counsel-minibuffer-history))
-  :config (counsel-mode))
+  (use-package counsel
+    ;; :after ivy                     ;; commented as I don't know if it's required
+    ;; :bind (("C-M-j" . 'counsel-switch-buffer)
+    ;;        :map minibuffer-local-map
+    ;;        ("C-r" . 'counsel-minibuffer-history))
+    :config (counsel-mode))
 #+end_src
 
 ** Swiper
 
 #+begin_src emacs-lisp
-(use-package swiper
-  :after ivy
-  :bind (("C-s" . swiper)))
+  (use-package swiper
+    :after ivy
+    :bind (("C-s" . swiper)))
 #+end_src
 
 ** Ivy-rich
 
 #+begin_src emacs-lisp
-(use-package ivy-rich
-  :after ivy
-  :config
-  ;;   :custom
-  ;;   (ivy-virtual-abbreviate 'full
-  ;;    ivy-rich-switch-buffer-align-virtual-buffer t
-  ;;    ivy-rich-path-style 'abbrev)
-  ;;   :config
-  ;;   (ivy-set-display-transformer 'ivy-switch-buffer
-  ;;                                'ivy-rich-switch-buffer-transformer)
-  (ivy-rich-mode 1)) ;; this gets us descriptions in M-x.
+  (use-package ivy-rich
+    :after ivy
+    :config
+    ;;   :custom
+    ;;   (ivy-virtual-abbreviate 'full
+    ;;    ivy-rich-switch-buffer-align-virtual-buffer t
+    ;;    ivy-rich-path-style 'abbrev)
+    ;;   :config
+    ;;   (ivy-set-display-transformer 'ivy-switch-buffer
+    ;;                                'ivy-rich-switch-buffer-transformer)
+    (ivy-rich-mode 1)) ;; this gets us descriptions in M-x.
 #+end_src
 
 ** Other
 Remove the default '^' string in prompts
 #+begin_src emacs-lisp
-;; (setq ivy-initial-inputs-alist nil)
+  ;; (setq ivy-initial-inputs-alist nil)
 #+end_src
 
 Remember and show M-x history (last used commands)
 #+begin_src emacs-lisp
-(use-package smex)
-(smex-initialize)
+  (use-package smex)
+  (smex-initialize)
+#+end_src
+
+** Improved Candidate Sorting with prescient.el
+
+prescient.el provides some helpful behavior for sorting Ivy completion candidates based on how recently or frequently you select them.  This can be especially helpful when using =M-x= to run commands that you don't have bound to a key but still need to access occasionally.
+
+#+begin_src emacs-lisp
+  ;; (use-package ivy-prescient
+  ;;   :after counsel
+  ;;   :custom
+  ;;   (ivy-prescient-enable-filtering nil)
+  ;;   :config
+  ;;   ;; Uncomment the following line to have sorting remembered across sessions!
+  ;;   ;(prescient-persist-mode 1)
+  ;;   (ivy-prescient-mode 1))
 #+end_src
 
 * HELPFUL
 
 Adds a lot of information to the describe- command buffers like source code and other examples.
 #+begin_src emacs-lisp
-(use-package helpful
-  :commands (helpful-callable helpful-variable helpful-command helpful-key)
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
+  (use-package helpful
+    :commands (helpful-callable helpful-variable helpful-command helpful-key)
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
 #+end_src
 
 * DEVELOPMENT
@@ -606,12 +628,12 @@ Use Language server protocol.
 
 #+begin_src emacs-lisp
 
-(use-package lsp-mode
-  :init
-  (setq lsp-keymap-prefix "C-l")  ;; Or 'C-l', 's-l'
-  :config
-  (lsp-enable-which-key-integration t)  ;; integrate with which-key for help with bindings
-)
+  (use-package lsp-mode
+    :init
+    (setq lsp-keymap-prefix "C-l")  ;; Or 'C-l', 's-l'
+    :config
+    (lsp-enable-which-key-integration t)  ;; integrate with which-key for help with bindings
+    )
 #+end_src
 
 Useful commands: flymake-show-diagnostics-buffer (show error messages on the fly)
@@ -621,10 +643,10 @@ Useful commands: flymake-show-diagnostics-buffer (show error messages on the fly
 
 #+begin_src emacs-lisp
 
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :custom
-  (lsp-ui-doc-position 'bottom))
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (lsp-ui-doc-position 'bottom))
 
 #+end_src
 
@@ -642,8 +664,8 @@ This package is built on the [[https://github.com/Alexander-Miller/treemacs][tre
 
 #+begin_src emacs-lisp
 
-(use-package lsp-treemacs
-  :after lsp)
+  (use-package lsp-treemacs
+    :after lsp)
 
 #+end_src
 
@@ -658,8 +680,8 @@ Try these commands with =M-x=:
 
 #+begin_src emacs-lisp
 
-(use-package lsp-ivy
-  :after lsp)
+  (use-package lsp-ivy
+    :after lsp)
 
 #+end_src
 
@@ -671,19 +693,19 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+begin_src emacs-lisp
 
-(use-package company
-  :after lsp-mode
-  :hook (lsp-mode . company-mode)
-  :bind (:map company-active-map
-              ("<tab>" . company-complete-selection))  ;; use tab instead of enter for autocompletion
-  (:map lsp-mode-map
-        ("<tab>" . company-indent-or-complete-common))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0))
+  (use-package company
+    :after lsp-mode
+    :hook (lsp-mode . company-mode)
+    :bind (:map company-active-map
+                ("<tab>" . company-complete-selection))  ;; use tab instead of enter for autocompletion
+    (:map lsp-mode-map
+          ("<tab>" . company-indent-or-complete-common))
+    :custom
+    (company-minimum-prefix-length 1)
+    (company-idle-delay 0.0))
 
-;; (use-package company-box
-;;   :hook (company-mode . company-box-mode))
+  ;; (use-package company-box
+  ;;   :hook (company-mode . company-box-mode))
 
 #+end_src
 
@@ -693,31 +715,31 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+begin_src emacs-lisp
 
-;; (use-package dap-mode
-;;   ;; Uncomment the config below if you want all UI panes to be hidden by default!
-;;   ;; :custom
-;;   ;; (lsp-enable-dap-auto-configure nil)
-;;   ;; :config
-;;   ;; (dap-ui-mode 1)
-;;   :commands dap-debug
-;;   :config
-;;   ;; Set up Node debugging
-;;   (require 'dap-node)
-;;   (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+  ;; (use-package dap-mode
+  ;;   ;; Uncomment the config below if you want all UI panes to be hidden by default!
+  ;;   ;; :custom
+  ;;   ;; (lsp-enable-dap-auto-configure nil)
+  ;;   ;; :config
+  ;;   ;; (dap-ui-mode 1)
+  ;;   :commands dap-debug
+  ;;   :config
+  ;;   ;; Set up Node debugging
+  ;;   (require 'dap-node)
+  ;;   (dap-node-setup) ;; Automatically installs Node debug adapter if needed
 
-;;   ;; Bind `C-c l d` to `dap-hydra` for easy access
-;;   (general-define-key
-;;    :keymaps 'lsp-mode-map
-;;    :prefix lsp-keymap-prefix
-;;    "d" '(dap-hydra t :wk "debugger")))
+  ;;   ;; Bind `C-c l d` to `dap-hydra` for easy access
+  ;;   (general-define-key
+  ;;    :keymaps 'lsp-mode-map
+  ;;    :prefix lsp-keymap-prefix
+  ;;    "d" '(dap-hydra t :wk "debugger")))
 
 #+end_src
 
 ** Language Support
 Packages for syntax highlighting in programming languages
 #+begin_src emacs-lisp
-;;(use-package haskell-mode)
-;;(use-package markdown-mode)
+  ;;(use-package haskell-mode)
+  ;;(use-package markdown-mode)
 #+end_src
 *** TypeScript
 **** Basic Setup
@@ -725,11 +747,11 @@ This is a basic configuration for the TypeScript language so that =.ts= files ac
 
 #+begin_src emacs-lisp
 
-(use-package typescript-mode
-:mode "\\.ts\\'"
-:hook (typescript-mode . lsp-deferred)
-:config
-(setq typescript-indent-level 2))
+  (use-package typescript-mode
+    :mode "\\.ts\\'"
+    :hook (typescript-mode . lsp-deferred)
+    :config
+    (setq typescript-indent-level 2))
 
 #+end_src
 
@@ -768,7 +790,7 @@ Make sure you have the =pyls= language server installed before trying =lsp-mode=
 
 #+begin_src sh :tangle no
 
-# pip install --user "python-language-server[all]"
+  # pip install --user "python-language-server[all]"
 
 #+end_src
 
@@ -776,16 +798,16 @@ There are a number of other language servers for Python so if you find that =pyl
 
 #+begin_src emacs-lisp
 
-;; (use-package python-mode
-;;   :ensure t
-;;   :hook (python-mode . lsp-deferred)
-;;   :custom
-;;   ;; NOTE: Set these if Python 3 is called "python3" on your system!
-;;   ;; (python-shell-interpreter "python3")
-;;   ;; (dap-python-executable "python3")
-;;   (dap-python-debugger 'debugpy)
-;;   :config
-;;   (require 'dap-python))
+  ;; (use-package python-mode
+  ;;   :ensure t
+  ;;   :hook (python-mode . lsp-deferred)
+  ;;   :custom
+  ;;   ;; NOTE: Set these if Python 3 is called "python3" on your system!
+  ;;   ;; (python-shell-interpreter "python3")
+  ;;   ;; (dap-python-executable "python3")
+  ;;   (dap-python-debugger 'debugpy)
+  ;;   :config
+  ;;   (require 'dap-python))
 
 
 #+end_src
@@ -1284,8 +1306,12 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 - [ ] evil-snipe
 - [ ] evil-mark-replace
 - [ ] evil-exchange
+- [ ] vertico, consult
 ** TODO Others 
 - [ ] [[https://github.com/daviwil/emacs-from-scratch][EFS Tutorial]]
+- [ ] [[https://cestlaz.github.io/stories/emacs/][EFS Reference]]
+- [ ] [[github.com/nloyola/.emacs.d/blob/master/config.org][Nloyola Emacs Reference]]
+- [ ] [[github.com/emacs-tw/awesome-emacs][Awesome Emacs]]
 - [ ] [[https://opensource.com/article/20/1/emacs-cheat-sheet][Extending Emacs]]
 - [ ] Highlight matching parenthesis
   
