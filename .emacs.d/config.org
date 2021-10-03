@@ -1314,4 +1314,6 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 - [ ] [[github.com/emacs-tw/awesome-emacs][Awesome Emacs]]
 - [ ] [[https://opensource.com/article/20/1/emacs-cheat-sheet][Extending Emacs]]
 - [ ] Highlight matching parenthesis
-  
+* REFERENCES
+- Distrotube's GNU Emacs Config
+- Daviwil's Emacs From Scratch Config
