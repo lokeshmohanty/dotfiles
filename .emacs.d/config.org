@@ -873,7 +873,7 @@ File tree viewer.
 
 ** MAGIT
 
-Git client.
+Run *me/magit-status-bare* to use magit on dotfiles. To revert magit in order to use it for other repos run *me/magit-status*.
 
 #+begin_src emacs-lisp
   (setq bare-git-dir (concat "--git-dir=" (expand-file-name "~/.cfg")))
@@ -1002,8 +1002,8 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
 **** Todo
 #+begin_src emacs-lisp
   (setq org-todo-keywords '(
-                            (sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-                            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")
+                            (sequence "TODO(t)" "ACTIVE(a)" "NEXT(n)" "|" "DONE(d!)")
+                            (sequence "BACKLOG(b)" "PLAN(p)" "TO_SEE(s)" "WAIT(w@/!)" "HOLD(h)" "|" "CANCELLED(k@)")
                             ))
   ;; )
 #+end_src
@@ -1023,6 +1023,7 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
                            "~/Org/Journal.org"
                            "~/Org/Birthdays.org"
                            "~/Org/Habits.org"
+                           "~/Org/Bookmarks.org"
                            ))
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
@@ -1122,6 +1123,10 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
                                 ("tt" "Task" entry 
                                  (file+olp "~/Org/Tasks.org" "Inbox")
                                  "* TODO %?\n  %U\n  %a\n  %i" 
+                                 :empty-lines 1)
+                                ("tb" "Bookmarks" entry 
+                                 (file+olp+datetree "~/Org/Bookmarks.org")
+                                 "* TO_SEE %?\n  %U\n  \n  %i" 
                                  :empty-lines 1)
 
                                 ("j" "Journal Entries")
