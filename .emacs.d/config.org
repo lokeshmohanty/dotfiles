@@ -879,7 +879,7 @@ Git client.
   (setq bare-git-dir (concat "--git-dir=" (expand-file-name "~/.cfg")))
   (setq bare-work-tree (concat "--work-tree=" (expand-file-name "~")))
 
-  ;; use maggit on git bare repos like dotfiles repos, don't forget to change `bare-git-dir' and `bare-work-tree' to your needs
+  ;; use maggit on git bare repos like dotfiles repos
   (defun me/magit-status-bare ()
     "set --git-dir and --work-tree in `magit-git-global-arguments' to `bare-git-dir' and `bare-work-tree' and calls `magit-status'"
     (interactive)
@@ -905,7 +905,9 @@ Git client.
     )
 #+end_src
 Key Bindings
-| C-x g | magit-status |
+| C-x g | magit-status         |
+|       | magit-file-untrack   |
+| l r   | magit-reflog-current |
 
 ** PERSPECTIVE
 
@@ -1166,6 +1168,19 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
     )
 #+end_src
 
+**** Use abbreviations instead of lengthy URL.
+
+#+begin_src emacs-lisp
+  ;; An example of how this works.
+  ;; [[arch-wiki:Name_of_Page][Description]]
+  ;; This overwrites the default list
+  (setq org-link-abbrev-alist 
+        '(("google" . "http://www.google.com/search?q=")
+          ("ddg" . "https://duckduckgo.com/?q=")
+          ("stack-exchange" . "https://emacs.stackexchange.com/a/")
+          ("wiki" . "https://en.wikipedia.org/wiki/")))
+#+end_src
+
 
 **** Toc
 It helps to have an up-to-date table of contents in org files without
@@ -1210,22 +1225,6 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 #+end_src
 
-
-**** Use abbreviations instead of lengthy URL.
-
-#+begin_src emacs-lisp
-  ;; ;; An example of how this works.
-  ;; ;; [[arch-wiki:Name_of_Page][Description]]
-  ;; (setq org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
-  ;;       '(("google" . "http://www.google.com/search?q=")
-  ;;         ("ddg" . "https://duckduckgo.com/?q=")
-  ;;         ("wiki" . "https://en.wikipedia.org/wiki/")))
-#+end_src
-
-**** Syntax highlighting for source code blocks
-
-#+begin_src emacs-lisp
-#+end_src
 
 **** Prevent M-Ret from adding blank lines
 
