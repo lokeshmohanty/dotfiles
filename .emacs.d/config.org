@@ -903,14 +903,14 @@ Run *me/magit-status-bare* to use magit on dotfiles. To revert magit in order to
       (add-to-list 'magit-git-global-arguments bare-work-tree)
       (call-interactively 'magit-status))
 
-    ;; if you use `me/magit-status-bare' you cant use `magit-status' on other other repos you have to unset `--git-dir' and `--work-tree'
-    use `me/magit-status' insted it unsets those before calling `magit-status'
+    ;; if you use `me/magit-status-bare' you cant use `magit-status' on other other repos 
+    ;; you have to unset `--git-dir' and `--work-tree' use `me/magit-status' insted it unsets 
+    ;; those before calling `magit-status'
     (defun me/magit-status ()
       "sets the default value in `magit-git-global-arguments' and calls `magit-status'"
       (interactive)
       (require 'magit-git)
-      (setq-default magit-git-global-arguments (eval (car (get 'magit-git-global-arguments 'standard-value))))
-      )
+      (setq-default magit-git-global-arguments (eval (car (get 'magit-git-global-arguments 'standard-value)))))
 #+end_src
 
 ** PERSPECTIVE
