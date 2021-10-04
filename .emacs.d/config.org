@@ -54,6 +54,17 @@ Update packages automatically
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
 
+** Update path to bash environment path
+
+#+begin_src emacs-lisp
+  (let ((path (shell-command-to-string "source <(grep -v bind ~/.bashrc); echo -n $PATH")))
+    (setenv "PATH" path)
+    (setq exec-path
+          (append
+            (split-string-and-unquote path ":")
+            exec-path)))
+#+end_src
+
 * STARTUP PERFORMANCE
 ** Garbage Collection
 
