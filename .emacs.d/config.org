@@ -1010,10 +1010,12 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
                       ;; org-crypt
                       org-agenda
                       org-habit
+                      org-bullets              ;; show bullets instead of asterisks
                       ;; org-bookmark
                       ;; org-eshell
                       ;; org-irc
                       ))
+  (add-hook 'org-mode-hook 'org-bullets-mode)
 #+end_src
 
 **** Todo
@@ -1311,14 +1313,6 @@ Currently using org-capture for journaling
           ("mw" "Weight" table-line (file+headline "~/Org/Metrics.org" "Weight")
            "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
           ))
-#+end_src
-
-**** Show bullets instead of asterisks.
-
-#+begin_src emacs-lisp
-  (use-package org-bullets
-    :hook (org-mode . org-bullets-mode)
-    )
 #+end_src
 
 **** Evil key bindings for org mode
