@@ -1029,10 +1029,10 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
   ;; '!' -> record timestamp; '@' -> record a note; x/y -> do x while entering state, y while exiting state
   (setq org-todo-keywords 
         '(
-          (sequence "TODO(t@/!)" "ACTIVE(a)" "BACKLOG(b)" "HOLD(h)" "|" "DONE(D!)")
-          (sequence "WAITING(w@)" "DELEGATED(d@)" "|" "ASSIGNED(A@)" "CANCELLED(K@/!)")
-          (sequence "CONSUME(c)" "CONSUMING(C!)" "SHARE(s)" "|" "IGNORED(I@!)" "REFERENCE(R!)" "SHARED(S!)")
-          (sequence "VISIT(v)" "|" "VISITED(V)")  ;; physically
+          (sequence "TODO(t@/!)" "ACTIVE(a!)" "BACKLOG(b!)" "HOLD(h@/!)" "|" "DONE(D!)")
+          (sequence "WAITING(w@/!)" "DELEGATED(d@/!)" "|" "ASSIGNED(A@/!)" "CANCELLED(C@/!)")
+          (sequence "CONSUME(c!)" "CONSUMING(k!)" "SHARE(s@/!)" "|" "IGNORED(I@/!)" "REFERENCE(R!)" "SHARED(S!)")
+          (sequence "VISIT(v!)" "|" "VISITED(V!)")  ;; physically
           ))
   ;; )
 #+end_src
@@ -1252,35 +1252,35 @@ Currently using org-capture for journaling
         `(("t" "Tasks")
           ("tt" "General Task" entry 
            (file+olp "~/Org/Tasks.org" "Inbox")
-           "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:LOCATION: %a\n:END:\n  %i" 
+           "* TODO %? %^G\n:PROPERTIES:\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
           ("ts" "Scheduled Task" entry 
            (file+olp "~/Org/Tasks.org" "Inbox")
-           "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:LOCATION: %a\n:END:\n  %i" 
+           "* TODO %? %^G\n:PROPERTIES:\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
           ("td" "Task with deadline" entry 
            (file+olp "~/Org/Tasks.org" "Inbox")
-           "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:LOCATION: %a\n:END:\n  %i" 
+           "* TODO %? %^G\n:PROPERTIES:\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
 
           ("w" "Work Tasks")
           ("w" "Task" entry 
            (file+olp "~/Org/Work.org" "Inbox")
-           "* TODO %? :@work:\n:PROPERTIES:\n:CREATED: %U\n:CATEGORIES: %^{Categories}\n:LOCATION: %a\n:END:\n  %i" 
+           "* TODO %? :@work:\n:PROPERTIES:\n:Created: %U\n:CATEGORIES: %^{Categories}\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
           ("ws" "Scheduled Task" entry 
            (file+olp "~/Org/Tasks.org" "Inbox")
-           "* TODO %? :@work:\nSCHEDULED: %^t\n:PROPERTIES:\n:CREATED: %U\n:CATEGORIES: %^{Categories}\n:LOCATION: %a\n:END:\n  %i" 
+           "* TODO %? :@work:\nSCHEDULED: %^t\n:PROPERTIES:\n:Created: %U\n:CATEGORIES: %^{Categories}\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
           ("wd" "Task with deadline" entry 
            (file+olp "~/Org/Tasks.org" "Inbox")
-           "* TODO %? :@work:\nDEADLINE: %^t\n:PROPERTIES:\n:CREATED: %U\n:CATEGORIES: %^{Categories}\n:LOCATION: %a\n:END:\n  %i" 
+           "* TODO %? :@work:\nDEADLINE: %^t\n:PROPERTIES:\n:Created: %U\n:CATEGORIES: %^{Categories}\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
 
           ("b" "Bookmarks / References")
           ("bl" "Links to visit" entry 
            (file+olp+datetree "~/Org/References.org")
-           "* CONSUME %? %^G\n:PROPERTIES:\n:CREATED: %U\n:LOCATION: %c\n:END:\n%i\n" 
+           "* CONSUME %? %^G\n:PROPERTIES:\n:Created: %U\n:LOCATION: %c\n:END:\n%i\n" 
            :empty-lines 1)
 
           ("j" "Journal Entries")
@@ -1293,19 +1293,19 @@ Currently using org-capture for journaling
           ("h" "Habit Entries")
           ("hd" "Daily Habit" entry
            (file+olp "~/Org/Habits.org" "Daily Habits")
-           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:END:\n\n"
+           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n\n"
            :empty-lines 1)
           ("hw" "Weekly Habit" entry
            (file+olp "~/Org/Habits.org" "Weekly Habits")
-           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:END:\n\n"
+           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n\n"
            :empty-lines 1)
           ("hm" "Monthly Habit" entry
            (file+olp "~/Org/Habits.org" "Monthly Habits")
-           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:END:\n\n"
+           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n\n"
            :empty-lines 1)
           ("hy" "Yearly Habit" entry
            (file+olp "~/Org/Habits.org" "Yearly Habits")
-           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:END:\n\n"
+           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n\n"
            :empty-lines 1)
           ("hr" "Repeat Tasks" entry 
            (file "~/Org/Habits.org")
