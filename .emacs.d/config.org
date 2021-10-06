@@ -1348,15 +1348,15 @@ Currently using org-capture for journaling
           ("wiki" . "https://en.wikipedia.org/wiki/")))
 #+end_src
 
-
 **** Toc
 It helps to have an up-to-date table of contents in org files without
 exporting. Use :TOC: to create the table.
 
 #+begin_src emacs-lisp
-  ;; (use-package toc-org :commands toc-org-enable :init (add-hook
-  ;;   'org-mode-hook 'toc-org-enable)) 
+  (use-package toc-org :commands toc-org-enable :init (add-hook
+                                                       'org-mode-hook 'toc-org-enable)) 
 #+end_src
+
 
 **** Configure Babel Languages
 
