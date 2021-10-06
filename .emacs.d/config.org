@@ -842,8 +842,8 @@ Enable projectile mode
     ;; :diminish projectile-mode
     :config (projectile-mode)
     ;; (projectile-global-mode 1) ;; automatically add projects whose files are accessed
-    :init
-    (setq projectile-switch-project-action #'projectile-dired)
+    ;; :init
+    ;; (setq projectile-switch-project-action #'projectile-dired)
     ) 
   (leader-keys
     "p"   '(projectile-command-map :which-key "projectile"))
