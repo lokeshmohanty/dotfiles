@@ -61,8 +61,8 @@ Update packages automatically
     (setenv "PATH" path)
     (setq exec-path
           (append
-            (split-string-and-unquote path ":")
-            exec-path)))
+           (split-string-and-unquote path ":")
+           exec-path)))
 #+end_src
 
 * STARTUP PERFORMANCE
@@ -512,6 +512,8 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
                             (bookmarks . 3)
                             (projects . 3)
                             (registers . 3)))
+    (setq dashboard-filter-agenda-entry "+TODO=\"TODO\"&-STYLE=\"habit\"")
+
     :config
     (dashboard-setup-startup-hook)
     (dashboard-modify-heading-icons '((recents . "file-text")
@@ -635,6 +637,7 @@ Adds a lot of information to the describe- command buffers like source code and 
 ** Language Server Protocol (LSP)
 *** lsp-mode
 Use Language server protocol.
+[[https://github.com/emacs-lsp/lsp-mode/wiki][Wiki]], [[https://emacs-lsp.github.io/lsp-mode/][Documentation]]
 [[https://emacs-lsp.github.io/lsp-mode/page/languages/][Language Documentation]]
 
 #+begin_src emacs-lisp
@@ -671,14 +674,14 @@ Try these commands with =M-x=:
 - =lsp-treemacs-references= - Show a tree view for the references of the symbol under the cursor
 - =lsp-treemacs-error-list= - Show a tree view for the diagnostic messages in the project
 
-This package is built on the [[https://github.com/Alexander-Miller/treemacs][treemacs]] package which might be of some interest to you if you like to have a file browser at the left side of your screen in your editor.
+  This package is built on the [[https://github.com/Alexander-Miller/treemacs][treemacs]] package which might be of some interest to you if you like to have a file browser at the left side of your screen in your editor.
 
-#+begin_src emacs-lisp
+  #+begin_src emacs-lisp
 
-  (use-package lsp-treemacs
-    :after lsp)
+    (use-package lsp-treemacs
+      :after lsp)
 
-#+end_src
+  #+end_src
 
 *** lsp-ivy
 
@@ -689,12 +692,12 @@ Try these commands with =M-x=:
 - =lsp-ivy-workspace-symbol= - Search for a symbol name in the current project workspace
 - =lsp-ivy-global-workspace-symbol= - Search for a symbol name in all active project workspaces
 
-#+begin_src emacs-lisp
+  #+begin_src emacs-lisp
 
-  (use-package lsp-ivy
-    :after lsp)
+    (use-package lsp-ivy
+      :after lsp)
 
-#+end_src
+  #+end_src
 
 ** Company Mode
 
@@ -749,11 +752,10 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 ** Language Support
 Packages for syntax highlighting in programming languages
 #+begin_src emacs-lisp
-  ;;(use-package haskell-mode)
-  ;;(use-package markdown-mode)
+  (use-package haskell-mode)
+  (use-package markdown-mode)
 #+end_src
 *** TypeScript
-**** Basic Setup
 This is a basic configuration for the TypeScript language so that =.ts= files activate =typescript-mode= when opened.  We're also adding a hook to =typescript-mode-hook= to call =lsp-deferred= so that we activate =lsp-mode= to get LSP features every time we edit TypeScript code.
 
 #+begin_src emacs-lisp
@@ -777,9 +779,13 @@ This is a basic configuration for the TypeScript language so that =.ts= files ac
 This will install the [[https://github.com/theia-ide/typescript-language-server][typescript-language-server]] and the TypeScript compiler package.
 
 *** Angular
+    
+Installation from [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode docmentation]]
 #+begin_src shell
   npm install -g @angular/language-service@next typescript  @angular/language-server
 #+end_src
+
+Fixes warning -> (Unknown notification: angular/projectLanguageService) from [[https://github.com/emacs-lsp/lsp-mode/wiki/Install-Angular-Language-server][lsp-mode]]
 
 #+begin_src emacs-lisp
   (setq lsp-clients-angular-language-server-command
@@ -791,7 +797,6 @@ This will install the [[https://github.com/theia-ide/typescript-language-server]
           "/home/lokesh/.nvm/versions/node/v14.16.0/lib/node_modules"
           "--stdio"))
 #+end_src
-
 
 *** Python
 
@@ -863,6 +868,7 @@ Key Bindings
 
 File tree viewer.
 [[https://github.com/Alexander-Miller/treemacs][Documentation]]
+[[https://github.com/emacs-lsp/lsp-treemacs][lsp-integration]]
 
 #+begin_src emacs-lisp
   (use-package treemacs)
@@ -891,37 +897,37 @@ File tree viewer.
 #+begin_src emacs-lisp
   (use-package magit)
   (leader-keys
-      "g"      '(:ignore t :which-key "git")
-      "g s"    '(magit-status :which-key "git status")
-      "g l"    '(magit-log :which-key "git log")
-      "g b"    '(magit-status :which-key "git blame")
-      )
+    "g"      '(:ignore t :which-key "git")
+    "g s"    '(magit-status :which-key "git status")
+    "g l"    '(magit-log :which-key "git log")
+    "g b"    '(magit-status :which-key "git blame")
+    )
 #+end_src
 
 *** Custom commands to use magit on dotfiles
 Run *me/magit-status-bare* to use magit on dotfiles. To revert magit in order to use it for other repos run *me/magit-status*.
 
 #+begin_src emacs-lisp
-    (setq bare-git-dir (concat "--git-dir=" (expand-file-name "~/.cfg")))
-    (setq bare-work-tree (concat "--work-tree=" (expand-file-name "~")))
+  (setq bare-git-dir (concat "--git-dir=" (expand-file-name "~/.cfg")))
+  (setq bare-work-tree (concat "--work-tree=" (expand-file-name "~")))
 
-    ;; use magit on git bare repos like dotfiles repos
-    (defun me/magit-status-bare ()
-      "set --git-dir and --work-tree in `magit-git-global-arguments' to `bare-git-dir' and `bare-work-tree' and calls `magit-status'"
-      (interactive)
-      (require 'magit-git)
-      (add-to-list 'magit-git-global-arguments bare-git-dir)
-      (add-to-list 'magit-git-global-arguments bare-work-tree)
-      (call-interactively 'magit-status))
+  ;; use magit on git bare repos like dotfiles repos
+  (defun me/magit-status-bare ()
+    "set --git-dir and --work-tree in `magit-git-global-arguments' to `bare-git-dir' and `bare-work-tree' and calls `magit-status'"
+    (interactive)
+    (require 'magit-git)
+    (add-to-list 'magit-git-global-arguments bare-git-dir)
+    (add-to-list 'magit-git-global-arguments bare-work-tree)
+    (call-interactively 'magit-status))
 
-    ;; if you use `me/magit-status-bare' you cant use `magit-status' on other other repos 
-    ;; you have to unset `--git-dir' and `--work-tree' use `me/magit-status' insted it unsets 
-    ;; those before calling `magit-status'
-    (defun me/magit-status ()
-      "sets the default value in `magit-git-global-arguments' and calls `magit-status'"
-      (interactive)
-      (require 'magit-git)
-      (setq-default magit-git-global-arguments (eval (car (get 'magit-git-global-arguments 'standard-value)))))
+  ;; if you use `me/magit-status-bare' you cant use `magit-status' on other other repos 
+  ;; you have to unset `--git-dir' and `--work-tree' use `me/magit-status' insted it unsets 
+  ;; those before calling `magit-status'
+  (defun me/magit-status ()
+    "sets the default value in `magit-git-global-arguments' and calls `magit-status'"
+    (interactive)
+    (require 'magit-git)
+    (setq-default magit-git-global-arguments (eval (car (get 'magit-git-global-arguments 'standard-value)))))
 #+end_src
 
 ** PERSPECTIVE
