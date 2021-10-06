@@ -1033,6 +1033,7 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
           (sequence "WAITING(w@/!)" "DELEGATED(d@/!)" "|" "ASSIGNED(A@/!)" "CANCELLED(C@/!)")
           (sequence "CONSUME(c!)" "CONSUMING(k!)" "SHARE(s@/!)" "|" "IGNORED(I@/!)" "REFERENCE(R!)" "SHARED(S!)")
           (sequence "VISIT(v!)" "|" "VISITED(V!)")  ;; physically
+          (sequence "|" "NOTE(N)" "BOOKMARK(B)")  ;; static todo keywords
           ))
   ;; )
 #+end_src
@@ -1265,51 +1266,65 @@ Currently using org-capture for journaling
 
           ("w" "Work Tasks")
           ("w" "Task" entry 
-           (file+olp "~/Org/Work.org" "Inbox")
-           "* TODO %? :@work:\n:PROPERTIES:\n:Created: %U\n:CATEGORIES: %^{Categories}\n:LOCATION: %a\n:END:\n  %i" 
+           (file+olp "~/Org/Work.org" "INBOX")
+           "* TODO %? :@work:\n:PROPERTIES:\n:CATEGORIES: %^{Categories}\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
           ("ws" "Scheduled Task" entry 
-           (file+olp "~/Org/Tasks.org" "Inbox")
-           "* TODO %? :@work:\nSCHEDULED: %^t\n:PROPERTIES:\n:Created: %U\n:CATEGORIES: %^{Categories}\n:LOCATION: %a\n:END:\n  %i" 
+           (file+olp "~/Org/Tasks.org" "INBOX")
+           "* TODO %? :@work:\nSCHEDULED: %^t\n:PROPERTIES:\n:CATEGORIES: %^{Categories}\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
           ("wd" "Task with deadline" entry 
-           (file+olp "~/Org/Tasks.org" "Inbox")
-           "* TODO %? :@work:\nDEADLINE: %^t\n:PROPERTIES:\n:Created: %U\n:CATEGORIES: %^{Categories}\n:LOCATION: %a\n:END:\n  %i" 
+           (file+olp "~/Org/Tasks.org" "INBOX")
+           "* TODO %? :@work:\nDEADLINE: %^t\n:PROPERTIES:\n:CATEGORIES: %^{Categories}\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
 
           ("b" "Bookmarks / References")
           ("bl" "Links to visit" entry 
-           (file+olp+datetree "~/Org/References.org")
-           "* CONSUME %? %^G\n:PROPERTIES:\n:Created: %U\n:LOCATION: %c\n:END:\n%i\n" 
+           (file+olp "~/Org/References.org" "Links")
+           "* CONSUME [[%c][%^{Link Title}]] %^G\n:PROPERTIES:\n:Created: %U\n:END:\n  %i" 
            :empty-lines 1)
+          ("bb" "Bookmark" entry 
+           (file+olp "~/Org/References.org" "Bookmarks")
+           "* BOOKMARK [[%c][%^{Link Title}]] %^G\n:PROPERTIES:\n:Created: %U\n:REPEAT_TO_STATE: BOOKMARK\n:LOGGING: DONE(!)\n:END:\n  %i")
+          ("bb" "Bookmark" entry 
+           (file+olp "~/Org/References.org" "Bookmarks")
+           "* BOOKMARK [[%c][%^{Link Title}]] %^G\n:PROPERTIES:\n:Created: %U\n:REPEAT_TO_STATE: BOOKMARK\n:LOGGING: DONE(!)\n:END:\n  %i")
+
+          ("n" "Notes")
+          ("nn" "General Note" entry 
+           (file "~/Org/Notes.org")
+           "* NOTE %? %^G\n:PROPERTIES:\n:Created: %U\n:LOCATION: %a\n:END:\n  %i")
+          ("nw" "Work Note" entry 
+           (file+olp "~/Org/Work.org" "NOTES")
+           "* NOTE %? :@work\n:PROPERTIES:\n:CATEGORIES: %^{Categories}\n:Created: %U\n:LOCATION: %a\n:END:\n  %i")
 
           ("j" "Journal Entries")
           ("jj" "Journal" entry
            (file+olp+datetree "~/Org/Journal.org")
-           "\n* %<%I:%M %p> - %? :journal:\n\n"
+           "\n* %<%I:%M %p> - %? :journal:\n"
            :clock-in :clock-resume
            :empty-lines 1)
 
           ("h" "Habit Entries")
           ("hd" "Daily Habit" entry
            (file+olp "~/Org/Habits.org" "Daily Habits")
-           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n\n"
+           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n"
            :empty-lines 1)
           ("hw" "Weekly Habit" entry
            (file+olp "~/Org/Habits.org" "Weekly Habits")
-           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n\n"
+           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n"
            :empty-lines 1)
           ("hm" "Monthly Habit" entry
            (file+olp "~/Org/Habits.org" "Monthly Habits")
-           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n\n"
+           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n"
            :empty-lines 1)
           ("hy" "Yearly Habit" entry
            (file+olp "~/Org/Habits.org" "Yearly Habits")
-           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n\n"
+           "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:STYLE:    habit\n:Created: %U\n:END:\n"
            :empty-lines 1)
           ("hr" "Repeat Tasks" entry 
            (file "~/Org/Habits.org")
-           "* REPEAT %?\nSCHEDULED: <%<%Y-%m-%d %a .+1d>>\n:PROPERTIES:\n:CREATED: %U\n:STYLE: habit\n:REPEAT_TO_STATE: REPEAT\n:LOGGING: DONE(!)\n:ARCHIVE: %%s_archive::* Habits\n:END:\n%U\n")
+           "* REPEAT %?\nSCHEDULED: <%<%Y-%m-%d %a .+1d>>\n:PROPERTIES:\n:Created: %U\n:STYLE: habit\n:REPEAT_TO_STATE: REPEAT\n:LOGGING: DONE(!)\n:ARCHIVE: %%s_archive::* Habits\n:END:\n")
 
           ("w" "Workflows")
           ("we" "Checking Email" entry (file+olp+datetree "~/Org/Journal.org")
@@ -1320,6 +1335,10 @@ Currently using org-capture for journaling
            "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
           ))
 #+end_src
+
+#+RESULTS:
+| t  | Tasks        |       |                                  |               |
+| tt | General Task | entry | (file+olp ~/Org/Tasks.org Inbox) | * TODO %? %^G |
 
 **** Evil key bindings for org mode
 
