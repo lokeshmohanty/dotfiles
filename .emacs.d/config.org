@@ -1007,6 +1007,11 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
         org-fontify-quote-and-verse-blocks t
         ;; org-confirm-babel-evaluate nil
         )
+
+  (leader-keys 
+    "m"      '(:ignore t :which-key "Mode Specific Bindings")
+    "m t"      '(org-toggle-link-display :which-key "Toggle the display of link")
+  )
 #+end_src
 
 **** Modules
