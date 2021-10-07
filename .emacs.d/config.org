@@ -1092,7 +1092,7 @@ Currently using org-capture for journaling
                   ((org-agenda-overriding-header "Tasks")))
             (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-          ("t" "Tasks" tags "+TODO=\"TODO\"&-STYLE=\"habit\"")
+          ("T" "Tasks" tags "-STYLE=\"habit\"")
           ;; ("t" "Tasks" tags "+TODO={.*}&-STYLE=\"habit\"")
 
           ("h" "Habits" tags "+STYLE=\"habit\"")
@@ -1138,15 +1138,6 @@ Currently using org-capture for journaling
                    (org-agenda-files org-agenda-files)))))))
 #+end_src
 
-#+RESULTS:
-| d | Dashboard                   | ((agenda  ((org-deadline-warning-days 7))) (todo TODO ((org-agenda-overriding-header Tasks))) (tags-todo agenda/ACTIVE ((org-agenda-overriding-header Active Projects))))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |                                                                                                                 |
-| t | Tasks                       | tags                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | +TODO="TODO"&-STYLE="habit"                                                                                     |
-| h | Habits                      | tags                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | +STYLE="habit"                                                                                                  |
-| b | Backlogs                    | ((todo BACKLOG ((org-agenda-overriding-header Backlog Tasks))))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |                                                                                                                 |
-| R | References to visit/consume | tags-todo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | +CONSUME                                                                                                        |
-| e | tags-todo                   | +TODO="NEXT"+Effort<15&+Effort>0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | ((org-agenda-overriding-header Low Effort Tasks) (org-agenda-max-todos 20) (org-agenda-files org-agenda-files)) |
-| w | Workflow Status             | ((tags +@work+TODO="TODO" ((org-agenda-overriding-header TODO) (org-agenda-files org-agenda-files))) (tags +@work+TODO="ACTIVE" ((org-agenda-overriding-header Active Projects) (org-agenda-files org-agenda-files))) (tags +@work+TODO="BACKLOG" ((org-agenda-overriding-header Todo when I am free) (org-agenda-files org-agenda-files))) (tags +@work+TODO="WAITING" ((org-agenda-overriding-header Waiting) (org-agenda-todo-list-sublevels nil) (org-agenda-files org-agenda-files))) (tags +@work+TODO="DELEGATED" ((org-agenda-overriding-header Delegated to some one else) (org-agenda-todo-list-sublevels nil) (org-agenda-files org-agenda-files))) (tags +@work+TODO="ASSIGNED" ((org-agenda-overriding-header Assigned) (org-agenda-files org-agenda-files))) (tags +@work+TODO="COMPLETED+TODO="DONE" ((org-agenda-overriding-header Completed Projects) (org-agenda-files org-agenda-files))) (tags +@work+TODO="CANCELED" ((org-agenda-overriding-header Cancelled Projects) (org-agenda-files org-agenda-files)))) |                                                                                                                 |
-
 **** Habit
 
 # org-habit-toggle-habits
@@ -1155,10 +1146,16 @@ Currently using org-capture for journaling
 # org-habit-show-habits-only-for-today
 # org-habit-show-all-today
 # org-habit-show-habits
+This is particularly useful if you use the org-habits module and you are late to file the completion of a habit. If you complete the habit with org-todo it will be completed for the current day, and scheduled to repeat at the next repeat interval based on the current date. If you use org-todo-at-date and set the appropriate date, the task will be scheduled to repeat as though the task had been completed on the specified date.
 #+begin_src emacs-lisp
   ;; (require 'org-habit)
   ;; (add-to-list 'org-modules 'org-habit)
   ;; (setq org-habit-graph-column 60)
+(defun org-todo-at-date (date)
+  (interactive (list (org-time-string-to-time (org-read-date))))
+  (cl-flet ((org-current-effective-time (&rest r) date)
+         (org-today (&rest r) (time-to-days date)))
+    (org-todo)))
 #+end_src
 
 **** Tag
@@ -1265,18 +1262,21 @@ Currently using org-capture for journaling
            :empty-lines 1)
 
           ("w" "Work Tasks")
-          ("w" "Task" entry 
+          ("wt" "Task" entry 
            (file+olp "~/Org/Work.org" "INBOX")
-           "* TODO %? :@work:\n:PROPERTIES:\n:CATEGORIES: %^{Categories}\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
+           "* TODO %? %^G:@work:\n:PROPERTIES:\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
           ("ws" "Scheduled Task" entry 
-           (file+olp "~/Org/Tasks.org" "INBOX")
-           "* TODO %? :@work:\nSCHEDULED: %^t\n:PROPERTIES:\n:CATEGORIES: %^{Categories}\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
+           (file+olp "~/Org/Work.org" "INBOX")
+           "* TODO %? %^G:@work:\nSCHEDULED: %^t\n:PROPERTIES:\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
           ("wd" "Task with deadline" entry 
-           (file+olp "~/Org/Tasks.org" "INBOX")
-           "* TODO %? :@work:\nDEADLINE: %^t\n:PROPERTIES:\n:CATEGORIES: %^{Categories}\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
+           (file+olp "~/Org/Work.org" "INBOX")
+           "* TODO %? %^G:@work:\nDEADLINE: %^t\n:PROPERTIES:\n:Created: %U\n:LOCATION: %a\n:END:\n  %i" 
            :empty-lines 1)
+          ("wn" "Work Note" entry 
+           (file+olp "~/Org/Work.org" "NOTES")
+           "* NOTE %? :@work\n:PROPERTIES:\n:CATEGORIES: %^{Categories}\n:Created: %U\n:LOCATION: %a\n:END:\n  %i")
 
           ("b" "Bookmarks / References")
           ("bl" "Links to visit" entry 
@@ -1294,9 +1294,6 @@ Currently using org-capture for journaling
           ("nn" "General Note" entry 
            (file "~/Org/Notes.org")
            "* NOTE %? %^G\n:PROPERTIES:\n:Created: %U\n:LOCATION: %a\n:END:\n  %i")
-          ("nw" "Work Note" entry 
-           (file+olp "~/Org/Work.org" "NOTES")
-           "* NOTE %? :@work\n:PROPERTIES:\n:CATEGORIES: %^{Categories}\n:Created: %U\n:LOCATION: %a\n:END:\n  %i")
 
           ("j" "Journal Entries")
           ("jj" "Journal" entry
@@ -1326,19 +1323,15 @@ Currently using org-capture for journaling
            (file "~/Org/Habits.org")
            "* REPEAT %?\nSCHEDULED: <%<%Y-%m-%d %a .+1d>>\n:PROPERTIES:\n:Created: %U\n:STYLE: habit\n:REPEAT_TO_STATE: REPEAT\n:LOGGING: DONE(!)\n:ARCHIVE: %%s_archive::* Habits\n:END:\n")
 
-          ("w" "Workflows")
-          ("we" "Checking Email" entry (file+olp+datetree "~/Org/Journal.org")
-           "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+          ;; ("w" "Workflows")
+          ;; ("we" "Checking Email" entry (file+olp+datetree "~/Org/Journal.org")
+          ;;  "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
           ("m" "Metrics Capture")
           ("mw" "Weight" table-line (file+headline "~/Org/Metrics.org" "Weight")
            "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
           ))
 #+end_src
-
-#+RESULTS:
-| t  | Tasks        |       |                                  |               |
-| tt | General Task | entry | (file+olp ~/Org/Tasks.org Inbox) | * TODO %? %^G |
 
 **** Evil key bindings for org mode
 
