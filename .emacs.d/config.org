@@ -570,8 +570,16 @@ Generic completion mechanism for Emacs.
 
 #+begin_src emacs-lisp
   (use-package swiper
-    :after ivy
-    :bind (("C-s" . swiper)))
+    :after ivy)
+
+  (leader-keys
+    "s"     '(:ignore t :which-key "search")
+    "s s"   '(swiper :which-key "swiper")
+    ;; "s m"   '(swiper-mc :which-key "swiper with multiple cursors")     ;; multiple-cursors package required
+    "s b"   '(swiper-all :which-key "swiper in all buffers")
+    "s g"   '(counsel-rg :which-key "grep in current directory")
+  )
+
 #+end_src
 
 ** Ivy-rich
@@ -900,7 +908,7 @@ File tree viewer.
     "g"      '(:ignore t :which-key "git")
     "g s"    '(magit-status :which-key "git status")
     "g l"    '(magit-log :which-key "git log")
-    "g b"    '(magit-status :which-key "git blame")
+    "g b"    '(magit-blame :which-key "git blame")
     )
 #+end_src
 
