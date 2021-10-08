@@ -847,6 +847,17 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 
 #+end_src
 
+** Emmet
+
+| C-j       | emmet-expand           | expand the tag                 |
+| C-M-left  | emmet-next-edit-point  | goto emmet next edit point     |
+| C-M-right | emmet-prev-edit-point  | goto emmet previous edit point |
+| C-c C-c w | emmet-wrap-with-markup |                                |
+
+#+begin_src emacs-lisp
+  (use-package emmet-mode)
+#+end_src
+
 ** PROJECTILE
 
 Enable projectile mode
