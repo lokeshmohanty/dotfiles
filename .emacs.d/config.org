@@ -1007,7 +1007,8 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 #+end_src
 
 ** Emmet
-
+Great for producing HTML and CSS selectors. [[https://github.com/smihica/emmet-mode][Documentation]]
+Key bindings
 | C-j       | emmet-expand           | expand the tag                 |
 | C-M-left  | emmet-next-edit-point  | goto emmet next edit point     |
 | C-M-right | emmet-prev-edit-point  | goto emmet previous edit point |
