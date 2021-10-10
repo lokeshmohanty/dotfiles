@@ -5,10 +5,12 @@ CHEATSHEET: [[file:cheatsheet.pdf][./cheatsheet.pdf]]
 
 * PROGRAMS TO LOAD FIRST
 ** Package Management
+
 Setup package.el to work with MELPA. And initialize it.
 Run M-x list-packages to update packages list
 
 #+begin_src emacs-lisp
+
   (require 'package)
   (add-to-list 'package-archives 
                '("melpa" . "https://melpa.org/packages/"))  ;; It has many packages
@@ -16,24 +18,31 @@ Run M-x list-packages to update packages list
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
+
 #+end_src
 
 ** Installing use-package
 
 #+begin_src emacs-lisp
+
   (unless (package-installed-p 'use-package)
     (package-install 'use-package))
+
 #+end_src
 
 Globally enable use-package ensure(install package if not present)
 It doesn't update the packages
 #+begin_src emacs-lisp
+
   (require 'use-package-ensure)
   (setq use-package-always-ensure t)
+
 #+end_src
 
-Update packages automatically
+** Update packages automatically
+
 #+begin_src emacs-lisp
+
   (use-package auto-package-update
     :custom
     (auto-package-update-interval 7)
@@ -42,21 +51,26 @@ Update packages automatically
     (setq auto-package-update-delete-old-versions t)
     (setq auto-package-update-hide-results t)
     (auto-package-update-maybe))
+
 #+end_src
 
 ** Don't place autosave files in the same directory as the actual file
+
 #+begin_src emacs-lisp
+
   (use-package no-littering)
 
   ;; no-littering doesn't set this by default so we must place
   ;; auto save files in the same path as it uses for sessions
   (setq auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+
 #+end_src
 
 ** Update path to bash environment path
 
 #+begin_src emacs-lisp
+
   (let ((path (shell-command-to-string "source <(grep -v bind ~/.bashrc); echo -n $PATH")))
     (setenv "PATH" path)
     (setq exec-path
@@ -114,16 +128,21 @@ It increases runtime performance
 
 * GRAPHICAL USER INTERFACE SETTINGS
 ** Disable Menubar, Toolbars and Scrollbars
+
 #+begin_src emacs-lisp
+
   (menu-bar-mode -1)          ; Disable the menu bar
   (scroll-bar-mode -1)        ; Disable visible scrollbar
   (tool-bar-mode -1)          ; Disable the toolbar
   (tooltip-mode -1)           ; Disable tooltips
   ;; (set-fringe-mode 10)        ; Give some breathing room
+
 #+end_src
 
 ** Display Line Numbers and Truncated Lines
+
 #+begin_src emacs-lisp
+
   (column-number-mode)
   (global-display-line-numbers-mode 1)
   (global-visual-line-mode t)
@@ -134,20 +153,25 @@ It increases runtime performance
                   neotree-mode-hook
                   eshell-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 #+end_src
 
 ** Scrolling
+
 #+begin_src emacs-lisp
+
   (setq scroll-conservatively 101) ;; value greater than 100 gets rid of half page jumping
   (setq mouse-wheel-scroll-amount '(3 ((shift) . 3))) ;; how many lines at a time
   (setq mouse-wheel-progressive-speed t) ;; accelerate scrolling
   (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+
 #+end_src
 
 ** Theme
 
 You can test themes by using the counsel-load-theme.
 #+begin_src emacs-lisp
+
   (use-package doom-themes
                                           ;:ensure t
     :config
@@ -155,6 +179,7 @@ You can test themes by using the counsel-load-theme.
           doom-themes-enable-italic t) ; if nil, italics is universally disabled
     (load-theme 'doom-gruvbox t)
     (doom-themes-org-config))
+
 #+end_src
 
 ** Fonts
@@ -194,11 +219,14 @@ You can test themes by using the counsel-load-theme.
 Icon set that can be used with dashboard, dired, ibuffer and other Emacs programs.
 
 #+begin_src emacs-lisp
+
   (use-package all-the-icons)
+
 #+end_src
 
 ** Change Modeline To Doom's Modeline
 #+begin_src emacs-lisp
+
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
     :custom ((doom-modeline-height 25)) ;; lower height messes up the text vertical alignment
@@ -238,6 +266,7 @@ Minor mode for Emacs that displays the key bindings following your currently ent
 ** Install general.el to define keybindings
 
 #+begin_src emacs-lisp
+
   (use-package general
     :config
     (general-create-definer leader-keys
@@ -294,11 +323,13 @@ Minor mode for Emacs that displays the key bindings following your currently ent
     "f R"   '(rename-file :which-key "Rename file")
     "f S"   '(write-file :which-key "Save file as...")
     "f U"   '(sudo-edit :which-key "Sudo edit file"))
+
 #+end_src
 
 ** Window
 
 #+begin_src emacs-lisp
+
   (winner-mode 1)
   (leader-keys
     "w"     '(:ignore t :which-key "window")
@@ -315,11 +346,13 @@ Minor mode for Emacs that displays the key bindings following your currently ent
     ;; winner mode
     "w <left>"  '(winner-undo :which-key "Winner undo")
     "w <right>" '(winner-redo :which-key "Winner redo"))
+
 #+end_src
 
 ** Register
 
 #+begin_src emacs-lisp
+
   ;; (nvmap :prefix "SPC"
   ;;   "r c"   '(copy-to-register :which-key "Copy to register")
   ;;   "r f"   '(frameset-to-register :which-key "Frameset to register")
@@ -332,32 +365,38 @@ Minor mode for Emacs that displays the key bindings following your currently ent
   ;;   "r w"   '(window-configuration-to-register :which-key "Window configuration to register")
   ;;   "r +"   '(increment-register :which-key "Increment register")
   ;;   "r SPC" '(point-to-register :which-key "Point to register"))
+
 #+end_src
 
 ** Evaluate Elisp
 
 #+begin_src emacs-lisp
+
   ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
   ;;   "e b"   '(eval-buffer :which-key "Eval elisp in buffer")
   ;;   "e d"   '(eval-defun :which-key "Eval defun")
   ;;   "e e"   '(eval-expression :which-key "Eval elisp expression")
   ;;   "e l"   '(eval-last-sexp :which-key "Eval last sexression")
   ;;   "e r"   '(eval-region :which-key "Eval region"))
+
 #+end_src
 
 ** Zooming In and Out
 
 #+begin_src emacs-lisp
+
   ;; (global-set-key (kbd "C-=") 'text-scale-increase)
   ;; (global-set-key (kbd "C--") 'text-scale-decrease)
   ;; (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
   ;; (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
 #+end_src
 
 ** Hydra
 
 Hydra helps in desgning transient key bindings to run commands easily 
 #+begin_src emacs-lisp
+
   ;; (use-package hydra
   ;;   :defer t)
 
@@ -369,6 +408,7 @@ Hydra helps in desgning transient key bindings to run commands easily
 
   ;; (leader-keys
   ;;   "ts" '(hydra-text-scale/body :which-key "scale text"))
+
 #+end_src
 
 * EVIL MODE
@@ -614,10 +654,13 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
     (setq completion-styles '(orderless)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
+
 #+end_src
 
 ** Marginalia
+
 #+begin_src emacs-lisp
+
    ;; Enable richer annotations using the Marginalia package
   (use-package marginalia
     :after vertico
@@ -638,7 +681,9 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
 #+end_src
 
 ** Consult
+
 Extra commands for vertico
+
 | consult-line                                 |                                                                                                       |
 | consult-ripgrep                              |                                                                                                       |
 | consult-buffer                               |                                                                                                       |
@@ -722,6 +767,7 @@ Actions for vertico minibuffer
 
   ;;   ;; Enable recursive minibuffers
   ;;   (setq enable-recursive-minibuffers t)) 
+
 #+end_src
 
 
@@ -775,7 +821,6 @@ Actions for vertico minibuffer
   ;;                        (completing-read "cd: " eshell-dirs))))))))
 
 #+end_src
-
 
 * JUMPING WITH AVY
 
