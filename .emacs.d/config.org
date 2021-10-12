@@ -235,20 +235,7 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
   ;; Decrease modeline font height
   (set-face-attribute 'mode-line nil :height 100)
   (set-face-attribute 'mode-line-inactive nil :height 100)
-#+end_src
 
-* WHICH KEY
-  
-Minor mode for Emacs that displays the key bindings following your currently entered incomplete command (a prefix) in a popup.
-
-#+begin_src emacs-lisp
-  (use-package which-key
-    ;; :defer 0
-    ;; :diminish which-key-mode
-    :config
-    (which-key-mode)
-    ;; (setq which-key-idle-delay 0.7)
-    )
 #+end_src
 
 * KEY BINDINGS
@@ -453,6 +440,26 @@ Setup evil mode to use vim like keybindings
   (use-package evil-surround
     :config
     (global-evil-surround-mode 1))
+#+end_src
+
+* WHICH KEY
+  
+Minor mode for Emacs that displays the key bindings following your currently entered incomplete command (a prefix) in a popup.
+
+#+begin_src emacs-lisp
+  (use-package which-key
+    ;; :defer 0
+    ;; :diminish which-key-mode
+    :config
+    (which-key-mode)
+    ;; (setq which-key-idle-delay 0.7)
+    )
+
+  ;; (use-package which-key
+  ;;   :init (which-key-mode)
+  ;;   :diminish which-key-mode
+  ;;   :config
+  ;;   (setq which-key-idle-delay 0.3))
 #+end_src
 
 * MODES
