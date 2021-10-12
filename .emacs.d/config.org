@@ -4,57 +4,7 @@
 CHEATSHEET: [[file:cheatsheet.pdf][./cheatsheet.pdf]]
 
 * PROGRAMS TO LOAD FIRST
-** Package Management
-
-Setup package.el to work with MELPA. And initialize it.
-Run M-x list-packages to update packages list
-
-#+begin_src emacs-lisp
-
-  ;; (require 'package)
-  ;; (add-to-list 'package-archives 
-  ;;              '("melpa" . "https://melpa.org/packages/"))  ;; It has many packages
-
-  ;; (package-initialize)
-  ;; (unless package-archive-contents
-  ;;   (package-refresh-contents))
-
-#+end_src
-
-** Installing use-package
-
-#+begin_src emacs-lisp
-
-  ;; (unless (package-installed-p 'use-package)
-  ;;   (package-install 'use-package))
-
-#+end_src
-
-Globally enable use-package ensure(install package if not present)
-It doesn't update the packages
-#+begin_src emacs-lisp
-
-  ;; (require 'use-package-ensure)
-  ;; (setq use-package-always-ensure t)
-
-#+end_src
-
-** Update packages automatically
-
-#+begin_src emacs-lisp
-
-  ;; (use-package auto-package-update
-  ;;   :custom
-  ;;   (auto-package-update-interval 7)
-  ;;   (auto-package-update-prompt-before-update t)
-  ;;   :config
-  ;;   (setq auto-package-update-delete-old-versions t)
-  ;;   (setq auto-package-update-hide-results t)
-  ;;   (auto-package-update-maybe))
-
-#+end_src
-
-** Straight
+** Package Management with Straight
 
 #+begin_src emacs-lisp
 
