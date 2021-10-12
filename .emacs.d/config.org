@@ -277,26 +277,33 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
       "hrr" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
       "hpc" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/config.org"))))
     )
+
 #+end_src
 
 ** Buffer
 
 #+begin_src emacs-lisp
+
   (leader-keys
     "b"     '(:ignore t :which-key "buffer")
     "b b"   '(ibuffer :which-key "Ibuffer")
-    "b s"   '(switch-to-buffer :which-key "switch buffer")
-    "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
+    ;; "b s"   '(switch-to-buffer :which-key "switch buffer")
+    "b s"   '(consult-buffer :which-key "switch buffer")
+    "b f"   '(consult-buffer-other-frame :which-key "open buffer in other frame")
+    "b w"   '(consult-buffer-other-window :which-key "open buffer in other window")
+    "b c"   '(clone-indirect-buffer-other-window :which-key "Clone buffer in other window")
     "b k"   '(kill-current-buffer :which-key "Kill current buffer")
     "b n"   '(next-buffer :which-key "Next buffer")
     "b p"   '(previous-buffer :which-key "Previous buffer")
     "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
     "b K"   '(kill-buffer :which-key "Kill buffer"))
+
 #+end_src
 
 ** File
 
 #+begin_src emacs-lisp
+
   (leader-keys
     ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
     "."     '(find-file :which-key "Find file")
@@ -315,9 +322,40 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 
 ** Window
 
+| Command                             | Key        | Description                                      |
+|-------------------------------------+------------+--------------------------------------------------|
+| =shrink-window-horizontally=          | ~C-x {~      | Make the window smaller horizontally             |
+| =enlarge-window-horizontally=         | ~C-x }~      | Make the window bigger horizontally              |
+| =shrink-window=                       | None!      | Shrink the window vertically                     |
+| =shrink-window-if-larger-than-buffer= | ~C-x -~      | Shrink the window vertically to buffer           |
+| =dired-other-window=                  | ~C-x 4 d~    | Open Dired in another window                     |
+| =dired-jump-other-window=             | ~C-x 4 j~    | Open Dired in another window at location of file |
+| =scroll-other-window=                 | ~M-pgdn~     | Scroll the other window down without focusing it |
+| =scroll-other-window-down=            | ~M-pgup~     | Scroll the other window up without focusing it   |
+|-------------------------------------+------------+--------------------------------------------------|
+| =evil-window-delete=                  | ~C-w C-c~    | Close the current window                         |
+| =delete-other-windows=                | ~C-w C-o~    | Close all other windows                          |
+| =evil-window-split=                   | ~C-w C-s~    | Split the current window horizontally            |
+| =evil-window-vsplit=                  | ~C-w C-v~    | Split the current window vertically              |
+| =evil-window-set-width=               | ~C-w (pipe)~ | Use numeric prefix to set window width           |
+| =evil-window-set-height=              | ~C-w _~      | Use numeric prefix to set window height          |
+| =balance-windows=                     | ~C-w =~      | Balance the sizes of all windows                 |
+| =evil-window-next=                    | ~C-w C-w~    | Select the next visible window                   |
+| =evil-window-prev=                    | ~C-w W~      | Select the previous visible window               |
+| =ffap-other-window=                   | ~C-w C-f~    | Open a file in another window                    |
+| =evil-window-left=                    | ~C-w h~      |                                                  |
+| =evil-window-right=                   | ~C-w l~      |                                                  |
+| =evil-window-up=                      | ~C-w k~      |                                                  |
+| =evil-window-down=                    | ~C-w j~      |                                                  |
+
+*TIP*: You can use a numeric argument before running =evil-window-set-width= and =evil-window-set-height= to specify the desired size of the window.
+
+
+C-w -> Prefix for evil window commands
+
 #+begin_src emacs-lisp
 
-  (winner-mode 1)
+  ;; (winner-mode 1)
   (leader-keys
     "w"     '(:ignore t :which-key "window")
     "w c"   '(evil-window-delete :which-key "Close window")
@@ -331,10 +369,76 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
     "w l"   '(evil-window-right :which-key "Window right")
     "w w"   '(evil-window-next :which-key "Goto next window")
     ;; winner mode
-    "w <left>"  '(winner-undo :which-key "Winner undo")
-    "w <right>" '(winner-redo :which-key "Winner redo"))
+    ;; "w <left>"  '(winner-undo :which-key "Winner undo")
+    ;; "w <right>" '(winner-redo :which-key "Winner redo")
+    )
+
+  ;; (use-package winner-mode
+  ;;   :ensure nil
+  ;;   :bind (:map evil-window-map
+  ;;               ("u" . winner-undo)
+  ;;               ("C-u" . winner-redo))
+  ;;   :config
+  ;;   (winner-mode))
+
 
 #+end_src
+
+** Tab
+Basic Usage
+
+    - =tab-bar-mode= - Enable display of the tab bar
+    - =tab-new= (~C-x t 2~) - Create a new tab
+    - =tab-next= (~C-x t o~, evil: ~g t~) - Move to the next tab (also known as =tab-bar-switch-to-next-tab=)
+    - =tab-bar-switch-to-prev-tab= (evil: ~g T~) - Switch to the previous tab
+    - =tab-rename= (~C-x t r~) - Rename the current tab (or numbered tab with prefix arg)
+    - =tab-close= (~C-x t 0~) - Close the current tab
+    - =tab-close-other= (~C-x t 1~) - Close other tabs
+    - =tab-bar-undo-close-tab= - Reopen the last closed tab
+    - =tab-move= (~C-x t m~) - Move the current tab to the right (or left with negative prefix)
+    - =tab-bar-select-tab-by-name= (~C-x t RET~) - Select tab by name using completion
+
+      Configuring operation
+
+    - =tab-bar-new-tab-choice= - The name of a buffer or file to display in new tabs
+    - =tab-bar-new-tab-to= - Where to place new tabs (left or right of current) - Also a function!
+    - =tab-bar-tab-name-function= - Control how new tabs are named (can prompt for a name!)
+
+      #+begin_src emacs-lisp
+
+        ;; (setq tab-bar-new-tab-choice "*scratch*")
+
+      #+end_src
+
+      Configuring tab-bar appearance
+
+      - =tab-bar-close-button-show= - Show or hide the close button
+      - =tab-bar-new-button-show= - Show or hide the new button at the end
+      - =tab-bar-button-relief= - Control pixel width of tab bar button appearance
+
+      - =tab-bar= face - customize text of tabs
+      - =tab-bar-tab= face - customize the color of the active tab
+      - =tab-bar-tab-inactive= face - customize the color of inactive tabs
+
+        #+begin_src emacs-lisp
+
+          ;; (setq tab-bar-close-button-show nil
+          ;;       tab-bar-new-button-show nil)
+
+        #+end_src
+
+        Using tab-bar-mode without showing the bar
+
+        #+begin_src emacs-lisp
+
+          ;; Don't turn on tab-bar-mode when tabs are created
+          ;; (setq tab-bar-show nil)
+
+          ;; ;; Get the current tab name for use in some other display
+          ;; (defun efs/current-tab-name ()
+          ;;   (alist-get 'name (tab-bar--current-tab)))
+
+        #+end_src
 
 ** Register
 
