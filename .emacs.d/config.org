@@ -11,13 +11,13 @@ Run M-x list-packages to update packages list
 
 #+begin_src emacs-lisp
 
-  (require 'package)
-  (add-to-list 'package-archives 
-               '("melpa" . "https://melpa.org/packages/"))  ;; It has many packages
+  ;; (require 'package)
+  ;; (add-to-list 'package-archives 
+  ;;              '("melpa" . "https://melpa.org/packages/"))  ;; It has many packages
 
-  (package-initialize)
-  (unless package-archive-contents
-    (package-refresh-contents))
+  ;; (package-initialize)
+  ;; (unless package-archive-contents
+  ;;   (package-refresh-contents))
 
 #+end_src
 
@@ -25,8 +25,8 @@ Run M-x list-packages to update packages list
 
 #+begin_src emacs-lisp
 
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
+  ;; (unless (package-installed-p 'use-package)
+  ;;   (package-install 'use-package))
 
 #+end_src
 
@@ -34,8 +34,8 @@ Globally enable use-package ensure(install package if not present)
 It doesn't update the packages
 #+begin_src emacs-lisp
 
-  (require 'use-package-ensure)
-  (setq use-package-always-ensure t)
+  ;; (require 'use-package-ensure)
+  ;; (setq use-package-always-ensure t)
 
 #+end_src
 
@@ -43,15 +43,44 @@ It doesn't update the packages
 
 #+begin_src emacs-lisp
 
-  (use-package auto-package-update
-    :custom
-    (auto-package-update-interval 7)
-    (auto-package-update-prompt-before-update t)
-    :config
-    (setq auto-package-update-delete-old-versions t)
-    (setq auto-package-update-hide-results t)
-    (auto-package-update-maybe))
+  ;; (use-package auto-package-update
+  ;;   :custom
+  ;;   (auto-package-update-interval 7)
+  ;;   (auto-package-update-prompt-before-update t)
+  ;;   :config
+  ;;   (setq auto-package-update-delete-old-versions t)
+  ;;   (setq auto-package-update-hide-results t)
+  ;;   (auto-package-update-maybe))
 
+#+end_src
+
+** Straight
+
+#+begin_src emacs-lisp
+
+  (setq package-enable-at-startup nil)
+
+  ;; Bootstrap straight.el
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+
+  ;; Always use straight to install on systems other than Linux
+  (setq straight-use-package-by-default t)
+
+  ;; Use straight.el for use-package expressions
+  (straight-use-package 'use-package)
+
+  ;; Clean up unused repos with `straight-remove-unused-repos'
 #+end_src
 
 ** Don't place autosave files in the same directory as the actual file
