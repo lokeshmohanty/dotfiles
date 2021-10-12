@@ -1154,8 +1154,7 @@ File tree viewer.
 
   (leader-keys 
     "d"    '(:ignore t :which-key "directory viewer")
-    ;; "d t"  '(treemacs :which-key "treemacs(file viewer)")
-    "d t"  '(treemacs-add-and-display-current-project :which-key "treemacs")
+    "d t"  '(treemacs :which-key "treemacs")
     "d e"  '(treemacs-display-current-project-exclusively :which-key "treemacs")
     )
 #+end_src
@@ -1244,6 +1243,12 @@ Add keybindins for
 | C-c C-d              | org-deadline             |
 | C-c C-x e            | org-set-effort           |
 | C-c C-x p            | org-set-property         |
+|----------------------+--------------------------|
+| C-c C-x C-i          | org-clock-in             |
+| C-c C-x C-o          | org-clock-out            |
+| C-c C-x C-j          | org-clock-jump           |
+|                      | org-clock-report         |
+|----------------------+--------------------------|
 | C-c M-:              | repeat-complex-command   |
 | C-c *                | org-ctrl-c-star          |
 | C-c -                | org-ctrl-c-minus         |
@@ -1283,12 +1288,16 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
   (leader-keys 
     "m"      '(:ignore t :which-key "Mode Specific Bindings")
     "m t"      '(org-toggle-link-display :which-key "Toggle the display of link")
-  )
+    )
 #+end_src
 
 **** Modules
 
 #+begin_src emacs-lisp
+
+  (use-package org-bullets)
+  ;; (use-package org-habit)
+
   (setq org-modules '(
                       ;; org-crypt
                       org-agenda
@@ -1299,6 +1308,7 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
                       ;; org-irc
                       ))
   (add-hook 'org-mode-hook 'org-bullets-mode)
+
 #+end_src
 
 **** Todo
@@ -1428,11 +1438,11 @@ This is particularly useful if you use the org-habits module and you are late to
   ;; (require 'org-habit)
   ;; (add-to-list 'org-modules 'org-habit)
   ;; (setq org-habit-graph-column 60)
-(defun org-todo-at-date (date)
-  (interactive (list (org-time-string-to-time (org-read-date))))
-  (cl-flet ((org-current-effective-time (&rest r) date)
-         (org-today (&rest r) (time-to-days date)))
-    (org-todo)))
+  (defun org-todo-at-date (date)
+    (interactive (list (org-time-string-to-time (org-read-date))))
+    (cl-flet ((org-current-effective-time (&rest r) date)
+              (org-today (&rest r) (time-to-days date)))
+      (org-todo)))
 #+end_src
 
 **** Tag
@@ -1454,19 +1464,6 @@ This is particularly useful if you use the org-habits module and you are late to
           ("planning" . ?p)
           ("note" . ?n)
           ("idea" . ?i)))
-#+end_src
-
-**** Refile
-#+begin_src emacs-lisp
-  (setq org-refile-targets '(
-                             (nil :maxlevel . 1)
-                             (org-agenda-files :maxlevel . 1)
-                             ;; ("Archive.org" :maxlevel . 1)
-                             ;; ("Tasks.org" :maxlevel . 1)
-                             ))
-
-  ;; Save Org buffers after refiling!
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
 #+end_src
 
 **** Capture Templates
@@ -1608,6 +1605,19 @@ This is particularly useful if you use the org-habits module and you are late to
           ("mw" "Weight" table-line (file+headline "~/Org/Metrics.org" "Weight")
            "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
           ))
+#+end_src
+
+**** Refile
+#+begin_src emacs-lisp
+  (setq org-refile-targets '(
+                             (nil :maxlevel . 1)
+                             (org-agenda-files :maxlevel . 1)
+                             ;; ("Archive.org" :maxlevel . 1)
+                             ;; ("Tasks.org" :maxlevel . 1)
+                             ))
+
+  ;; Save Org buffers after refiling!
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
 #+end_src
 
 **** Evil key bindings for org mode
