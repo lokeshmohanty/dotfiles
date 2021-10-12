@@ -596,6 +596,12 @@ Enable snippets globally. Add more snippets from [[https://github.com/AndreaCrot
     ;; (yas-reload-all)
     ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
     )
+** Rainbow Delimiters
+#+begin_src emacs-lisp
+
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+
 #+end_src
 
 * FILE
