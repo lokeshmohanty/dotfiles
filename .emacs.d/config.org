@@ -1295,26 +1295,58 @@ Run *me/magit-status-bare* to use magit on dotfiles. To revert magit in order to
 Similar to workspaces. Each perspective has its own buffer list and
 window layout.
 
-# #+begin_src emacs-lisp
-# (use-package perspective
-#   :bind
-#   ("C-x C-b" . persp-list-buffers)   ; or use a nicer switcher, see below
-#   :config
-#   (persp-mode))
-# #+end_src
+#+begin_src emacs-lisp
+  ;; (use-package perspective
+  ;;   :bind
+  ;;   ("C-x C-b" . persp-list-buffers)   ; or use a nicer switcher, see below
+  ;;   :config
+  ;;   (persp-mode))
+#+end_src
+
+** API Management
+*** JSON mode for json formatting
+
+#+begin_src emacs-lisp
+
+  (use-package json-mode)
+
+#+end_src
+
+*** Restclient
+
+#+begin_src emacs-lisp
+
+  (use-package restclient
+    :defer t
+    :mode (("\\.http\\'" . restclient-mode))
+    :bind (:map restclient-mode-map
+                ("C-c C-f" . json-mode-beautify)))
+
+#+end_src
+
+*** Impostman
+    
+To import postman collection
+    
+#+begin_src emacs-lisp
+
+  ;; (use-package impostman
+  ;;   :straight '(impostman :host github
+  ;;                         :repo "flashcode/impostman"))
+
+#+end_src
 
 * ORG MODE
-*** Todo
-Add keybindins for
-- org-toggle-link-display 
 *** Tips
-|-------------------------+---------|
-| Commands                | binding |
-|-------------------------+---------|
-| org-insert-link         | C-c C-l |
-| org-toggle-link-dislpay |         |
-| org-todo                | C-c C-t |
-|-------------------------+---------|
+|-------------------------+---------+--------------------------|
+| Commands                | binding | evil normal mode binding |
+|-------------------------+---------+--------------------------|
+| org-store-link          |         |                          |
+| org-insert-link         | C-c C-l |                          |
+| org-toggle-link-dislpay |         |                          |
+| org-todo                | C-c C-t | t                        |
+| org-priority            | C-c ,   |                          |
+|-------------------------+---------+--------------------------|
 
 |----------------------+--------------------------|
 | M-<up>               | Move the title up        |
