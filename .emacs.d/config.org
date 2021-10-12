@@ -578,29 +578,8 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
 ** Vertico
 #+begin_src emacs-lisp
 
-  ;; Enable vertico
-  (use-package vertico
-    :bind (:map vertico-map
-                ("C-j" . vertico-next)
-                ("C-k" . vertico-previous))
-    :custom 
-    (vertico-cycle t)
-    :init
-    (vertico-mode)
-
-    ;; Grow and shrink the Vertico minibuffer
-    ;; (setq vertico-resize t)
-
-    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-    ;; (setq vertico-cycle t)
-    )
-#+end_src
-
-*** Completions with Vertico
-
-#+begin_src emacs-lisp
-
-  (defun dw/minibuffer-backward-kill (arg)
+  ;; Borrowed from systemcrafters.cc
+  (defun me/minibuffer-backward-kill (arg)
     "When minibuffer is completing a file name delete up to parent
   folder, otherwise delete a word"
     (interactive "p")
@@ -609,45 +588,51 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
         (if (string-match-p "/." (minibuffer-contents))
             (zap-up-to-char (- arg) ?/)
           (delete-minibuffer-contents))
-        (delete-word (- arg))))
+      (delete-word (- arg))))
 
+  ;; Enable vertico
   (use-package vertico
-    ;; :straight '(vertico :host github
-    ;;                     :repo "minad/vertico"
-    ;;                     :branch "main")
     :bind (:map vertico-map
-           ("C-j" . vertico-next)
-           ("C-k" . vertico-previous)
-           ("C-f" . vertico-exit)
-           :map minibuffer-local-map
-           ("M-h" . dw/minibuffer-backward-kill))
-    :custom
+                ("C-j" . vertico-next)
+                ("C-k" . vertico-previous)
+                ("C-f" . vertico-exit)
+                :map minibuffer-local-map
+                ("C-b" . me/minibuffer-backward-kill))
+    :custom 
     (vertico-cycle t)
-    :custom-face
-    (vertico-current ((t (:background "#3a3f5a"))))
     :init
-    (vertico-mode))
+    (vertico-mode)
 
-#+end_src
+    ;; Grow and shrink the Vertico minibuffer
+    ;; (setq vertico-resize t)
 
-*Guix Packages*
+    ;; The text menu bar works well with Vertico but always shows a *Completions* buffer, 
+    ;; which is unwanted if you are using the Vertico UI. This completion buffer can be disabled as follows.
+    ;; (advice-add #'tmm-add-prompt :after #'minibuffer-hide-completions)
 
-#+begin_src scheme :noweb-ref packages :noweb-sep ""
-
-  "emacs-vertico"
-
+    ;; In combination with Orderless, hostnames are not made available for completion after entering /ssh:. 
+    ;; In order to avoid this problem, the basic completion style should be specified for the file completion category.
+    ;; (setq completion-styles '(orderless)
+    ;;   completion-category-overrides '((file (styles basic partial-completion))))
+    )
 #+end_src
 
 ** Save History
+
+Persist history over Emacs restarts. Vertico sorts by history position.
+
 #+begin_src emacs-lisp
-  ;; Persist history over Emacs restarts. Vertico sorts by history position.
+
   (use-package savehist
     :init
     (savehist-mode))
+
 #+end_src
 
 ** Orderless
+
 #+begin_src emacs-lisp
+
   ;; Optionally use the `orderless' completion style. See
   ;; `+orderless-dispatch' in the Consult wiki for an advanced Orderless style
   ;; dispatcher. Additionally enable `partial-completion' for file path
@@ -668,7 +653,7 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
 
 #+begin_src emacs-lisp
 
-   ;; Enable richer annotations using the Marginalia package
+  ;; Enable richer annotations using the Marginalia package
   (use-package marginalia
     :after vertico
     ;; Either bind `marginalia-cycle` globally or only in the minibuffer
@@ -691,18 +676,19 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
 
 Extra commands for vertico
 
-| consult-line                                 |                                                                                                       |
-| consult-ripgrep                              |                                                                                                       |
-| consult-buffer                               |                                                                                                       |
-| consult-imenu / consult-org-heading(for org) | search through headings                                                                               |
-| consult-mark                                 | Show a list of previous mark locations                                                                |
-| consult-outline                              | Show a list of headings in the current file depending on type                                         |
-| consult-minor-mode-menu                      | Show a list of all minor modes, press i SPC to narrow to active modes                                 |
-| consult-history                              | History for current minibuffer, also works for terminal modes                                         |
-| consult-file-externally                      | Open a file in an external program                                                                    |
-| consult-preview-mode                         | Preview selections for various commands                                                               |
-| consult-completion-in-region                 | Can be used with the completion-in-region-function variable to do in-buffer completions using Vertico |
-|                                              |                                                                                                       |
+| consult-line                 |                                                                                                       |
+| consult-ripgrep              |                                                                                                       |
+| consult-buffer               |                                                                                                       |
+| consult-imenu                | search through headings                                                                               |
+| consult-org-heading          | like consult-imenu but for org                                                                        |
+| consult-mark                 | Show a list of previous mark locations                                                                |
+| consult-outline              | Show a list of headings in the current file depending on type                                         |
+| consult-minor-mode-menu      | Show a list of all minor modes, press i SPC to narrow to active modes                                 |
+| consult-history              | History for current minibuffer, also works for terminal modes                                         |
+| consult-file-externally      | Open a file in an external program                                                                    |
+| consult-preview-mode         | Preview selections for various commands                                                               |
+| consult-completion-in-region | Can be used with the completion-in-region-function variable to do in-buffer completions using Vertico |
+
 #+begin_src emacs-lisp
 
   ;; (defun dw/get-project-root ()
@@ -717,42 +703,149 @@ Extra commands for vertico
     ;; :custom
     ;; (consult-project-root-function #'dw/get-project-root)
     ;; (completion-in-region-function #'consult-completion-in-region)
-  )
+    )
 
   (leader-keys
     "s"     '(:ignore t :which-key "search")
     "s s"   '(consult-line :which-key "search in current file")
-    "s h"   '(consult-imenu :which-key "search headings in current file")
     "s g"   '(consult-ripgrep :which-key "grep in current directory")
-  )
+    ;; "s h"   '(consult-imenu :which-key "search headings in current file")
+    "s h"   '(consult-outline :which-key "search headings in current file")
+    "s o"   '(consult-org-heading :which-key "search org heading in current file")
+    "s m"   '(consult-man :which-key "search man with regexp")
+    )
 
 #+end_src
 
 ** Embark
-Actions for vertico minibuffer
 
 #+begin_src emacs-lisp
 
-  ;; (use-package embark
-  ;;   :bind (("C-S-a" . embark-act)
-  ;;          :map minibuffer-local-map
-  ;;          ("C-d" . embark-act))
-  ;;   :config
+  (use-package embark
+    :bind
+    (("C-." . embark-act)
+     ("C-;" . embark-dwim)
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    ;; :map minibuffer-local-map
+    ;; ("C-d" . embark-act))
 
-  ;;   ;; Show Embark actions via which-key
-  ;;   (setq embark-action-indicator
-  ;;         (lambda (map)
-  ;;           (which-key--show-keymap "Embark" map nil nil 'no-paging)
-  ;;           #'which-key--hide-popup-ignore-command)
-  ;;         embark-become-indicator embark-action-indicator))
+    :init
 
-  ;; (use-package embark-consult
-  ;;   :after embark)
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
+
+    :config
+
+    ;; Show Embark actions via which-key
+    ;; (setq embark-action-indicator
+    ;;       (lambda (map)
+    ;;         (which-key--show-keymap "Embark" map nil nil 'no-paging)
+    ;;         #'which-key--hide-popup-ignore-command)
+    ;;       embark-become-indicator embark-action-indicator)
+
+    ;; Hide the mode line of the Embark live/completions buffers
+    ;; (add-to-list 'display-buffer-alist
+    ;;              '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+    ;;                nil
+    ;;                (window-parameters (mode-line-format . none))))
+    )
+
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :after (embark consult)
+    :demand t ; only necessary if you have the hook below
+    ;; if you want to have consult previews as you move around an
+    ;; auto-updating embark collect buffer
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
+
+** Completions in Regions with Corfu
+
+#+begin_src emacs-lisp
+
+   (use-package corfu
+     ;; :straight '(corfu :host github
+     ;;                   :repo "minad/corfu")
+     ;; Optional customizations
+     :custom
+     (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+     ;; (corfu-auto t)                 ;; Enable auto completion
+     ;; (corfu-commit-predicate nil)   ;; Do not commit selected candidates on next input
+     ;; (corfu-quit-at-boundary t)     ;; Automatically quit at word boundary
+     ;; (corfu-quit-no-match t)        ;; Automatically quit if there is no match
+     ;; (corfu-echo-documentation nil) ;; Do not show documentation in the echo area
+
+     ;; Optionally use TAB for cycling, default is `corfu-complete'.
+     :bind (:map corfu-map
+            ("C-j" . corfu-next)
+            ("C-k" . corfu-previous))
+
+     ;; You may want to enable Corfu only for certain modes.
+     ;; :hook ((prog-mode . corfu-mode)
+     ;;        (shell-mode . corfu-mode)
+     ;;        (eshell-mode . corfu-mode))
+
+     ;; Recommended: Enable Corfu globally.
+     ;; This is recommended since dabbrev can be used globally (M-/).
+     :init
+     (corfu-global-mode))
+
+   ;; Emacs tries to complete the word by searching all open buffers
+   ;; Dabbrev is in-built into emacs. It works with Corfu
+   (use-package dabbrev
+     ;; Swap M-/ and C-M-/
+     :bind (("M-/" . dabbrev-completion)
+            ("C-M-/" . dabbrev-expand)))
+
+   ;; A few more useful configurations...
+   (use-package emacs
+     :init
+     ;; TAB cycle if there are only few candidates
+     ;; (setq completion-cycle-threshold 3)
+
+     ;; Enable indentation+completion using the TAB key.
+     ;; `completion-at-point' is often bound to M-TAB.
+     (setq tab-always-indent 'complete))
+
+#+end_src
+
+** Switching Directories with consult-dir
+
+#+begin_src emacs-lisp
+
+  (use-package consult-dir
+    :bind (("C-x C-d" . consult-dir)
+           :map vertico-map
+           ("C-x C-d" . consult-dir)
+           ("C-x C-j" . consult-dir-jump-file))
+    :custom
+    (consult-dir-project-list-function nil))
+
+  ;; ;; Thanks Karthik!
+  ;; (with-eval-after-load 'eshell-mode
+  ;;   (defun eshell/z (&optional regexp)
+  ;;     "Navigate to a previously visited directory in eshell."
+  ;;     (let ((eshell-dirs (delete-dups (mapcar 'abbreviate-file-name
+  ;;                                             (ring-elements eshell-last-dir-ring)))))
+  ;;       (cond
+  ;;        ((and (not regexp) (featurep 'consult-dir))
+  ;;         (let* ((consult-dir--source-eshell `(:name "Eshell"
+  ;;                                                    :narrow ?e
+  ;;                                                    :category file
+  ;;                                                    :face consult-file
+  ;;                                                    :items ,eshell-dirs))
+  ;;                (consult-dir-sources (cons consult-dir--source-eshell consult-dir-sources)))
+  ;;           (eshell/cd (substring-no-properties (consult-dir--pick "Switch directory: ")))))
+  ;;        (t (eshell/cd (if regexp (eshell-find-previous-directory regexp)
+  ;;                        (completing-read "cd: " eshell-dirs))))))))
 
 #+end_src
 
 ** Other Config
+
 #+begin_src emacs-lisp
+
   ;; ;; A few more useful configurations...
   ;; (use-package emacs
   ;;   :init
@@ -774,58 +867,6 @@ Actions for vertico minibuffer
 
   ;;   ;; Enable recursive minibuffers
   ;;   (setq enable-recursive-minibuffers t)) 
-
-#+end_src
-
-
-** Completions in Regions with Corfu
-
-#+begin_src emacs-lisp
-
-  ;; (use-package corfu
-  ;;   :straight '(corfu :host github
-  ;;                     :repo "minad/corfu")
-  ;;   :bind (:map corfu-map
-  ;;          ("C-j" . corfu-next)
-  ;;          ("C-k" . corfu-previous)
-  ;;          ("C-f" . corfu-insert))
-  ;;   :custom
-  ;;   (corfu-cycle t)
-  ;;   :config
-  ;;   (corfu-global-mode))
-
-#+end_src
-
-** Switching Directories with consult-dir
-
-#+begin_src emacs-lisp
-
-  ;; (use-package consult-dir
-  ;;   :straight t
-  ;;   :bind (("C-x C-d" . consult-dir)
-  ;;          :map vertico-map
-  ;;          ("C-x C-d" . consult-dir)
-  ;;          ("C-x C-j" . consult-dir-jump-file))
-  ;;   :custom
-  ;;   (consult-dir-project-list-function nil))
-
-  ;; ;; Thanks Karthik!
-  ;; (with-eval-after-load 'eshell-mode
-  ;;   (defun eshell/z (&optional regexp)
-  ;;     "Navigate to a previously visited directory in eshell."
-  ;;     (let ((eshell-dirs (delete-dups (mapcar 'abbreviate-file-name
-  ;;                                             (ring-elements eshell-last-dir-ring)))))
-  ;;       (cond
-  ;;        ((and (not regexp) (featurep 'consult-dir))
-  ;;         (let* ((consult-dir--source-eshell `(:name "Eshell"
-  ;;                                                    :narrow ?e
-  ;;                                                    :category file
-  ;;                                                    :face consult-file
-  ;;                                                    :items ,eshell-dirs))
-  ;;                (consult-dir-sources (cons consult-dir--source-eshell consult-dir-sources)))
-  ;;           (eshell/cd (substring-no-properties (consult-dir--pick "Switch directory: ")))))
-  ;;        (t (eshell/cd (if regexp (eshell-find-previous-directory regexp)
-  ;;                        (completing-read "cd: " eshell-dirs))))))))
 
 #+end_src
 
@@ -856,7 +897,7 @@ Actions for vertico minibuffer
 ** Basic Config
 *** Set tab width as 2
 #+begin_src emacs-lisp
-  
+
   (setq-default tab-width 2)
   (setq-default evil-shift-width tab-width)
 
