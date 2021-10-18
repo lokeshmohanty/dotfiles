@@ -664,6 +664,15 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
 
+* SHELL
+** Vterm
+
+#+begin_src emacs-lisp
+
+  (use-package vterm)
+
+#+end_src
+
 * COMPLETION SYSTEM
 ** Vertico
 #+begin_src emacs-lisp
