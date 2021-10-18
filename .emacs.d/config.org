@@ -1219,18 +1219,17 @@ Enable projectile mode
     ;; :diminish projectile-mode
     :config (projectile-mode)
     ;; (projectile-global-mode 1) ;; automatically add projects whose files are accessed
-    ;; :init
+    :init
+    ;; required to recognise subprojects as projects by projectile
+    (setq projectile-project-root-files #'( ".projectile" )
+          projectile-project-root-files-functions #'(projectile-root-top-down
+                                                     projectile-root-top-down-recurring
+                                                     projectile-root-bottom-up
+                                                     projectile-root-local))
     ;; (setq projectile-switch-project-action #'projectile-dired)
     ) 
   (leader-keys
     "p"   '(projectile-command-map :which-key "projectile"))
-#+end_src
-
-Adds extra commands to M-o inside ivy-buffer
-#+begin_src emacs-lisp
-  ;; (use-package counsel-projectile
-  ;;   :after projectile
-  ;;   :config (counsel-projectile-mode))
 #+end_src
 
 Key Bindings
