@@ -251,6 +251,7 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
       "o"   '(:ignore t :which-key "open")
       "oa"   '(org-agenda :which-key "org-agenda")
       "oc"   '(org-capture :which-key "org-capture")
+      "om"   '(mu4e :which-key "mu4e")
       "oe"   '(eshell :which-key "eshell")
       "ot"   '(vterm :which-key "vterm")
       "hrr" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
@@ -1838,6 +1839,428 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 - org-wild-notifier
 
+* MAIL MANAGEMENT
+** Initialization
+
+Run *mu init* to initialize mu for email addresses. Required only while changing email addresses
+
+#+begin_src shell
+
+  mu init --maildir=~/Mail --my-address=lokesh1197@gmail.com --my-address=lokesh.mohanty@e-arc.com
+
+#+end_src
+
+Run *mu index* for indexing
+
+#+begin_src shell
+
+  mu index
+
+#+end_src
+
+Run *mbsync* to sync mails
+
+#+begin_src shell
+
+  mbsync -a
+
+#+end_src
+
+** Mu4e
+
+Run *pkill mu* in case of mu lock error
+
+| mu4e-quit | stop mail sync |
+
+*** Basic Config
+
+#+begin_src emacs-lisp
+
+  (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+  (use-package mu4e
+    ;; :defer 20 ; Wait until 20 seconds after startup
+    :init
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+    :config
+    ;; Load org-mode integration
+    ;; (require 'org-mu4e)
+    ;; (require 'smtpmail)
+
+    ;; Refresh mail using isync every 10 minutes
+    (setq mu4e-update-interval (* 10 60))
+    (setq mu4e-get-mail-command "mbsync -a")
+    ;; (setq mu4e-get-mail-command "mbsync -c ~/.config/mu4e/mbsyncrc -a")
+    (setq mu4e-maildir "~/Maildir")
+
+    ;; Use Ivy for mu4e completions (maildir folders, etc)
+    ;; (setq mu4e-completing-read-function #'ivy-completing-read)
+
+    ;; Make sure that moving a message (like to Trash) causes the
+    ;; message to get a new file name.  This helps to avoid the
+    ;; dreaded "UID is N beyond highest assigned" error.
+    ;; See this link for more info: https://stackoverflow.com/a/43461973
+    (setq mu4e-change-filenames-when-moving t)
+
+    ;; Use mu4e for sending e-mail
+    ;; (setq mail-user-agent 'mu4e-user-agent)
+    ;; Use emacs for sending mail
+    (setq message-send-mail-function 'smtpmail-send-it)
+
+    ;; Make sure plain text mails flow correctly for recipents
+    (setq mu4e-compose-format-flowed t)
+
+#+end_src
+
+*** Contexts (Multiple Email Configuration)
+
+#+begin_src emacs-lisp
+
+  ;; Set up contexts for email accounts
+  (setq mu4e-contexts
+        `(,(make-mu4e-context
+            :name "Gmail"
+            :match-func (lambda (msg) (when msg
+                                        (string-prefix-p "/lokesh-gmail" (mu4e-message-field msg :maildir))))
+            :vars '(
+                    (user-full-name . "Lokesh Mohanty")
+                    (user-mail-address . "lokesh1197@gmail.com")
+                    (smtpmail-smtp-server . "smtp.gmail.com")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
+                    (mu4e-sent-folder . "/lokesh-gmail/[Gmail]/Sent Mail")
+                    (mu4e-trash-folder . "/lokesh-gmail/[Gmail]/Trash")
+                    (mu4e-drafts-folder . "/lokesh-gmail/[Gmail]/Drafts")
+                    (mu4e-refile-folder . "/lokesh-gmail/[Gmail]/Archive")
+                    ;; (mu4e-sent-messages-behavior . sent)
+                    ))
+          ,(make-mu4e-context
+            :name "Yahoo"
+            :match-func (lambda (msg) 
+                          (when msg
+                            (string-prefix-p "/lokesh-yahoo" (mu4e-message-field msg :maildir))))
+            :vars '(
+                    (user-full-name . "Lokesh Mohanty")
+                    (user-mail-address . "lokesh1197@yahoo.com")
+                    (smtpmail-smtp-server . "smtp.mail.yahoo.com")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
+                    (mu4e-sent-folder . "/lokesh-yahoo/Sent")
+                    (mu4e-trash-folder . "/lokesh-yahoo/Trash")
+                    (mu4e-drafts-folder . "/lokesh-yahoo/Drafts")
+                    (mu4e-refile-folder . "/lokesh-yahoo/Archive")
+                    ))
+          ,(make-mu4e-context
+            :name "Work"
+            :match-func (lambda (msg) (when msg
+                                        (string-prefix-p "/office-arc" (mu4e-message-field msg :maildir))))
+            :vars '(
+                    (user-full-name . "Lokesh Mohanty")
+                    (user-mail-address . "lokesh.mohanty@e-arc.com")
+                    (smtpmail-smtp-server . "smtp.office365.com")
+                    (smtpmail-stream-type . starttls)
+                    (smtpmail-smtp-service . 587)
+                    (mu4e-sent-folder . "/office-arc/Sent Mail")
+                    (mu4e-trash-folder . "/office-arc/Deleted")
+                    (mu4e-drafts-folder . "/office-arc/Drafts")
+                    (mu4e-refile-folder . "/office-arc/Archive")
+                    ))
+          ,(make-mu4e-context
+            :name "Befreier"
+            :match-func (lambda (msg) 
+                          (when msg
+                            (string-prefix-p "/befreier-gmail" (mu4e-message-field msg :maildir))))
+            :vars '(
+                    (user-full-name . "Lokesh Mohanty")
+                    (user-mail-address . "befreier19@gmail.com")
+                    (smtpmail-smtp-server . "smtp.gmail.com")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
+                    (mu4e-sent-folder . "/befreier-gmail/[Gmail]/Sent Mail")
+                    (mu4e-trash-folder . "/befreier-gmail/[Gmail]/Trash")
+                    (mu4e-drafts-folder . "/befreier-gmail/[Gmail]/Drafts")
+                    (mu4e-refile-folder . "/befreier-gmail/[Gmail]/Archive")
+                    ))
+          ,(make-mu4e-context
+            :name "Ineffable"
+            :match-func (lambda (msg) 
+                          (when msg
+                            (string-prefix-p "/ineffable-gmail" (mu4e-message-field msg :maildir))))
+            :vars '(
+                    (user-full-name . "InEffable1197")
+                    (user-mail-address . "ineffable97@gmail.com")
+                    (smtpmail-smtp-server . "smtp.gmail.com")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
+                    (mu4e-sent-folder . "/ineffable-gmail/[Gmail]/Sent Mail")
+                    (mu4e-trash-folder . "/ineffable-gmail/[Gmail]/Trash")
+                    (mu4e-drafts-folder . "/ineffable-gmail/[Gmail]/Drafts")
+                    (mu4e-refile-folder . "/ineffable-gmail/[Gmail]/Archive")
+                    ))
+          ))
+  (setq mu4e-context-policy 'pick-first)
+
+#+end_src
+
+*** Custom Functions
+
+#+begin_src emacs-lisp
+
+  (defun my-mu4e-choose-signature ()
+    "Insert one of a number of signatures"
+    (interactive)
+    (let ((message-signature
+           (mu4e-read-option "Signature:"
+                             '(("formal" .
+                                (concat
+                                 "Lokesh Mohanty\n"
+                                 "Software Engineer\n" 
+                                 "OpenSource Team\n" 
+                                 "ARC Document Solutions\n"))
+                               ("informal" .
+                                "Lokesh Mohanty\n")))))
+      (message-insert-signature)))
+
+  (add-hook 'mu4e-compose-mode-hook
+            (lambda () (local-set-key (kbd "C-c C-w") #'my-mu4e-choose-signature)))
+
+#+end_src
+
+*** To Try
+
+#+begin_src emacs-lisp
+
+  ;; Prevent mu4e from permanently deleting trashed items
+  ;; This snippet was taken from the following article:
+  ;; http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/
+  ;; (defun remove-nth-element (nth list)
+  ;;   (if (zerop nth) (cdr list)
+  ;;     (let ((last (nthcdr (1- nth) list)))
+  ;;       (setcdr last (cddr last))
+  ;;       list)))
+  ;; (setq mu4e-marks (remove-nth-element 5 mu4e-marks))
+  ;; (add-to-list 'mu4e-marks
+  ;;              '(trash
+  ;;                :char ("d" . "▼")
+  ;;                :prompt "dtrash"
+  ;;                :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
+  ;;                :action (lambda (docid msg target)
+  ;;                          (mu4e~proc-move docid
+  ;;                                          (mu4e~mark-check-target target) "-N"))))
+
+  ;; Display options
+  ;; (setq mu4e-view-show-images t)
+  ;; (setq mu4e-view-show-addresses 't)
+
+  ;; Composing mail
+  ;; (setq mu4e-compose-dont-reply-to-self t)
+
+  ;; Signing messages (use mml-secure-sign-pgpmime)
+  ;; (setq mml-secure-openpgp-signers '("53C41E6E41AAFE55335ACA5E446A2ED4D940BF14"))
+
+  ;; (See the documentation for `mu4e-sent-messages-behavior' if you have
+  ;; additional non-Gmail addresses and want assign them different
+  ;; behavior.)
+
+  ;; setup some handy shortcuts
+  ;; you can quickly switch to your Inbox -- press ``ji''
+  ;; then, when you want archive some messages, move them to
+  ;; the 'All Mail' folder by pressing ``ma''.
+  ;; (setq mu4e-maildir-shortcuts
+  ;;   '(("/lokesh-gmail/Inbox"      . ?i)
+  ;;     ("/lokesh-gmail/Sent Items" . ?s)
+  ;;     ("/lokesh-gmail/Drafts"     . ?d)
+  ;;     ("/lokesh-gmail/Trash"      . ?t)))
+
+#+end_src
+
+*** Bookmarks
+
+#+begin_src emacs-lisp
+
+    (add-to-list 'mu4e-bookmarks
+                 (make-mu4e-bookmark
+                  :name "My Work Inbox"
+                  :query "maildir:/office-arc/Inbox"
+                  :key ?w)
+                 (make-mu4e-bookmark
+                  :name "My Personal Inboxes"
+                  :query "maildir:/lokesh-gmail/Inbox OR maildir:/lokesh-yahoo/Inbox"
+                  :key ?i))
+
+  ;; (add-to-list
+  ;;  'mu4e-bookmarks
+  ;;  '("flag:unread NOT flag:trashed AND (flag:list OR from:trac@sagemath.org)"
+  ;;    "Unread bulk messages" ?l))
+
+  ;; (add-to-list
+  ;;  'mu4e-bookmarks
+  ;;  '("flag:unread NOT flag:trashed AND NOT flag:list AND (maildir:\"/royal holloway\" OR maildir:/INBOX)"
+  ;;    "Unread messages addressed to me" ?i))
+
+  ;; (add-to-list
+  ;;  'mu4e-bookmarks
+  ;;  '("mime:application/* AND NOT mime:application/pgp* AND (maildir:\"/royal holloway\" OR maildir:/INBOX)"
+  ;;    "Messages with attachments for me." ?d) t)
+
+  ;; (add-to-list
+  ;;  'mu4e-bookmarks
+  ;;  '("flag:flagged"
+  ;;    "Flagged messages" ?f) t)
+
+  ;; (add-to-list
+  ;;  'mu4e-bookmarks
+  ;;  '("(maildir:\"/[Google Mail]/.Sent Mail\" OR maildir:\"/royal holloway/.sent\") AND date:7d..now"
+  ;;    "Sent in last 7 days" ?s) t)
+
+    ;; ;; don't keep message buffers around
+    (setq message-kill-buffer-on-exit t)
+
+#+end_src
+
+*** Using Prodigy to Start/Stop Imapnotify
+  
+  prodigy: Manage imapnotify for email notifications.
+  
+  Install imapnotify: `npm install -g imapnotify'
+  
+#+begin_src emacs-lisp
+
+  ;; (use-package prodigy
+  ;;   :init (prodigy-define-tag
+  ;;          :name 'email
+  ;;          :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
+  ;;   (prodigy-define-service
+  ;;    :name "imapnotify"
+  ;;    :command "imapnotify"
+  ;;    :args (list "-c" (expand-file-name "imapnotify.gmail.js" user-emacs-directory))
+  ;;    :tags '(email)
+  ;;    :kill-signal 'sigkill))
+
+  ;; (use-package prodigy
+  ;;   ;;:disabled
+  ;;   :commands (prodigy-define-tag
+  ;;              prodigy-define-service
+  ;;              prodigy-find-service
+  ;;              prodigy-start-service)
+  ;;   :config
+  ;;   (prodigy-define-tag
+  ;;    :name 'email
+  ;;    :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
+
+  ;;   (prodigy-define-service
+  ;;    :name "imapnotify-bmail"
+  ;;    :command "imapnotify"
+  ;;    :args '("-c" "~/.config/imapnotify/bmail.js")
+  ;;    :tags '(email)
+  ;;    :auto-start t
+  ;;    :kill-process-buffer-on-stop t
+  ;;    :kill-signal 'sigkill)
+
+  ;;   (prodigy-define-service
+  ;;    :name "imapnotify-sand.rain.online"
+  ;;    :command "imapnotify"
+  ;;    :args '("-c" "~/.config/imapnotify/sand.rain.online@gmail.com.js")
+  ;;    :tags '(email)
+  ;;    :auto-start t
+  ;;    :kill-process-buffer-on-stop t
+  ;;    :kill-signal 'sigkill)
+
+  ;;   (prodigy-define-service
+  ;;    :name "imapnotify-anand.iyer.p"
+  ;;    :command "imapnotify"
+  ;;    :args '("-c" "~/.config/imapnotify/anand.iyer.p@gmail.com.js")
+  ;;    :tags '(email)
+  ;;    :auto-start t
+  ;;    :kill-process-buffer-on-stop t
+  ;;    :kill-signal 'sigkill)
+
+  ;;   (prodigy-define-service
+  ;;    :name "imapnotify-anand.padmanabha.iyer"
+  ;;    :command "imapnotify"
+  ;;    :args '("-c" "~/.config/imapnotify/anand.padmanabha.iyer@gmail.com.js")
+  ;;    :tags '(email)
+  ;;    :auto-start t
+  ;;    :kill-process-buffer-on-stop t
+  ;;    :kill-signal 'sigkill)
+  ;;   :preface
+  ;;   (defun api|start-prodigy ()
+  ;;     (prodigy-start-service (prodigy-find-service "imapnotify-bmail"))
+  ;;     (prodigy-start-service (prodigy-find-service "imapnotify-anand.iyer.p"))
+  ;;     (prodigy-start-service (prodigy-find-service "imapnotify-anand.padmanabha.iyer"))
+  ;;     (prodigy-start-service (prodigy-find-service "imapnotify-sand.rain.online")))
+  ;;   :hook (emacs-startup . api|start-prodigy))
+
+#+end_src
+
+*** Kebindings
+
+#+begin_src emacs-lisp
+
+  ;; (setq me/mu4e-inbox-query
+  ;;       "(maildir:/Personal/Inbox OR maildir:/Fastmail/INBOX) AND flag:unread")
+
+  ;; (defun me/go-to-inbox ()
+  ;;   (interactive)
+  ;;   (mu4e-headers-search me/mu4e-inbox-query))
+
+  ;; (leader-key
+  ;;   "m"  '(:ignore t :which-key "mail")
+  ;;   "mm" 'mu4e
+  ;;   "mc" 'mu4e-compose-new
+  ;;   "mi" 'me/go-to-inbox
+  ;;   "ms" 'mu4e-update-mail-and-index)
+
+  ;; Start mu4e in the background so that it syncs mail periodically
+  (mu4e t))
+
+#+end_src
+
+** Org Mime
+
+| org-mime-htmlize               | to convert org mail to html mail |
+| org-mime-edit-mail-in-org-mode | edit mail in org mode            |
+
+#+begin_src emacs-lisp
+
+  (use-package org-mime
+    :config
+    (setq org-mime-export-options 
+          '(
+            :section-numbers nil
+            :with-author nil
+            :with-toc nil))
+
+    ;; Prompts whether to send email if the email is not htmlized
+    (add-hook 'message-send-hook 'org-mime-confirm-when-no-multipart)
+    ;; Automatically htmlize email before sending
+    ;; (add-hook 'message-send-hook 'org-mime-htmlize)
+
+
+    ;; Custom CSS
+    (add-hook 'org-mime-html-hook
+              (lambda ()
+                (org-mime-change-element-style
+                 "pre" (format "color: %s; background-color: %s; padding: 0.5em;" 
+                               "#E6E1DC" "#232323")))))
+
+#+end_src
+
+** Mu4e Alerts
+#+begin_src emacs-lisp
+
+  ;; (use-package mu4e-alert
+  ;;   :after mu4e
+  ;;   :config
+  ;;   ;; Show unread emails from all inboxes
+  ;;   (setq mu4e-alert-interesting-mail-query dw/mu4e-inbox-query)
+
+  ;;   ;; Show notifications for mails already notified
+  ;;   (setq mu4e-alert-notify-repeated-mails nil)
+
+  ;;   (mu4e-alert-enable-notifications))
+
+#+end_src
+
 * ELFEED
 
 # #+begin_src emacs-lisp
@@ -1888,18 +2311,15 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 * TO TRY
 ** TODO Emacs Packages
-- [ ] ivy-posframe
 - [ ] evil-snipe
 - [ ] evil-mark-replace
 - [ ] evil-exchange
-- [ ] vertico, consult
 ** TODO Others 
 - [ ] [[https://github.com/daviwil/emacs-from-scratch][EFS Tutorial]]
 - [ ] [[https://cestlaz.github.io/stories/emacs/][EFS Reference]]
 - [ ] [[github.com/nloyola/.emacs.d/blob/master/config.org][Nloyola Emacs Reference]]
 - [ ] [[github.com/emacs-tw/awesome-emacs][Awesome Emacs]]
 - [ ] [[https://opensource.com/article/20/1/emacs-cheat-sheet][Extending Emacs]]
-- [ ] Highlight matching parenthesis
 * REFERENCES
 - Distrotube's GNU Emacs Config
 - Daviwil's Emacs From Scratch Config
