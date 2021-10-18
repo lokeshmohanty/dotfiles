@@ -24,7 +24,7 @@ Account lokesh-gmail
 # LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p ~/Maildir/lokesh-gmail)
 MaildirStore lokesh-gmail-local
 Path ~/Maildir/lokesh-gmail/
-Inbox ~/Maildir/lokesh-gmail/INBOX
+Inbox ~/Maildir/lokesh-gmail/Inbox
 # REQUIRED ONLY IF YOU WANT TO DOWNLOAD ALL SUBFOLDERS; SYNCING SLOWS DOWN
 SubFolders Verbatim
 
@@ -62,7 +62,7 @@ Account office-arc
 
 MaildirStore office-arc-local
 Path ~/Maildir/office-arc/
-Inbox ~/Maildir/office-arc/INBOX
+Inbox ~/Maildir/office-arc/Inbox
 SubFolders Verbatim
 
 Channel office-arc
@@ -89,7 +89,7 @@ Account befreier-gmail
 
 MaildirStore befreier-gmail-local
 Path ~/Maildir/befreier-gmail/
-Inbox ~/Maildir/befreier-gmail/INBOX
+Inbox ~/Maildir/befreier-gmail/Inbox
 SubFolders Verbatim
 
 Channel befreier-gmail
@@ -118,7 +118,7 @@ Account ineffable-gmail
 
 MaildirStore ineffable-gmail-local
 Path ~/Maildir/ineffable-gmail/
-Inbox ~/Maildir/ineffable-gmail/INBOX
+Inbox ~/Maildir/ineffable-gmail/Inbox
 SubFolders Verbatim
 
 Channel ineffable-gmail
@@ -147,7 +147,7 @@ Account lokesh-yahoo
 
 MaildirStore lokesh-yahoo-local
 Path ~/Maildir/lokesh-yahoo/
-Inbox ~/Maildir/lokesh-yahoo/INBOX
+Inbox ~/Maildir/lokesh-yahoo/Inbox
 SubFolders Verbatim
 
 Channel lokesh-yahoo
