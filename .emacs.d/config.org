@@ -2210,7 +2210,7 @@ Install imapnotify: `npm install -g imapnotify'
 #+begin_src emacs-lisp
 
   ;; (setq me/mu4e-inbox-query
-  ;;       "(maildir:/Personal/Inbox OR maildir:/Fastmail/INBOX) AND flag:unread")
+  ;;       "(maildir:/lokesh-gmail/Inbox OR maildir:/office-arc/Inbox) AND flag:unread")
 
   ;; (defun me/go-to-inbox ()
   ;;   (interactive)
@@ -2225,6 +2225,65 @@ Install imapnotify: `npm install -g imapnotify'
 
   ;; Start mu4e in the background so that it syncs mail periodically
   (mu4e t))
+
+#+end_src
+
+*** Mu4e Alerts
+
+#+begin_src emacs-lisp
+
+  (use-package mu4e-alert
+    :after mu4e
+    :config
+    ;; Show unread emails from all inboxes
+    ;; (setq mu4e-alert-interesting-mail-query me/mu4e-inbox-query)
+
+    ;; Show notifications for mails already notified
+    (setq mu4e-alert-notify-repeated-mails nil)
+
+    ;; Set notify-send for alert
+    (mu4e-alert-set-default-style 'libnotify)
+    (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+
+    ;; (mu4e-alert-enable-notifications)
+  )
+
+#+end_src
+
+** Org Msg
+
+Great tool for using outlook style email and replies.
+Documentation: https://github.com/jeremy-compostella/org-msg
+
+| C-c C-e | org-msg-preview      |
+| C-c C-k | message-kill-buffer  |
+| C-c C-s | message-goto-subject |
+| C-c C-b | org-msg-goto-body    |
+| C-c C-a | org-msg-attach       |
+| C-c C-c | org-ctrl-c-ctrl-c    |
+
+- Quotes: >, >>, >>>, ...
+
+#+begin_src emacs-lisp
+
+  (use-package org-msg
+    :config
+    (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
+          org-msg-startup "hidestars indent inlineimages"
+          org-msg-greeting-fmt "\nHi%s,\n\n"
+          org-msg-recipient-names '(("lokesh.mohanty@e-arc.com" . "Lokesh Mohanty"))
+          org-msg-greeting-name-limit 3
+          org-msg-default-alternatives '((new		. (text html))
+                                         (reply-to-html	. (text html))
+                                         (reply-to-text	. (text)))
+          org-msg-convert-citation t
+          org-msg-signature (concat
+                              "\nRegards,\n\n"
+                              "#+begin_signature\n"
+                              "--\n"
+                              "*Lokesh Mohanty*\n"
+                              "#+end_signature"))
+    (org-msg-mode))
 
 #+end_src
 
@@ -2255,59 +2314,6 @@ Install imapnotify: `npm install -g imapnotify'
   ;;               (org-mime-change-element-style
   ;;                "pre" (format "color: %s; background-color: %s; padding: 0.5em;" 
   ;;                              "#E6E1DC" "#232323")))))
-
-#+end_src
-
-** Org Msg
-
-Great tool for using outlook style email and replies.
-Documentation: https://github.com/jeremy-compostella/org-msg
-
-| C-c C-e | org-msg-preview      |
-| C-c C-k | message-kill-buffer  |
-| C-c C-s | message-goto-subject |
-| C-c C-b | org-msg-goto-body    |
-| C-c C-a | org-msg-attach       |
-| C-c C-c | org-ctrl-c-ctrl-c    |
-
-#+begin_src emacs-lisp
-
-  (use-package org-msg
-    :config
-    (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
-          org-msg-startup "hidestars indent inlineimages"
-          org-msg-greeting-fmt "\nHi%s,\n\n"
-          org-msg-recipient-names '(("lokesh.mohanty@e-arc.com" . "Lokesh Mohanty"))
-          org-msg-greeting-name-limit 3
-          org-msg-default-alternatives '((new		. (text html))
-                                         (reply-to-html	. (text html))
-                                         (reply-to-text	. (text)))
-          org-msg-convert-citation t
-          org-msg-signature "
-
-                              Regards,
-
-                              ,#+begin_signature
-                              --
-                              ,*Lokesh Mohanty*
-                              ,#+end_signature")
-    (org-msg-mode))
-
-#+end_src
-
-** Mu4e Alerts
-#+begin_src emacs-lisp
-
-  ;; (use-package mu4e-alert
-  ;;   :after mu4e
-  ;;   :config
-  ;;   ;; Show unread emails from all inboxes
-  ;;   (setq mu4e-alert-interesting-mail-query dw/mu4e-inbox-query)
-
-  ;;   ;; Show notifications for mails already notified
-  ;;   (setq mu4e-alert-notify-repeated-mails nil)
-
-  ;;   (mu4e-alert-enable-notifications))
 
 #+end_src
 
@@ -2408,5 +2414,6 @@ Commands for header-mode and view-mode:
 - [ ] [[github.com/emacs-tw/awesome-emacs][Awesome Emacs]]
 - [ ] [[https://opensource.com/article/20/1/emacs-cheat-sheet][Extending Emacs]]
 * REFERENCES
-- Distrotube's GNU Emacs Config
-- Daviwil's Emacs From Scratch Config
+- Distrotube's GNU Emacs
+- Daviwil's Emacs From Scratch
+- Daviwil's Mail
