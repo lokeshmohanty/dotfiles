@@ -235,15 +235,18 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 
   (use-package general
     :config
-    (general-create-definer leader-keys
+    (general-create-definer me/leader-keys
       :keymaps '(normal insert visual emacs)
       :prefix "SPC"
       :global-prefix "C-SPC")
 
+    (general-create-definer me/ctrl-c-keys
+      :prefix "C-c")
+
     (general-evil-setup t)
 
     ;; general-simulate-key should not be quoted as it is supposed to be evaluated before assigning
-    (leader-keys
+    (me/leader-keys
       ;; "SPC" '(counsel-M-x :which-key "M-x")
       "SPC"  (general-simulate-key "M-x" :which-key "M-x") 
       "r"    (general-simulate-key "C-x r" :which-key "+register/bookmark") 
@@ -264,7 +267,7 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 
 #+begin_src emacs-lisp
 
-  (leader-keys
+  (me/leader-keys
     "b"     '(:ignore t :which-key "buffer")
     "b b"   '(ibuffer :which-key "Ibuffer")
     ;; "b s"   '(switch-to-buffer :which-key "switch buffer")
@@ -284,7 +287,7 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 
 #+begin_src emacs-lisp
 
-  (leader-keys
+  (me/leader-keys
     ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
     "."     '(find-file :which-key "Find file")
     "f"     '(:ignore t :which-key "file")
@@ -336,7 +339,7 @@ C-w -> Prefix for evil window commands
 #+begin_src emacs-lisp
 
   ;; (winner-mode 1)
-  (leader-keys
+  (me/leader-keys
     "w"     '(:ignore t :which-key "window")
     "w c"   '(evil-window-delete :which-key "Close window")
     "w n"   '(evil-window-new :which-key "New window")
@@ -367,58 +370,58 @@ C-w -> Prefix for evil window commands
 ** Tab
 Basic Usage
 
-    - =tab-bar-mode= - Enable display of the tab bar
-    - =tab-new= (~C-x t 2~) - Create a new tab
-    - =tab-next= (~C-x t o~, evil: ~g t~) - Move to the next tab (also known as =tab-bar-switch-to-next-tab=)
-    - =tab-bar-switch-to-prev-tab= (evil: ~g T~) - Switch to the previous tab
-    - =tab-rename= (~C-x t r~) - Rename the current tab (or numbered tab with prefix arg)
-    - =tab-close= (~C-x t 0~) - Close the current tab
-    - =tab-close-other= (~C-x t 1~) - Close other tabs
-    - =tab-bar-undo-close-tab= - Reopen the last closed tab
-    - =tab-move= (~C-x t m~) - Move the current tab to the right (or left with negative prefix)
-    - =tab-bar-select-tab-by-name= (~C-x t RET~) - Select tab by name using completion
+- =tab-bar-mode= - Enable display of the tab bar
+- =tab-new= (~C-x t 2~) - Create a new tab
+- =tab-next= (~C-x t o~, evil: ~g t~) - Move to the next tab (also known as =tab-bar-switch-to-next-tab=)
+- =tab-bar-switch-to-prev-tab= (evil: ~g T~) - Switch to the previous tab
+- =tab-rename= (~C-x t r~) - Rename the current tab (or numbered tab with prefix arg)
+- =tab-close= (~C-x t 0~) - Close the current tab
+- =tab-close-other= (~C-x t 1~) - Close other tabs
+- =tab-bar-undo-close-tab= - Reopen the last closed tab
+- =tab-move= (~C-x t m~) - Move the current tab to the right (or left with negative prefix)
+- =tab-bar-select-tab-by-name= (~C-x t RET~) - Select tab by name using completion
 
-      Configuring operation
+  Configuring operation
 
-    - =tab-bar-new-tab-choice= - The name of a buffer or file to display in new tabs
-    - =tab-bar-new-tab-to= - Where to place new tabs (left or right of current) - Also a function!
-    - =tab-bar-tab-name-function= - Control how new tabs are named (can prompt for a name!)
+- =tab-bar-new-tab-choice= - The name of a buffer or file to display in new tabs
+- =tab-bar-new-tab-to= - Where to place new tabs (left or right of current) - Also a function!
+- =tab-bar-tab-name-function= - Control how new tabs are named (can prompt for a name!)
 
-      #+begin_src emacs-lisp
+  #+begin_src emacs-lisp
 
-        ;; (setq tab-bar-new-tab-choice "*scratch*")
+    ;; (setq tab-bar-new-tab-choice "*scratch*")
 
-      #+end_src
+  #+end_src
 
-      Configuring tab-bar appearance
+  Configuring tab-bar appearance
 
-      - =tab-bar-close-button-show= - Show or hide the close button
-      - =tab-bar-new-button-show= - Show or hide the new button at the end
-      - =tab-bar-button-relief= - Control pixel width of tab bar button appearance
+  - =tab-bar-close-button-show= - Show or hide the close button
+  - =tab-bar-new-button-show= - Show or hide the new button at the end
+  - =tab-bar-button-relief= - Control pixel width of tab bar button appearance
 
-      - =tab-bar= face - customize text of tabs
-      - =tab-bar-tab= face - customize the color of the active tab
-      - =tab-bar-tab-inactive= face - customize the color of inactive tabs
+  - =tab-bar= face - customize text of tabs
+  - =tab-bar-tab= face - customize the color of the active tab
+  - =tab-bar-tab-inactive= face - customize the color of inactive tabs
 
-        #+begin_src emacs-lisp
+    #+begin_src emacs-lisp
 
-          ;; (setq tab-bar-close-button-show nil
-          ;;       tab-bar-new-button-show nil)
+      ;; (setq tab-bar-close-button-show nil
+      ;;       tab-bar-new-button-show nil)
 
-        #+end_src
+    #+end_src
 
-        Using tab-bar-mode without showing the bar
+    Using tab-bar-mode without showing the bar
 
-        #+begin_src emacs-lisp
+    #+begin_src emacs-lisp
 
-          ;; Don't turn on tab-bar-mode when tabs are created
-          ;; (setq tab-bar-show nil)
+      ;; Don't turn on tab-bar-mode when tabs are created
+      ;; (setq tab-bar-show nil)
 
-          ;; ;; Get the current tab name for use in some other display
-          ;; (defun efs/current-tab-name ()
-          ;;   (alist-get 'name (tab-bar--current-tab)))
+      ;; ;; Get the current tab name for use in some other display
+      ;; (defun efs/current-tab-name ()
+      ;;   (alist-get 'name (tab-bar--current-tab)))
 
-        #+end_src
+    #+end_src
 
 ** Register
 
@@ -477,7 +480,7 @@ Hydra helps in desgning transient key bindings to run commands easily
   ;;   ("k" text-scale-decrease "out")
   ;;   ("f" nil "finished" :exit t))
 
-  ;; (leader-keys
+  ;; (me/leader-keys
   ;;   "ts" '(hydra-text-scale/body :which-key "scale text"))
 
 #+end_src
@@ -568,14 +571,23 @@ Distraction free writing mode
 Enable snippets globally. Add more snippets from [[https://github.com/AndreaCrotti/yasnippet-snippets][AndreaCrotti/yasnippet-snippets]]
 
 #+begin_src emacs-lisp
+
+  ;; (use-package yasnippet
+  ;;   :hook (prog-mode . yas-minor-mode)
+  ;;   :config
+  ;;   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  ;;   (yas-reload-all))
   (use-package yasnippet
     :config
     (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
     (yas-global-mode 1)   ;; enables yasnippet globally
-    ;; ;; enable yasnippet as a non-global minor mode
+    ;; enable yasnippet as a non-global minor mode
     ;; (yas-reload-all)
     ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
     )
+
+#+end_src
+
 ** Rainbow Delimiters
 #+begin_src emacs-lisp
 
@@ -595,6 +607,7 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
 
 ---------------------------------
 | Command                 | Key |
+|-------------------------+-----|
 | dired-hide-details-mode | (   |
 ---------------------------------
 #+begin_src emacs-lisp
@@ -602,7 +615,7 @@ Not required. Can be replaced with: counsel-find-file(SPC .) -> open as root(M-o
   ;; (use-package dired-open)
   ;; (use-package peep-dired)
 
-  (leader-keys
+  (me/leader-keys
     "d d" '(dired :which-key "Open dired")
     "d j" '(dired-jump :which-key "Dired jump to current")
     ;; "d p" '(peep-dired :which-key "Peep-dired")
@@ -804,7 +817,7 @@ Extra commands for vertico
     ;; (completion-in-region-function #'consult-completion-in-region)
     )
 
-  (leader-keys
+  (me/leader-keys
     "s"     '(:ignore t :which-key "search")
     "s s"   '(consult-line :which-key "search in current file")
     "s g"   '(consult-ripgrep :which-key "grep in current directory")
@@ -977,7 +990,7 @@ Extra commands for vertico
   (use-package avy
     :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
 
-  (leader-keys
+  (me/leader-keys
     "j"   '(:ignore t :which-key "jump")
     "jj"  '(avy-goto-char :which-key "jump to char")
     "jw"  '(avy-goto-word-0 :which-key "jump to word")
@@ -1059,63 +1072,49 @@ Try these commands with =M-x=:
 
   #+end_src
 
-** Company Mode
-
-[[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
-
-We also use [[https://github.com/sebastiencs/company-box][company-box]] to further enhance the look of the completions with icons and better overall presentation.
-
-#+begin_src emacs-lisp
-
-  ;; (use-package company
-  ;;   :after lsp-mode
-  ;;   :hook (lsp-mode . company-mode)
-  ;;   :bind (:map company-active-map
-  ;;               ("<tab>" . company-complete-selection))  ;; use tab instead of enter for autocompletion
-  ;;   (:map lsp-mode-map
-  ;;         ("<tab>" . company-indent-or-complete-common))
-  ;;   :custom
-  ;;   (company-minimum-prefix-length 1)
-  ;;   (company-idle-delay 0.0))
-
-  ;; ;; (use-package company-box
-  ;; ;;   :hook (company-mode . company-box-mode))
-
-#+end_src
-
 ** Debugging with dap-mode
 
-[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
+[[https://emacs-lsp.github.io/dap-mode/][Dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  
+Check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.
+
+Dap ui -> sessions, locals, expressions, breakpoints
 
 #+begin_src emacs-lisp
 
-  ;; (use-package dap-mode
-  ;;   ;; Uncomment the config below if you want all UI panes to be hidden by default!
-  ;;   ;; :custom
-  ;;   ;; (lsp-enable-dap-auto-configure nil)
-  ;;   ;; :config
-  ;;   ;; (dap-ui-mode 1)
-  ;;   :commands dap-debug
-  ;;   :config
-  ;;   ;; Set up Node debugging
-  ;;   (require 'dap-node)
-  ;;   (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+  (use-package dap-mode
+    ;; Hide all dap-ui buffers
+    :custom
+    (lsp-enable-dap-auto-configure nil)
 
-  ;;   ;; Bind `C-c l d` to `dap-hydra` for easy access
-  ;;   (general-define-key
-  ;;    :keymaps 'lsp-mode-map
-  ;;    :prefix lsp-keymap-prefix
-  ;;    "d" '(dap-hydra t :wk "debugger")))
+    :config
+    (dap-ui-mode 1)       ;; show basic ui
+    (dap-tooltip-mode 1)  ;; show tooltip
+
+    ;; Setup debugging for node
+    (require 'dap-node)
+    (dap-node-setup)
+
+    ;; Bind `C-c l d` to `dap-hydra` for easy access
+    (general-define-key
+     :keymaps 'lsp-mode-map
+     :prefix lsp-keymap-prefix
+     "d" '(dap-hydra t :wk "debugger"))
+  )
 
 #+end_src
 
 ** Language Support
+
 Packages for syntax highlighting in programming languages
+
 #+begin_src emacs-lisp
+
   (use-package haskell-mode)
-  (use-package markdown-mode)
+
 #+end_src
-*** TypeScript
+
+*** JavaScript
+**** TypeScript
 This is a basic configuration for the TypeScript language so that =.ts= files activate =typescript-mode= when opened.  We're also adding a hook to =typescript-mode-hook= to call =lsp-deferred= so that we activate =lsp-mode= to get LSP features every time we edit TypeScript code.
 
 #+begin_src emacs-lisp
@@ -1138,7 +1137,7 @@ This is a basic configuration for the TypeScript language so that =.ts= files ac
 
 This will install the [[https://github.com/theia-ide/typescript-language-server][typescript-language-server]] and the TypeScript compiler package.
 
-*** Angular
+**** Angular
     
 Installation from [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode docmentation]]
 #+begin_src shell
@@ -1156,6 +1155,113 @@ Fixes warning -> (Unknown notification: angular/projectLanguageService) from [[h
           "--tsProbeLocations"
           "/home/lokesh/.nvm/versions/node/v14.16.0/lib/node_modules"
           "--stdio"))
+#+end_src
+
+**** Js2-mode
+
+#+begin_src emacs-lisp
+
+  ;; (defun me/set-js-indentation ()
+  ;;   (setq js-indent-level 2)
+  ;;   (setq evil-shift-width js-indent-level)
+  ;;   (setq-default tab-width 2))
+
+  ;; (use-package js2-mode
+  ;;   :mode "\\.jsx?\\'"
+  ;;   :config
+  ;;   ;; Use js2-mode for Node scripts
+  ;;   (add-to-list 'magic-mode-alist '("#!/usr/bin/env node" . js2-mode))
+
+  ;;   ;; Don't use built-in syntax checking
+  ;;   (setq js2-mode-show-strict-warnings nil)
+
+  ;;   ;; Set up proper indentation in JavaScript and JSON files
+  ;;   (add-hook 'js2-mode-hook #'me/set-js-indentation)
+  ;;   (add-hook 'json-mode-hook #'me/set-js-indentation))
+
+#+end_src
+
+**** Prettier
+
+#+begin_src emacs-lisp
+
+  ;; (use-package prettier-js
+  ;;   ;; :hook ((js2-mode . prettier-js-mode)
+  ;;   ;;        (typescript-mode . prettier-js-mode))
+  ;;   :config
+  ;;   (setq prettier-js-show-errors nil))
+
+#+end_src
+
+**** Apheleia (To auto format)
+
+#+begin_src emacs-lisp
+
+  ;; (use-package apheleia
+  ;;   :config
+  ;;   (apheleia-global-mode +1))
+
+#+end_src
+
+*** C/C++
+
+#+begin_src emacs-lisp
+
+  ;; (use-package ccls
+  ;;   :hook ((c-mode c++-mode objc-mode cuda-mode) .
+  ;;          (lambda () (require 'ccls) (lsp))))
+
+#+end_src
+
+*** Markdown
+
+#+begin_src emacs-lisp
+
+  ;; (use-package markdown-mode
+  ;;   :mode "\\.md\\'"
+  ;;   :config
+  ;;   (setq markdown-command "marked")
+  ;;   (defun me/set-markdown-header-font-sizes ()
+  ;;     (dolist (face '((markdown-header-face-1 . 1.2)
+  ;;                     (markdown-header-face-2 . 1.1)
+  ;;                     (markdown-header-face-3 . 1.0)
+  ;;                     (markdown-header-face-4 . 1.0)
+  ;;                     (markdown-header-face-5 . 1.0)))
+  ;;       (set-face-attribute (car face) nil :weight 'normal :height (cdr face))))
+
+  ;;   (defun me/markdown-mode-hook ()
+  ;;     (me/set-markdown-header-font-sizes))
+
+  ;;   (add-hook 'markdown-mode-hook 'me/markdown-mode-hook))
+
+#+end_src
+
+*** HTML
+
+#+begin_src emacs-lisp
+
+  ;; (use-package web-mode
+  ;;   :mode "(\\.\\(html?\\|ejs\\|tsx\\|jsx\\)\\'"
+  ;;   :config
+  ;;   (setq-default web-mode-code-indent-offset 2)
+  ;;   (setq-default web-mode-markup-indent-offset 2)
+  ;;   (setq-default web-mode-attribute-indent-offset 2))
+
+  ;; ;; 1. Start the server with `httpd-start'
+  ;; ;; 2. Use `impatient-mode' on any buffer
+  ;; (use-package impatient-mode)
+
+  ;; (use-package skewer-mode)
+
+#+end_src
+
+*** YAML
+
+#+begin_src emacs-lisp
+
+  ;; (use-package yaml-mode
+  ;;   :mode "\\.ya?ml\\'")
+
 #+end_src
 
 *** Python
@@ -1199,6 +1305,100 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 
 #+end_src
 
+*** Meta Lisp
+
+Here are packages that are useful across different Lisp and Scheme implementations:
+
+#+begin_src emacs-lisp
+
+  ;; (use-package lispy
+  ;;   :hook ((emacs-lisp-mode . lispy-mode)
+  ;;          (scheme-mode . lispy-mode)))
+
+  ;; ;; (use-package evil-lispy
+  ;; ;;   :hook ((lispy-mode . evil-lispy-mode)))
+
+  ;; (use-package lispyville
+  ;;   :hook ((lispy-mode . lispyville-mode))
+  ;;   :config
+  ;;   (lispyville-set-key-theme '(operators c-w additional
+  ;;                               additional-movement slurp/barf-cp
+  ;;                               prettify)))
+
+#+end_src
+
+*** Go
+
+#+begin_src emacs-lisp
+
+  ;; (use-package go-mode
+  ;;   :hook (go-mode . lsp-deferred))
+
+#+end_src
+
+*** Rust
+
+#+begin_src emacs-lisp
+
+  ;; (use-package rust-mode
+  ;;   :mode "\\.rs\\'"
+  ;;   :init (setq rust-format-on-save t))
+
+  ;; (use-package cargo
+  ;;   :straight t
+  ;;   :defer t)
+
+#+end_src
+
+*** Emacs Lisp
+
+#+begin_src emacs-lisp
+
+  ;; (add-hook 'emacs-lisp-mode-hook #'flycheck-mode)
+
+  ;; (use-package helpful
+  ;;   :custom
+  ;;   (counsel-describe-function-function #'helpful-callable)
+  ;;   (counsel-describe-variable-function #'helpful-variable)
+  ;;   :bind
+  ;;   ([remap describe-function] . helpful-function)
+  ;;   ([remap describe-symbol] . helpful-symbol)
+  ;;   ([remap describe-variable] . helpful-variable)
+  ;;   ([remap describe-command] . helpful-command)
+  ;;   ([remap describe-key] . helpful-key))
+
+  ;; (dw/leader-key-def
+  ;;   "e"   '(:ignore t :which-key "eval")
+  ;;   "eb"  '(eval-buffer :which-key "eval buffer"))
+
+  ;; (dw/leader-key-def
+  ;;   :keymaps '(visual)
+  ;;   "er" '(eval-region :which-key "eval region"))
+
+#+end_src
+
+*** Scheme
+
+#+begin_src emacs-lisp
+
+  ;; TODO: This causes issues for some reason.
+  ;; :bind (:map geiser-mode-map
+  ;;        ("TAB" . completion-at-point))
+
+  ;; (use-package geiser
+  ;;   :config
+  ;;   ;; (setq geiser-default-implementation 'gambit)
+  ;;   ;; (setq geiser-active-implementations '(gambit guile))
+  ;;   ;; (setq geiser-implementations-alist '(((regexp "\\.scm$") gambit)
+  ;;   ;;                                      ((regexp "\\.sld") gambit)))
+  ;;   ;; (setq geiser-repl-default-port 44555) ; For Gambit Scheme
+  ;;   (setq geiser-default-implementation 'guile)
+  ;;   (setq geiser-active-implementations '(guile))
+  ;;   (setq geiser-repl-default-port 44555) ; For Gambit Scheme
+  ;;   (setq geiser-implementations-alist '(((regexp "\\.scm$") guile))))
+
+#+end_src
+
 ** Emmet
 Great for producing HTML and CSS selectors. [[https://github.com/smihica/emmet-mode][Documentation]]
 Key bindings
@@ -1208,13 +1408,16 @@ Key bindings
 | C-c C-c w | emmet-wrap-with-markup |                                |
 
 #+begin_src emacs-lisp
+
   (use-package emmet-mode)
+
 #+end_src
 
 ** PROJECTILE
 
 Enable projectile mode
 #+begin_src emacs-lisp
+
   (use-package projectile
     ;; :diminish projectile-mode
     :config (projectile-mode)
@@ -1228,8 +1431,9 @@ Enable projectile mode
                                                      projectile-root-local))
     ;; (setq projectile-switch-project-action #'projectile-dired)
     ) 
-  (leader-keys
+  (me/leader-keys
     "p"   '(projectile-command-map :which-key "projectile"))
+
 #+end_src
 
 Key Bindings
@@ -1242,6 +1446,7 @@ File tree viewer.
 [[https://github.com/emacs-lsp/lsp-treemacs][lsp-integration]]
 
 #+begin_src emacs-lisp
+
   (use-package treemacs)
 
   ;; Add :after if needed
@@ -1251,11 +1456,12 @@ File tree viewer.
   ;; show hidden files
   ;; (setq-default neo-show-hidden-files t)
 
-  (leader-keys 
+  (me/leader-keys 
     "d"    '(:ignore t :which-key "directory viewer")
     "d t"  '(treemacs :which-key "treemacs")
     "d e"  '(treemacs-display-current-project-exclusively :which-key "treemacs")
     )
+
 #+end_src
 
 ** MAGIT
@@ -1266,7 +1472,7 @@ File tree viewer.
 
 #+begin_src emacs-lisp
   (use-package magit)
-  (leader-keys
+  (me/leader-keys
     "g"      '(:ignore t :which-key "git")
     "g s"    '(magit-status :which-key "git status")
     "g l"    '(magit-log :which-key "git log")
@@ -1416,7 +1622,7 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
         ;; org-confirm-babel-evaluate nil
         )
 
-  (leader-keys 
+  (me/leader-keys 
     "m"      '(:ignore t :which-key "Mode Specific Bindings")
     "m t"      '(org-toggle-link-display :which-key "Toggle the display of link")
     )
