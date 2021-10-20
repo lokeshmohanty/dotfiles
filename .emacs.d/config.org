@@ -448,12 +448,16 @@ Basic Usage
 
 #+begin_src emacs-lisp
 
-  ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-  ;;   "e b"   '(eval-buffer :which-key "Eval elisp in buffer")
-  ;;   "e d"   '(eval-defun :which-key "Eval defun")
-  ;;   "e e"   '(eval-expression :which-key "Eval elisp expression")
-  ;;   "e l"   '(eval-last-sexp :which-key "Eval last sexression")
-  ;;   "e r"   '(eval-region :which-key "Eval region"))
+  (my/leader-keys
+    "e"   '(:ignore t :which-key "eval")
+    "e b"   '(eval-buffer :which-key "Eval elisp in buffer")
+    "e d"   '(eval-defun :which-key "Eval defun")
+    "e e"   '(eval-expression :which-key "Eval elisp expression")
+    "e l"   '(eval-last-sexp :which-key "Eval last sexression"))
+
+  (my/leader-keys
+    :keymaps '(visual)
+    "er" '(eval-region :which-key "eval region"))
 
 #+end_src
 
