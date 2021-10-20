@@ -2726,12 +2726,17 @@ Taken from [[*[[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-m
 - [ ] evil-mark-replace
 - [ ] evil-exchange
 ** TODO Others 
-- [ ] [[https://github.com/daviwil/emacs-from-scratch][EFS Tutorial]]
+- [X] [[https://github.com/daviwil/emacs-from-scratch][EFS Tutorial]]
 - [ ] [[https://cestlaz.github.io/stories/emacs/][EFS Reference]]
 - [ ] [[github.com/nloyola/.emacs.d/blob/master/config.org][Nloyola Emacs Reference]]
 - [ ] [[github.com/emacs-tw/awesome-emacs][Awesome Emacs]]
 - [ ] [[https://opensource.com/article/20/1/emacs-cheat-sheet][Extending Emacs]]
 * REFERENCES
-- Distrotube's GNU Emacs
-- Daviwil's Emacs From Scratch
-- Daviwil's Mail
+** [[https://gitlab.com/dwt1/dotfiles/-/blob/master/.emacs.d.gnu/config.org][Distrotube's GNU Emacs]]
+** [[https://www.youtube.com/c/systemcrafters][System Crafters]]
+*** [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ][Emacs from Scratch]]
+*** [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oM-kA19xOQc8s0gr0PpFGJQ][Emacs Mail]]
+*** [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oNvsrtk_iZSb94krGRofFjN][Emacs IDE]]
+*** [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oMc34dTjyFmTUWbXTKrNfZA][Mastering Git with Magit]]
+** [[https://www.youtube.com/playlist?list=PLhXZp00uXBk4np17N39WvB80zgxlZfVwj][Zaiste Programming: DoomCasts]]
+** [[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-may-2019/][Jonathan Bennett's Emacs.org]]
