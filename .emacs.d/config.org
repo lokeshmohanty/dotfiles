@@ -3,6 +3,20 @@
 
 CHEATSHEET: [[file:cheatsheet.pdf][./cheatsheet.pdf]]
 
+* INITIALIZE DEBUGGING
+
+Enable Debugging before execution of the config and disable after execution. 
+Taken from [[*[[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-may-2019/\][Jonathan Bennett's Emacs.org]\]][Jonathan Bennett's Emacs.org]]
+
+#+begin_src emacs-lisp
+
+  (setq debug-on-error t)
+  (setq debug-on-quit t)
+  
+  (defconst emacs-start-time (current-time))
+  
+#+end_src
+
 * PROGRAMS TO LOAD FIRST
 ** Package Management with Straight
 
@@ -2689,6 +2703,22 @@ Commands for header-mode and view-mode:
 # (use-package emojify
 #   :hook (after-init . global-emojify-mode))
 # #+end_src
+
+* UNSET DEBUGGING
+
+Taken from [[*[[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-may-2019/\][Jonathan Bennett's Emacs.org]\]][Jonathan Bennett's Emacs.org]]
+
+#+begin_src emacs-lisp
+
+  (setq debug-on-error nil)
+  (setq debug-on-quit nil)
+
+  (let ((elapsed (float-time (time-subtract (current-time)
+                                            emacs-start-time))))
+    (message "Loading settings...done (%.3fs)" elapsed))
+  (put 'narrow-to-region 'disabled nil)
+
+#+end_src
 
 * TO TRY
 ** TODO Emacs Packages
