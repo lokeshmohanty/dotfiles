@@ -237,18 +237,18 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 
   (use-package general
     :config
-    (general-create-definer me/leader-keys
+    (general-create-definer my/leader-keys
       :keymaps '(normal insert visual emacs)
       :prefix "SPC"
       :global-prefix "C-SPC")
 
-    (general-create-definer me/ctrl-c-keys
+    (general-create-definer my/ctrl-c-keys
       :prefix "C-c")
 
     (general-evil-setup t)
 
     ;; general-simulate-key should not be quoted as it is supposed to be evaluated before assigning
-    (me/leader-keys
+    (my/leader-keys
       ;; "SPC" '(counsel-M-x :which-key "M-x")
       "SPC"  (general-simulate-key "M-x" :which-key "M-x") 
       "r"    (general-simulate-key "C-x r" :which-key "+register/bookmark") 
@@ -269,7 +269,7 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 
 #+begin_src emacs-lisp
 
-  (me/leader-keys
+  (my/leader-keys
     "b"     '(:ignore t :which-key "buffer")
     "b b"   '(ibuffer :which-key "Ibuffer")
     ;; "b s"   '(switch-to-buffer :which-key "switch buffer")
@@ -289,7 +289,7 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 
 #+begin_src emacs-lisp
 
-  (me/leader-keys
+  (my/leader-keys
     ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
     "."     '(find-file :which-key "Find file")
     "f"     '(:ignore t :which-key "file")
@@ -341,7 +341,7 @@ C-w -> Prefix for evil window commands
 #+begin_src emacs-lisp
 
   ;; (winner-mode 1)
-  (me/leader-keys
+  (my/leader-keys
     "w"     '(:ignore t :which-key "window")
     "w c"   '(evil-window-delete :which-key "Close window")
     "w n"   '(evil-window-new :which-key "New window")
@@ -482,7 +482,7 @@ Hydra helps in desgning transient key bindings to run commands easily
   ;;   ("k" text-scale-decrease "out")
   ;;   ("f" nil "finished" :exit t))
 
-  ;; (me/leader-keys
+  ;; (my/leader-keys
   ;;   "ts" '(hydra-text-scale/body :which-key "scale text"))
 
 #+end_src
@@ -733,7 +733,7 @@ Distraction free writing mode
 #+begin_src emacs-lisp
 
   ;; Borrowed from systemcrafters.cc
-  (defun me/minibuffer-backward-kill (arg)
+  (defun my/minibuffer-backward-kill (arg)
     "When minibuffer is completing a file name delete up to parent
   folder, otherwise delete a word"
     (interactive "p")
@@ -751,7 +751,7 @@ Distraction free writing mode
                 ("C-k" . vertico-previous)
                 ("C-f" . vertico-exit)
                 :map minibuffer-local-map
-                ("C-b" . me/minibuffer-backward-kill))
+                ("C-b" . my/minibuffer-backward-kill))
     :custom 
     (vertico-cycle t)
     :init
@@ -845,7 +845,7 @@ Extra commands for vertico
 
 #+begin_src emacs-lisp
 
-  ;; (defun me/get-project-root ()
+  ;; (defun my/get-project-root ()
   ;;   (when (fboundp 'projectile-project-root)
   ;;     (projectile-project-root)))
 
@@ -855,11 +855,11 @@ Extra commands for vertico
            :map minibuffer-local-map
            ("C-r" . consult-history))
     ;; :custom
-    ;; (consult-project-root-function #'me/get-project-root)
+    ;; (consult-project-root-function #'my/get-project-root)
     ;; (completion-in-region-function #'consult-completion-in-region)
     )
 
-  (me/leader-keys
+  (my/leader-keys
     "s"     '(:ignore t :which-key "search")
     "s s"   '(consult-line :which-key "search in current file")
     "s g"   '(consult-ripgrep :which-key "grep in current directory")
@@ -967,6 +967,8 @@ Extra commands for vertico
 
 ** Switching Directories with consult-dir
 
+Easy switching directories. Works great when combined with embark
+
 #+begin_src emacs-lisp
 
   (use-package consult-dir
@@ -974,8 +976,9 @@ Extra commands for vertico
            :map vertico-map
            ("C-x C-d" . consult-dir)
            ("C-x C-j" . consult-dir-jump-file))
-    :custom
-    (consult-dir-project-list-function nil))
+   ;;  :custom
+   ;; (consult-dir-project-list-function nil)
+   )
 
   ;; ;; Thanks Karthik!
   ;; (with-eval-after-load 'eshell-mode
@@ -1032,7 +1035,7 @@ Extra commands for vertico
   (use-package avy
     :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
 
-  (me/leader-keys
+  (my/leader-keys
     "j"   '(:ignore t :which-key "jump")
     "jj"  '(avy-goto-char :which-key "jump to char")
     "jw"  '(avy-goto-word-0 :which-key "jump to word")
@@ -1203,7 +1206,7 @@ Fixes warning -> (Unknown notification: angular/projectLanguageService) from [[h
 
 #+begin_src emacs-lisp
 
-  ;; (defun me/set-js-indentation ()
+  ;; (defun my/set-js-indentation ()
   ;;   (setq js-indent-level 2)
   ;;   (setq evil-shift-width js-indent-level)
   ;;   (setq-default tab-width 2))
@@ -1218,8 +1221,8 @@ Fixes warning -> (Unknown notification: angular/projectLanguageService) from [[h
   ;;   (setq js2-mode-show-strict-warnings nil)
 
   ;;   ;; Set up proper indentation in JavaScript and JSON files
-  ;;   (add-hook 'js2-mode-hook #'me/set-js-indentation)
-  ;;   (add-hook 'json-mode-hook #'me/set-js-indentation))
+  ;;   (add-hook 'js2-mode-hook #'my/set-js-indentation)
+  ;;   (add-hook 'json-mode-hook #'my/set-js-indentation))
 
 #+end_src
 
@@ -1263,7 +1266,7 @@ Fixes warning -> (Unknown notification: angular/projectLanguageService) from [[h
   ;;   :mode "\\.md\\'"
   ;;   :config
   ;;   (setq markdown-command "marked")
-  ;;   (defun me/set-markdown-header-font-sizes ()
+  ;;   (defun my/set-markdown-header-font-sizes ()
   ;;     (dolist (face '((markdown-header-face-1 . 1.2)
   ;;                     (markdown-header-face-2 . 1.1)
   ;;                     (markdown-header-face-3 . 1.0)
@@ -1271,10 +1274,10 @@ Fixes warning -> (Unknown notification: angular/projectLanguageService) from [[h
   ;;                     (markdown-header-face-5 . 1.0)))
   ;;       (set-face-attribute (car face) nil :weight 'normal :height (cdr face))))
 
-  ;;   (defun me/markdown-mode-hook ()
-  ;;     (me/set-markdown-header-font-sizes))
+  ;;   (defun my/markdown-mode-hook ()
+  ;;     (my/set-markdown-header-font-sizes))
 
-  ;;   (add-hook 'markdown-mode-hook 'me/markdown-mode-hook))
+  ;;   (add-hook 'markdown-mode-hook 'my/markdown-mode-hook))
 
 #+end_src
 
@@ -1473,7 +1476,7 @@ Enable projectile mode
                                                      projectile-root-local))
     ;; (setq projectile-switch-project-action #'projectile-dired)
     ) 
-  (me/leader-keys
+  (my/leader-keys
     "p"   '(projectile-command-map :which-key "projectile"))
 
 #+end_src
@@ -1498,7 +1501,7 @@ File tree viewer.
   ;; show hidden files
   ;; (setq-default neo-show-hidden-files t)
 
-  (me/leader-keys 
+  (my/leader-keys 
     "d"    '(:ignore t :which-key "directory viewer")
     "d t"  '(treemacs :which-key "treemacs")
     "d e"  '(treemacs-display-current-project-exclusively :which-key "treemacs")
@@ -1514,7 +1517,7 @@ File tree viewer.
 
 #+begin_src emacs-lisp
   (use-package magit)
-  (me/leader-keys
+  (my/leader-keys
     "g"      '(:ignore t :which-key "git")
     "g s"    '(magit-status :which-key "git status")
     "g l"    '(magit-log :which-key "git log")
@@ -1523,14 +1526,14 @@ File tree viewer.
 #+end_src
 
 *** Custom commands to use magit on dotfiles
-Run *me/magit-status-bare* to use magit on dotfiles. To revert magit in order to use it for other repos run *me/magit-status*.
+Run *my/magit-status-bare* to use magit on dotfiles. To revert magit in order to use it for other repos run *my/magit-status*.
 
 #+begin_src emacs-lisp
   (setq bare-git-dir (concat "--git-dir=" (expand-file-name "~/.cfg")))
   (setq bare-work-tree (concat "--work-tree=" (expand-file-name "~")))
 
   ;; use magit on git bare repos like dotfiles repos
-  (defun me/magit-status-bare ()
+  (defun my/magit-status-bare ()
     "set --git-dir and --work-tree in `magit-git-global-arguments' to `bare-git-dir' and `bare-work-tree' and calls `magit-status'"
     (interactive)
     (require 'magit-git)
@@ -1538,10 +1541,10 @@ Run *me/magit-status-bare* to use magit on dotfiles. To revert magit in order to
     (add-to-list 'magit-git-global-arguments bare-work-tree)
     (call-interactively 'magit-status))
 
-  ;; if you use `me/magit-status-bare' you cant use `magit-status' on other other repos 
-  ;; you have to unset `--git-dir' and `--work-tree' use `me/magit-status' insted it unsets 
+  ;; if you use `my/magit-status-bare' you cant use `magit-status' on other other repos 
+  ;; you have to unset `--git-dir' and `--work-tree' use `my/magit-status' insted it unsets 
   ;; those before calling `magit-status'
-  (defun me/magit-status ()
+  (defun my/magit-status ()
     "sets the default value in `magit-git-global-arguments' and calls `magit-status'"
     (interactive)
     (require 'magit-git)
@@ -1646,6 +1649,7 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
 *** Config
 **** Basic
 #+begin_src emacs-lisp
+
   (add-hook 'org-mode-hook 'org-indent-mode)
   (setq org-directory "~/Org/")
   (setq org-ellipsis " ▾"
@@ -1657,17 +1661,32 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
 
         ;; Org Source indentation
         org-src-fontify-natively t       
-        org-src-tab-acts-natively t
-        org-edit-src-content-indentation 2
-        org-src-preserve-indentation nil
-        org-fontify-quote-and-verse-blocks t
-        ;; org-confirm-babel-evaluate nil
+        org-src-tab-acts-natively nil     ;; setting it to t cause error in yasnippet expansion
+        ;; org-edit-src-content-indentation 2
+        ;; org-src-preserve-indentation nil
+        ;; org-fontify-quote-and-verse-blocks t
+        org-confirm-babel-evaluate nil
         )
 
-  (me/leader-keys 
+  (my/leader-keys 
     "m"      '(:ignore t :which-key "Mode Specific Bindings")
     "m t"      '(org-toggle-link-display :which-key "Toggle the display of link")
     )
+#+end_src
+
+**** Executing Source Blocks
+
+#+begin_src emacs-lisp
+
+  (org-babel-do-load-languages
+    'org-babel-load-languages
+        '((C          . t)
+          (python     . t)
+          (emacs-lisp . t)
+          (shell      . t)
+          (latex      . t)
+          (sql        . t)))
+
 #+end_src
 
 **** Modules
@@ -2457,18 +2476,18 @@ Install imapnotify: `npm install -g imapnotify'
 
 #+begin_src emacs-lisp
 
-  ;; (setq me/mu4e-inbox-query
+  ;; (setq my/mu4e-inbox-query
   ;;       "(maildir:/lokesh-gmail/Inbox OR maildir:/office-arc/Inbox) AND flag:unread")
 
-  ;; (defun me/go-to-inbox ()
+  ;; (defun my/go-to-inbox ()
   ;;   (interactive)
-  ;;   (mu4e-headers-search me/mu4e-inbox-query))
+  ;;   (mu4e-headers-search my/mu4e-inbox-query))
 
   ;; (leader-key
   ;;   "m"  '(:ignore t :which-key "mail")
   ;;   "mm" 'mu4e
   ;;   "mc" 'mu4e-compose-new
-  ;;   "mi" 'me/go-to-inbox
+  ;;   "mi" 'my/go-to-inbox
   ;;   "ms" 'mu4e-update-mail-and-index)
 
   ;; Start mu4e in the background so that it syncs mail periodically
@@ -2484,7 +2503,7 @@ Install imapnotify: `npm install -g imapnotify'
     :after mu4e
     :config
     ;; Show unread emails from all inboxes
-    ;; (setq mu4e-alert-interesting-mail-query me/mu4e-inbox-query)
+    ;; (setq mu4e-alert-interesting-mail-query my/mu4e-inbox-query)
 
     ;; Show notifications for mails already notified
     (setq mu4e-alert-notify-repeated-mails nil)
