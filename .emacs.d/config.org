@@ -383,6 +383,13 @@ C-w -> Prefix for evil window commands
 
 #+end_src
 
+#+begin_src emacs-lisp
+
+  ;; If a popup does happen, don't resize windows to be equal-sized
+  (setq even-window-sizes nil)
+
+#+end_src
+
 ** Tab
 Basic Usage
 
@@ -615,10 +622,13 @@ Distraction free writing mode
 
 ** Parenthesis
 
+Check show paren mode [[stack-exchange:52209][fix]].
+
 #+begin_src emacs-lisp
 
   ;; Turn on matching parenthesis highlighting
-  (show-paren-mode 1)
+  ;; Commented as it doesn't work properly. A fix is required
+  ;; (show-paren-mode 1)
 
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
@@ -705,24 +715,27 @@ Distraction free writing mode
   ;;   (evil-window-decrease-width 50)
   ;; )
 
-  ;; (with-eval-after-load 'dired
-  ;;   ;;(define-key dired-mode-map (kbd "M-p") 'peep-dired)
-  (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
-  (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-find-file) ; use dired-find-file instead if not using dired-open package
-  ;; (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
-  ;;   (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
+  (with-eval-after-load 'dired
+    (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-find-file))
 
-  ;; (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
-  ;; ;; Get file icons in dired
-  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-  ;; ;; With dired-open plugin, you can launch external programs for certain extensions
-  ;; ;; For example, I set all .png files to open in 'sxiv' and all .mp4 files to open in 'mpv'
-  ;; (setq dired-open-extensions '(("gif" . "sxiv")
-  ;;                               ("jpg" . "sxiv")
-  ;;                               ("png" . "sxiv")
-  ;;                               ("mkv" . "mpv")
-  ;;                               ("mp4" . "mpv")))
+  ;; Get file icons in dired
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+
+  ;; (dw/leader-key-def
+  ;;   "d"   '(:ignore t :which-key "dired")
+  ;;   "dd"  '(dired :which-key "Here")
+  ;;   "dh"  `(,(dw/dired-link "~") :which-key "Home")
+  ;;   "dn"  `(,(dw/dired-link "~/Notes") :which-key "Notes")
+  ;;   "do"  `(,(dw/dired-link "~/Downloads") :which-key "Downloads")
+  ;;   "dp"  `(,(dw/dired-link "~/Pictures") :which-key "Pictures")
+  ;;   "dv"  `(,(dw/dired-link "~/Videos") :which-key "Videos")
+  ;;   "d."  `(,(dw/dired-link "~/.dotfiles") :which-key "dotfiles")
+  ;;   "de"  `(,(dw/dired-link "~/.emacs.d") :which-key ".emacs.d"))
 #+end_src
+
+#+RESULTS:
+| dired-extra-startup | all-the-icons-dired-mode | dired-hide-details-mode | doom-modeline-set-project-modeline |
 
 * DASHBOARD
 ** Setup
@@ -1011,8 +1024,8 @@ Easy switching directories. Works great when combined with embark
            :map vertico-map
            ("C-x C-d" . consult-dir)
            ("C-x C-j" . consult-dir-jump-file))
-   ;;  :custom
-   ;; (consult-dir-project-list-function nil)
+    :custom
+   (consult-dir-project-list-function nil)
    )
 
   ;; ;; Thanks Karthik!
@@ -1633,7 +1646,7 @@ To import postman collection
 #+end_src
 
 * ORG MODE
-*** Tips
+** Tips
 |-------------------------+---------+--------------------------|
 | Commands                | binding | evil normal mode binding |
 |-------------------------+---------+--------------------------|
@@ -1644,45 +1657,46 @@ To import postman collection
 | org-priority            | C-c ,   |                          |
 |-------------------------+---------+--------------------------|
 
-|----------------------+--------------------------|
-| M-<up>               | Move the title up        |
-| M-<down>             |                          |
-| M-<left>             | Increase heading         |
-| M-<rignt>            | Decrease heading         |
-| C-c C-o              | org-open-at-point        |
-| C-c C-j              | org-goto                 |
-| C-c C-t              | org-todo                 |
-| Shift-<left>,<right> | org-todo                 |
-| C-c C-l              | org-insert-link          |
-| M-<enter>            |                          |
-|----------------------+--------------------------|
-| C-c C-s              | org-schedule             |
-| C-c C-d              | org-deadline             |
-| C-c C-x e            | org-set-effort           |
-| C-c C-x p            | org-set-property         |
-|----------------------+--------------------------|
-| C-c C-x C-i          | org-clock-in             |
-| C-c C-x C-o          | org-clock-out            |
-| C-c C-x C-j          | org-clock-jump           |
-|                      | org-clock-report         |
-|----------------------+--------------------------|
-| C-c M-:              | repeat-complex-command   |
-| C-c *                | org-ctrl-c-star          |
-| C-c -                | org-ctrl-c-minus         |
-|                      | counsel-org-goto         |
-|                      | org-export-dispatch      |
-|                      | org-footnote-new         |
-|                      | org-toggle-heading       |
-|                      | org-toggle-item          |
-|                      | org-toggle-checkbox      |
-|                      | org-babel-tangle         |
-|                      | org-toggle-inline-images |
-|                      | org-todo-list            |
+| Keybinding           | Command                  | Description                  |
+|----------------------+--------------------------+------------------------------|
+| M-<up>               | Move the title up        |                              |
+| M-<down>             |                          |                              |
+| M-<left>             | Increase heading         |                              |
+| M-<rignt>            | Decrease heading         |                              |
+| C-c C-o              | org-open-at-point        |                              |
+| C-c C-j              | org-goto                 |                              |
+| C-c C-t              | org-todo                 |                              |
+| Shift-<left>,<right> | org-todo                 |                              |
+| C-c C-l              | org-insert-link          |                              |
+| C-c '                | org-edit-special         | edit block in another buffer |
+| M-<enter>            |                          |                              |
+|----------------------+--------------------------+------------------------------|
+| C-c C-s              | org-schedule             |                              |
+| C-c C-d              | org-deadline             |                              |
+| C-c C-x e            | org-set-effort           |                              |
+| C-c C-x p            | org-set-property         |                              |
+|----------------------+--------------------------+------------------------------|
+| C-c C-x C-i          | org-clock-in             |                              |
+| C-c C-x C-o          | org-clock-out            |                              |
+| C-c C-x C-j          | org-clock-jump           |                              |
+|                      | org-clock-report         |                              |
+|----------------------+--------------------------+------------------------------|
+| C-c M-:              | repeat-complex-command   |                              |
+| C-c *                | org-ctrl-c-star          |                              |
+| C-c -                | org-ctrl-c-minus         |                              |
+|                      | counsel-org-goto         |                              |
+|                      | org-export-dispatch      |                              |
+|                      | org-footnote-new         |                              |
+|                      | org-toggle-heading       |                              |
+|                      | org-toggle-item          |                              |
+|                      | org-toggle-checkbox      |                              |
+|                      | org-babel-tangle         |                              |
+|                      | org-toggle-inline-images |                              |
+|                      | org-todo-list            |                              |
 # | C-c ESC ESC          | repeat-complex-command |
 
 M-<Enter> -> Continue adding tags in add tag minibuffer
-*** Config
-**** Basic
+** Basic
 #+begin_src emacs-lisp
 
   (add-hook 'org-mode-hook 'org-indent-mode)
@@ -1709,7 +1723,7 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
     )
 #+end_src
 
-**** Executing Source Blocks
+** Executing Source Blocks
 
 #+begin_src emacs-lisp
 
@@ -1724,7 +1738,15 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
 
 #+end_src
 
-**** Modules
+** Org Custom Link Types
+
+#+begin_src emacs-lisp
+
+  (org-link-set-parameters "stack.exchange" "https://emacs.stackexchange.com/a/")
+
+#+end_src
+
+** Modules
 
 #+begin_src emacs-lisp
 
@@ -1744,7 +1766,19 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
 
 #+end_src
 
-**** Todo
+** Priorities
+
+Allow priorities from A to E.
+
+#+begin_src emacs-lisp
+
+  (setq org-highest-priority ?A
+        org-default-priority ?C
+        org-lowest-priority ?E)
+
+#+end_src
+
+** Todo
 #+begin_src emacs-lisp
   ;; '!' -> record timestamp; '@' -> record a note; x/y -> do x while entering state, y while exiting state
   (setq org-todo-keywords 
@@ -1758,7 +1792,7 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
   ;; )
 #+end_src
 
-**** Journal
+** Journal
 [[https://github.com/bastibe/org-journal][Documentation]]
 
 Currently using org-capture for journaling
@@ -1777,7 +1811,7 @@ Currently using org-capture for journaling
   ;; (setq org-journal-file-format "%Y-%m-%d.org")
 #+end_src
 
-**** Agenda
+** Agenda
      
 #+begin_src emacs-lisp
   (setq org-agenda-files '(
@@ -1802,7 +1836,7 @@ Currently using org-capture for journaling
 
 #+end_src
 
-**** Agenda Custom 
+** Agenda Custom 
 #+begin_src emacs-lisp
   ;; Configure custom agenda views
   (setq org-agenda-custom-commands
@@ -1858,7 +1892,7 @@ Currently using org-capture for journaling
                    (org-agenda-files org-agenda-files)))))))
 #+end_src
 
-**** Habit
+** Habit
 
 # org-habit-toggle-habits
 # org-habit-toggle-display-in-agenda
@@ -1878,7 +1912,7 @@ This is particularly useful if you use the org-habits module and you are late to
       (org-todo)))
 #+end_src
 
-**** Tag
+** Tag
 #+begin_src emacs-lisp
   (setq org-tag-alist
         '((:startgroup)
@@ -1899,7 +1933,7 @@ This is particularly useful if you use the org-habits module and you are late to
           ("idea" . ?i)))
 #+end_src
 
-**** Capture Templates
+** Capture Templates
 
 +-------------+-------------------------------------------------------------------+
 | Prefix -> % |                                                                   |
@@ -2036,7 +2070,7 @@ This is particularly useful if you use the org-habits module and you are late to
           ))
 #+end_src
 
-**** Refile
+** Refile
 #+begin_src emacs-lisp
   (setq org-refile-targets '(
                              (nil :maxlevel . 1)
@@ -2049,7 +2083,7 @@ This is particularly useful if you use the org-habits module and you are late to
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 #+end_src
 
-**** Evil key bindings for org mode
+** Evil key bindings for org mode
 
 #+begin_src emacs-lisp
   (use-package evil-org
@@ -2063,7 +2097,7 @@ This is particularly useful if you use the org-habits module and you are late to
     )
 #+end_src
 
-**** Use abbreviations instead of lengthy URL.
+** Use abbreviations instead of lengthy URL.
 
 #+begin_src emacs-lisp
   ;; An example of how this works.
@@ -2076,7 +2110,7 @@ This is particularly useful if you use the org-habits module and you are late to
           ("wiki" . "https://en.wikipedia.org/wiki/")))
 #+end_src
 
-**** Toc
+** Toc
 It helps to have an up-to-date table of contents in org files without
 exporting. Use :TOC: to create the table.
 
@@ -2086,7 +2120,7 @@ exporting. Use :TOC: to create the table.
 #+end_src
 
 
-**** Configure Babel Languages
+** Configure Babel Languages
 
 To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with =org-babel=.
 
@@ -2102,7 +2136,7 @@ To execute or export code in =org-mode= code blocks, you'll need to set up =org-
 
 #+end_src
 
-**** Auto-tangle Configuration Files
+** Auto-tangle Configuration Files
 
 This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
 
@@ -2121,28 +2155,28 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 #+end_src
 
 
-**** Prevent M-Ret from adding blank lines
+** Prevent M-Ret from adding blank lines
 
 #+begin_src emacs-lisp
   ;; (setq org-blank-before-new-entry (quote ((heading . nil)
   ;;                                          (plain-list-item . nil))))
 #+end_src
 
-**** Export to manpage format
+** Export to manpage format
 
 #+begin_src emacs-lisp
   ;; (use-package ox-man
   ;;   :ensure nil)
 #+end_src
 
-**** Drag and drop into org files
+** Drag and drop into org files
 #+begin_src emacs-lisp
   ;; Drag and drop images to org files
   ;; (use-package org-download)
   ;; (add-hook 'dired-mode-hook 'org-download-enable)
 #+end_src
 
-*** Related Packages
+** Related Packages
 
 - org-wild-notifier
 
@@ -2214,6 +2248,9 @@ Run *pkill mu* in case of mu lock error
 
     ;; don't keep message buffers around
     (setq message-kill-buffer-on-exit t)
+
+    ;; (setq mu4e-main-buffer-hide-personal-addresses t)
+    ;; (setq starttls-use-gnutls t)
 
 #+end_src
 
