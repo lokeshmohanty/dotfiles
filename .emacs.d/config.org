@@ -267,6 +267,7 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
       "SPC"  (general-simulate-key "M-x" :which-key "M-x") 
       "r"    (general-simulate-key "C-x r" :which-key "+register/bookmark") 
       "t"    (general-simulate-key "C-x t" :which-key "+tab")
+      "f"    (general-simulate-key "C-x 5" :which-key "+frame")
       "o"   '(:ignore t :which-key "open")
       "oa"   '(org-agenda :which-key "org-agenda")
       "oc"   '(org-capture :which-key "org-capture")
@@ -303,19 +304,18 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 
 #+begin_src emacs-lisp
 
-  (my/leader-keys
-    ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-    "."     '(find-file :which-key "Find file")
-    "f"     '(:ignore t :which-key "file")
-    "f f"   '(find-file :which-key "Find file")
-    "f r"   '(counsel-recentf :which-key "Recent files")
-    "f s"   '(save-buffer :which-key "Save file")
-    "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
-    "f C"   '(copy-file :which-key "Copy file")
-    "f D"   '(delete-file :which-key "Delete file")
-    "f R"   '(rename-file :which-key "Rename file")
-    "f S"   '(write-file :which-key "Save file as...")
-    "f U"   '(sudo-edit :which-key "Sudo edit file"))
+  ;; (my/leader-keys
+  ;;   "."     '(find-file :which-key "Find file")
+  ;;   "f"     '(:ignore t :which-key "file")
+  ;;   "f f"   '(find-file :which-key "Find file")
+  ;;   "f r"   '(counsel-recentf :which-key "Recent files")
+  ;;   "f s"   '(save-buffer :which-key "Save file")
+  ;;   "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
+  ;;   "f C"   '(copy-file :which-key "Copy file")
+  ;;   "f D"   '(delete-file :which-key "Delete file")
+  ;;   "f R"   '(rename-file :which-key "Rename file")
+  ;;   "f S"   '(write-file :which-key "Save file as...")
+  ;;   "f U"   '(sudo-edit :which-key "Sudo edit file"))
 
 #+end_src
 
