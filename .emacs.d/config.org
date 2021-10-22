@@ -10,15 +10,17 @@ Taken from [[*[[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-m
 
 #+begin_src emacs-lisp
 
-  (setq debug-on-error t)
-  (setq debug-on-quit t)
-  
-  (defconst emacs-start-time (current-time))
-  
+  ;; (setq debug-on-error t)
+  ;; (setq debug-on-quit t)
+
+  ;; (defconst emacs-start-time (current-time))
+
 #+end_src
 
 * PROGRAMS TO LOAD FIRST
 ** Package Management with Straight
+
+- Clean up unused repos with =straight-remove-unused-repos=
 
 #+begin_src emacs-lisp
 
@@ -2778,13 +2780,13 @@ Taken from [[*[[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-m
 
 #+begin_src emacs-lisp
 
-  (setq debug-on-error nil)
-  (setq debug-on-quit nil)
+  ;; (setq debug-on-error nil)
+  ;; (setq debug-on-quit nil)
 
-  (let ((elapsed (float-time (time-subtract (current-time)
-                                            emacs-start-time))))
-    (message "Loading settings...done (%.3fs)" elapsed))
-  (put 'narrow-to-region 'disabled nil)
+  ;; (let ((elapsed (float-time (time-subtract (current-time)
+  ;;                                           emacs-start-time))))
+  ;;   (message "Loading settings...done (%.3fs)" elapsed))
+  ;; (put 'narrow-to-region 'disabled nil)
 
 #+end_src
 

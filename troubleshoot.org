@@ -100,7 +100,7 @@
   ls -l $(locate -e <fileName>)
   #+end_src
 
-** Redirect stdout and stderr
+** Redirect stdout and stder
 
 #+begin_src shell
 
