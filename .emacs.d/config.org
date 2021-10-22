@@ -626,7 +626,7 @@ Distraction free writing mode
 ** Yasnippet global mode
 
 #+begin_src emacs-lisp
-
+ 
   (use-package yasnippet
     ;; :hook (prog-mode . yas-minor-mode)
     :config
@@ -1271,7 +1271,7 @@ Debug config location -> .vscode/launch.json
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/.bin/jest",
       "args": ["-r", "ts-node/register", "${relativeFile}"],
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "protocol": "inspector"
     },
     {
@@ -1668,6 +1668,7 @@ File tree viewer.
 #+end_src
 
 *** Custom commands to use magit on dotfiles
+
 Run *my/magit-status-bare* to use magit on dotfiles. To revert magit in order to use it for other repos run *my/magit-status*.
 
 #+begin_src emacs-lisp
@@ -1692,6 +1693,7 @@ Run *my/magit-status-bare* to use magit on dotfiles. To revert magit in order to
     (require 'magit-git)
     (setq-default magit-git-global-arguments (eval (car (get 'magit-git-global-arguments 'standard-value)))))
 #+end_src
+
 ** PERSPECTIVE
 
 Similar to workspaces. Each perspective has its own buffer list and
@@ -1723,6 +1725,17 @@ window layout.
     :mode (("\\.http\\'" . restclient-mode))
     :bind (:map restclient-mode-map
                 ("C-c C-f" . json-mode-beautify)))
+
+#+end_src
+
+*** Verb
+
+#+begin_src emacs-lisp
+
+  (use-package verb)
+  
+  (with-eval-after-load 'org
+    (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 #+end_src
 
@@ -2687,7 +2700,7 @@ Commands for header-mode and view-mode:
 |---------------------------------+-----------+-------------|
 | Next message                    | C-j       |             |
 | Previous message                | C-k       |             |
-| Mark the current thread as read | T         |             |
+| Mark the current thread as read | T, !      |             |
 | Compose message                 | cc        | C           |
 | Compose edit**                  | ce        | E           |
 | Compose forward**               | cf        | F           |
@@ -2722,9 +2735,8 @@ Commands for header-mode and view-mode:
     "s w"   '(define-word :which-key "search definition of a word")
     "s d"   '(define-word-at-point :which-key "search definition at point")
     )
-#+end_src
 
- 
+#+end_src
 
 * ELFEED
 
