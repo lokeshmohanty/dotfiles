@@ -2187,10 +2187,11 @@ This is particularly useful if you use the org-habits module and you are late to
   ;; [[arch-wiki:Name_of_Page][Description]]
   ;; This overwrites the default list
   (setq org-link-abbrev-alist 
-        '(("google" . "http://www.google.com/search?q=")
-          ("ddg" . "https://duckduckgo.com/?q=")
+        '(("google"         . "http://www.google.com/search?q=")
+          ("ddg"            . "https://duckduckgo.com/?q=")
           ("stack-exchange" . "https://emacs.stackexchange.com/a/")
-          ("wiki" . "https://en.wikipedia.org/wiki/")))
+          ("github"         . "https://github.com/")
+          ("wiki"           . "https://en.wikipedia.org/wiki/")))
 #+end_src
 
 ** Toc
