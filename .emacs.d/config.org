@@ -2700,6 +2700,23 @@ Commands for header-mode and view-mode:
 - * denotes only in header-mode
 - ** denotes Alternative only in header-mode
 - *** denotes Alternative only in view-mode
+* DEFINE WORD
+
+#+begin_src emacs-lisp
+
+  (use-package define-word
+    :config
+    (setq define-word-default-service 'wordnik)
+    (defun url-http-user-agent-string ()
+    "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.80 Safari/537.36 "))
+
+  (my/leader-keys
+    "s w"   '(define-word :which-key "search definition of a word")
+    "s d"   '(define-word-at-point :which-key "search definition at point")
+    )
+#+end_src
+
+ 
 
 * ELFEED
 
@@ -2770,6 +2787,7 @@ Taken from [[*[[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-m
 - [ ] evil-snipe
 - [ ] evil-mark-replace
 - [ ] evil-exchange
+- [ ] [[https://github.com/karthink/popper][popper]] (manage popups)
 ** TODO Others 
 - [X] [[https://github.com/daviwil/emacs-from-scratch][EFS Tutorial]]
 - [ ] [[https://cestlaz.github.io/stories/emacs/][EFS Reference]]
@@ -2777,11 +2795,47 @@ Taken from [[*[[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-m
 - [ ] [[github.com/emacs-tw/awesome-emacs][Awesome Emacs]]
 - [ ] [[https://opensource.com/article/20/1/emacs-cheat-sheet][Extending Emacs]]
 * REFERENCES
-** [[https://gitlab.com/dwt1/dotfiles/-/blob/master/.emacs.d.gnu/config.org][Distrotube's GNU Emacs]]
-** [[https://www.youtube.com/c/systemcrafters][System Crafters]]
-*** [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ][Emacs from Scratch]]
-*** [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oM-kA19xOQc8s0gr0PpFGJQ][Emacs Mail]]
-*** [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oNvsrtk_iZSb94krGRofFjN][Emacs IDE]]
-*** [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oMc34dTjyFmTUWbXTKrNfZA][Mastering Git with Magit]]
-** [[https://www.youtube.com/playlist?list=PLhXZp00uXBk4np17N39WvB80zgxlZfVwj][Zaiste Programming: DoomCasts]]
-** [[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-may-2019/][Jonathan Bennett's Emacs.org]]
+** REFERENCE [[https://gitlab.com/dwt1/dotfiles/-/blob/master/.emacs.d.gnu/config.org][Distrotube's GNU Emacs]]
+CLOSED: [2021-10-22 Fri 11:40]
+:LOGBOOK:
+- State "REFERENCE"  from              [2021-10-22 Fri 11:40]
+:END:
+** CONSUMING [[https://www.youtube.com/c/systemcrafters][System Crafters]]
+:LOGBOOK:
+- State "CONSUMING"  from              [2021-10-22 Fri 11:40]
+:END:
+*** CONSUMING [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ][Emacs from Scratch]]
+:LOGBOOK:
+- State "CONSUMING"  from "REFERENCE"  [2021-10-22 Fri 11:39]
+- State "REFERENCE"  from              [2021-10-22 Fri 11:39]
+:END:
+*** CONSUMING [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oM-kA19xOQc8s0gr0PpFGJQ][Emacs Mail]]
+:LOGBOOK:
+- State "CONSUMING"  from "REFERENCE"  [2021-10-22 Fri 11:39]
+- State "REFERENCE"  from              [2021-10-22 Fri 11:39]
+:END:
+*** REFERENCE [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oNvsrtk_iZSb94krGRofFjN][Emacs IDE]]
+CLOSED: [2021-10-22 Fri 11:39]
+:LOGBOOK:
+- State "REFERENCE"  from              [2021-10-22 Fri 11:39]
+:END:
+*** REFERENCE [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oMc34dTjyFmTUWbXTKrNfZA][Mastering Git with Magit]]
+CLOSED: [2021-10-22 Fri 11:39]
+:LOGBOOK:
+- State "REFERENCE"  from              [2021-10-22 Fri 11:39]
+:END:
+** REFERENCE [[https://www.youtube.com/playlist?list=PLhXZp00uXBk4np17N39WvB80zgxlZfVwj][Zaiste Programming: DoomCasts]]
+CLOSED: [2021-10-22 Fri 11:38]
+:LOGBOOK:
+- State "REFERENCE"  from              [2021-10-22 Fri 11:38]
+:END:
+** REFERENCE [[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-may-2019/][Jonathan Bennett's Emacs.org]]
+CLOSED: [2021-10-22 Fri 11:39]
+:LOGBOOK:
+- State "REFERENCE"  from              [2021-10-22 Fri 11:39]
+:END:
+** CONSUME [[https://ogbe.net/emacs/emacs.html][Denis Ogbe's Config]]
+:LOGBOOK:
+- State "CONSUME"    from              [2021-10-22 Fri 11:38]
+:END:
+
