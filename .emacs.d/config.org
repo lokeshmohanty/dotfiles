@@ -44,7 +44,6 @@ Taken from [[*[[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-m
   ;; Use straight.el for use-package expressions
   (straight-use-package 'use-package)
 
-  ;; Clean up unused repos with `straight-remove-unused-repos'
 #+end_src
 
 ** Don't place autosave files in the same directory as the actual file
@@ -264,6 +263,7 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
     ;; general-simulate-key should not be quoted as it is supposed to be evaluated before assigning
     (my/leader-keys
       ;; "SPC" '(counsel-M-x :which-key "M-x")
+      "."    '(find-file :which-key "Find file")
       "SPC"  (general-simulate-key "M-x" :which-key "M-x") 
       "r"    (general-simulate-key "C-x r" :which-key "+register/bookmark") 
       "t"    (general-simulate-key "C-x t" :which-key "+tab")
@@ -352,9 +352,22 @@ Icon set that can be used with dashboard, dired, ibuffer and other Emacs program
 
 C-w -> Prefix for evil window commands
 
+- ace-window
+    x - delete window
+    m - swap windows
+    M - move window
+    c - copy window
+    j - select buffer
+    n - select the previous window
+    u - select buffer in the other window
+    c - split window fairly, either vertically or horizontally
+    v - split window vertically
+    b - split window horizontally
+    o - maximize current window
+    ? - show these command bindings
+
 #+begin_src emacs-lisp
 
-  ;; (winner-mode 1)
   (my/leader-keys
     "w"     '(:ignore t :which-key "window")
     "w c"   '(evil-window-delete :which-key "Close window")
@@ -372,13 +385,19 @@ C-w -> Prefix for evil window commands
     ;; "w <right>" '(winner-redo :which-key "Winner redo")
     )
 
-  ;; (use-package winner-mode
-  ;;   :ensure nil
-  ;;   :bind (:map evil-window-map
-  ;;               ("u" . winner-undo)
-  ;;               ("C-u" . winner-redo))
-  ;;   :config
-  ;;   (winner-mode))
+  (use-package ace-window
+    :config
+    (global-set-key (kbd "M-o") 'ace-window)
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    (setq aw-dispatch-always t))
+
+  (use-package winner-mode
+    :straight nil
+    :bind (:map evil-window-map
+                ("u" . winner-undo)
+                ("C-u" . winner-redo))
+    :config
+    (winner-mode))
 
 
 #+end_src
@@ -525,7 +544,7 @@ Setup evil mode to use vim like keybindings
     (setq evil-want-keybinding nil)
     (setq evil-vsplit-window-right t)
     (setq evil-split-window-below t)
-    (setq evil-want-C-u-scroll t)
+    ;; (setq evil-want-C-u-scroll t)
     ;; (setq evil-want-C-i-jump nil)
     :config
     (evil-mode)
