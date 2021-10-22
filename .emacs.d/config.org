@@ -1118,21 +1118,18 @@ Easy switching directories. Works great when combined with embark
     "j"   '(:ignore t :which-key "jump")
     "jj"  '(avy-goto-char :which-key "jump to char")
     "jw"  '(avy-goto-word-0 :which-key "jump to word")
+    "jW"  '(avy-goto-word-1 :which-key "jump to word starting with")
     "jl"  '(avy-goto-line :which-key "jump to line"))
-
-#+end_src
-
-*Guix Packages*
-
-#+begin_src scheme :noweb-ref packages :noweb-sep ""
-
-  "emacs-avy"
 
 #+end_src
 
 * DEVELOPMENT
 ** Basic Config
+
+Explore *tab-to-tab-stop* and *indent-relative*
+
 *** Set tab width as 2
+
 #+begin_src emacs-lisp
 
   (setq-default tab-width 2)
@@ -1145,6 +1142,15 @@ Easy switching directories. Works great when combined with embark
 #+begin_src emacs-lisp
 
   (setq-default indent-tabs-mode nil)
+
+#+end_src
+
+*** Use tab to work like in vim
+
+#+begin_src emacs-lisp
+
+  ;; (define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)
+
 #+end_src
 
 ** Language Server Protocol (LSP)
@@ -1161,6 +1167,7 @@ Use Language server protocol.
     :config
     (lsp-enable-which-key-integration t)  ;; integrate with which-key for help with bindings
     )
+
 #+end_src
 
 Useful commands: flymake-show-diagnostics-buffer (show error messages on the fly)
@@ -1197,6 +1204,7 @@ Try these commands with =M-x=:
   #+end_src
 
 ** Debugging with dap-mode
+*** Configuration
 
 [[https://emacs-lsp.github.io/dap-mode/][Dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  
 Check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.
@@ -1227,9 +1235,71 @@ Dap ui -> sessions, locals, expressions, breakpoints
 
 #+end_src
 
+*** Tips
+**** Node-Typescript
+
+Debug config location -> .vscode/launch.json
+
+#+begin_src json
+
+    {
+      "name": "Launch Application",
+      "type": "node",
+      "request": "launch",
+      "args": ["src/boot.ts"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}",
+      "protocol": "inspector",
+    },
+    {
+      "name": "Current TS File",
+      "type": "node",
+      "request": "launch",
+      "args": ["${relativeFile}"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "protocol": "inspector",
+    },
+    {
+      "name": "Current TS Tests File",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/.bin/jest",
+      "args": ["-r", "ts-node/register", "${relativeFile}"],
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector"
+    },
+    {
+        "name": "Attach: Nodemon",
+        "type": "node",
+        "request": "attach",
+        "processId": "${command:PickProcess}",
+        "restart": true,
+        "protocol": "inspector"
+    },
+
+#+end_src
+
+Nodemon config for attach request with ts-node
+
+#+begin_src json
+
+  "exec": "node --inspect -r ts-node/register src/boot.ts"
+  
+#+end_src
+
 ** Language Support
 
 Packages for syntax highlighting in programming languages
+
+*** Haskell
+
+- [[github:ndmitchell/ghcid][ghcid (GHCi Auto-Reloader)]]
+- [[github:ndmitchell/hlint][hlint (Smart Linter)]]
+- [[github:chrisdone/hindent][hindent (Formatter)]]
 
 #+begin_src emacs-lisp
 
@@ -1480,17 +1550,6 @@ Here are packages that are useful across different Lisp and Scheme implementatio
 
   ;; (add-hook 'emacs-lisp-mode-hook #'flycheck-mode)
 
-  ;; (use-package helpful
-  ;;   :custom
-  ;;   (counsel-describe-function-function #'helpful-callable)
-  ;;   (counsel-describe-variable-function #'helpful-variable)
-  ;;   :bind
-  ;;   ([remap describe-function] . helpful-function)
-  ;;   ([remap describe-symbol] . helpful-symbol)
-  ;;   ([remap describe-variable] . helpful-variable)
-  ;;   ([remap describe-command] . helpful-command)
-  ;;   ([remap describe-key] . helpful-key))
-
   ;; (dw/leader-key-def
   ;;   "e"   '(:ignore t :which-key "eval")
   ;;   "eb"  '(eval-buffer :which-key "eval buffer"))
@@ -1629,7 +1688,6 @@ Run *my/magit-status-bare* to use magit on dotfiles. To revert magit in order to
     (require 'magit-git)
     (setq-default magit-git-global-arguments (eval (car (get 'magit-git-global-arguments 'standard-value)))))
 #+end_src
-
 ** PERSPECTIVE
 
 Similar to workspaces. Each perspective has its own buffer list and
@@ -1765,15 +1823,9 @@ M-<Enter> -> Continue adding tags in add tag minibuffer
           (emacs-lisp . t)
           (shell      . t)
           (latex      . t)
+          (js         . t)
+          (octave     . t)
           (sql        . t)))
-
-#+end_src
-
-** Org Custom Link Types
-
-#+begin_src emacs-lisp
-
-  (org-link-set-parameters "stack.exchange" "https://emacs.stackexchange.com/a/")
 
 #+end_src
 
@@ -2497,81 +2549,6 @@ Run *pkill mu* in case of mu lock error
           ("/lokesh-yahoo/Inbox"      . ?y)
           ("/office-arc/Inbox"        . ?w)
           ("/office-arc/Sent Items"   . ?s)))
-
-#+end_src
-
-*** Using Prodigy to Start/Stop Imapnotify
-  
-prodigy: Manage imapnotify for email notifications.
-  
-Install imapnotify: `npm install -g imapnotify'
-  
-#+begin_src emacs-lisp
-
-  ;; (use-package prodigy
-  ;;   :init (prodigy-define-tag
-  ;;          :name 'email
-  ;;          :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
-  ;;   (prodigy-define-service
-  ;;    :name "imapnotify"
-  ;;    :command "imapnotify"
-  ;;    :args (list "-c" (expand-file-name "imapnotify.gmail.js" user-emacs-directory))
-  ;;    :tags '(email)
-  ;;    :kill-signal 'sigkill))
-
-  ;; (use-package prodigy
-  ;;   ;;:disabled
-  ;;   :commands (prodigy-define-tag
-  ;;              prodigy-define-service
-  ;;              prodigy-find-service
-  ;;              prodigy-start-service)
-  ;;   :config
-  ;;   (prodigy-define-tag
-  ;;    :name 'email
-  ;;    :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
-
-  ;;   (prodigy-define-service
-  ;;    :name "imapnotify-bmail"
-  ;;    :command "imapnotify"
-  ;;    :args '("-c" "~/.config/imapnotify/bmail.js")
-  ;;    :tags '(email)
-  ;;    :auto-start t
-  ;;    :kill-process-buffer-on-stop t
-  ;;    :kill-signal 'sigkill)
-
-  ;;   (prodigy-define-service
-  ;;    :name "imapnotify-sand.rain.online"
-  ;;    :command "imapnotify"
-  ;;    :args '("-c" "~/.config/imapnotify/sand.rain.online@gmail.com.js")
-  ;;    :tags '(email)
-  ;;    :auto-start t
-  ;;    :kill-process-buffer-on-stop t
-  ;;    :kill-signal 'sigkill)
-
-  ;;   (prodigy-define-service
-  ;;    :name "imapnotify-anand.iyer.p"
-  ;;    :command "imapnotify"
-  ;;    :args '("-c" "~/.config/imapnotify/anand.iyer.p@gmail.com.js")
-  ;;    :tags '(email)
-  ;;    :auto-start t
-  ;;    :kill-process-buffer-on-stop t
-  ;;    :kill-signal 'sigkill)
-
-  ;;   (prodigy-define-service
-  ;;    :name "imapnotify-anand.padmanabha.iyer"
-  ;;    :command "imapnotify"
-  ;;    :args '("-c" "~/.config/imapnotify/anand.padmanabha.iyer@gmail.com.js")
-  ;;    :tags '(email)
-  ;;    :auto-start t
-  ;;    :kill-process-buffer-on-stop t
-  ;;    :kill-signal 'sigkill)
-  ;;   :preface
-  ;;   (defun api|start-prodigy ()
-  ;;     (prodigy-start-service (prodigy-find-service "imapnotify-bmail"))
-  ;;     (prodigy-start-service (prodigy-find-service "imapnotify-anand.iyer.p"))
-  ;;     (prodigy-start-service (prodigy-find-service "imapnotify-anand.padmanabha.iyer"))
-  ;;     (prodigy-start-service (prodigy-find-service "imapnotify-sand.rain.online")))
-  ;;   :hook (emacs-startup . api|start-prodigy))
 
 #+end_src
 
