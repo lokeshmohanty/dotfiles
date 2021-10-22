@@ -100,6 +100,25 @@
   ls -l $(locate -e <fileName>)
   #+end_src
 
+** Redirect stdout and stderr
+
+#+begin_src shell
+
+  # Old way or redirection
+  # Redirects only stdout
+  ls > output
+  # Redirects both stdout and stderr by merging stderr with stdout
+  ls > output 2>&1
+
+  # New way or redirection
+  # Redirects both stdout and stderr
+  ls &> output
+  # Redirects both stdout and stderr but appends instead of replacing
+  ls &>> output
+
+#+end_src
+
+
 * Others
 ** SSH
 *** Generate a new SSH key
