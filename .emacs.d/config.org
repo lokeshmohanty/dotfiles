@@ -984,6 +984,13 @@ Extra commands for vertico
 
 ** Completions in Regions with Corfu
 
+| Keybinding  | Command                  |
+|-------------+--------------------------|
+| RET         | corfu-insert             |
+| TAB         | corfu-compete            |
+| M-g         | corfu-show-location      |
+| M-h         | corfu-show-documentation |
+
 #+begin_src emacs-lisp
 
   (use-package corfu
@@ -1016,15 +1023,20 @@ Extra commands for vertico
   ;; Emacs tries to complete the word by searching all open buffers
   ;; Dabbrev is in-built into emacs. It works with Corfu
   (use-package dabbrev
+    :straight nil
     ;; Swap M-/ and C-M-/
     :bind (("M-/" . dabbrev-completion)
-           ("C-M-/" . dabbrev-expand)))
+           ("C-M-/" . dabbrev-expand))
+    :config 
+    ;; make dabbrev case sensitive
+    (setq dabbrev-case-fold-search nil))
 
   ;; A few more useful configurations...
   (use-package emacs
+    :straight nil
     :init
     ;; TAB cycle if there are only few candidates
-    ;; (setq completion-cycle-threshold 3)
+    (setq completion-cycle-threshold 3)
 
     ;; Enable indentation+completion using the TAB key.
     ;; `completion-at-point' is often bound to M-TAB.
