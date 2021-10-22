@@ -1632,6 +1632,9 @@ File tree viewer.
 
   (use-package treemacs)
 
+  (with-eval-after-load 'treemacs
+    (treemacs-resize-icons 20))
+
   ;; Add :after if needed
   (use-package treemacs-evil)
   (use-package treemacs-projectile)
@@ -1641,8 +1644,7 @@ File tree viewer.
 
   (my/leader-keys 
     "d"    '(:ignore t :which-key "directory viewer")
-    "d t"  '(treemacs :which-key "treemacs")
-    "d e"  '(treemacs-display-current-project-exclusively :which-key "treemacs")
+    "d t"  '(treemacs-display-current-project-exclusively :which-key "treemacs")
     )
 
 #+end_src
@@ -2332,7 +2334,10 @@ Run *pkill mu* in case of mu lock error
 
     ;; don't keep message buffers around
     (setq message-kill-buffer-on-exit t)
-
+    
+    (setq mu4e-attachment-dir "~/Downloads")
+    (setq mu4e-view-show-images t)
+    
     ;; (setq mu4e-main-buffer-hide-personal-addresses t)
     ;; (setq starttls-use-gnutls t)
 
@@ -2478,34 +2483,34 @@ Run *pkill mu* in case of mu lock error
                 :query "maildir:/office-arc/Inbox"
                 :key ?w)
                (make-mu4e-bookmark
-                :name "My Personal Inboxes"
-                :query "maildir:/lokesh-gmail/Inbox OR maildir:/lokesh-yahoo/Inbox"
-                :key ?i))
+                :name "My Work Inbox Unread"
+                :query "maildir:/office-arc/Inbox not flag:trashed"
+                :key ?w))
 
-  ;; (add-to-list
-  ;;  'mu4e-bookmarks
-  ;;  '("flag:unread NOT flag:trashed AND (flag:list OR from:trac@sagemath.org)"
-  ;;    "Unread bulk messages" ?l))
+  (add-to-list
+   'mu4e-bookmarks
+   '("flag:unread NOT flag:trashed AND (flag:list OR from:lokesh1197@yahoo.com)"
+     "Unread bulk messages" ?l))
 
   ;; (add-to-list
   ;;  'mu4e-bookmarks
   ;;  '("flag:unread NOT flag:trashed AND NOT flag:list AND (maildir:\"/royal holloway\" OR maildir:/INBOX)"
   ;;    "Unread messages addressed to me" ?i))
 
-  ;; (add-to-list
-  ;;  'mu4e-bookmarks
-  ;;  '("mime:application/* AND NOT mime:application/pgp* AND (maildir:\"/royal holloway\" OR maildir:/INBOX)"
-  ;;    "Messages with attachments for me." ?d) t)
+  (add-to-list
+   'mu4e-bookmarks
+   '("mime:application/* AND NOT mime:application/pgp* AND (maildir:**/Inbox)"
+     "Messages with attachments for me." ?d) t)
 
-  ;; (add-to-list
-  ;;  'mu4e-bookmarks
-  ;;  '("flag:flagged"
-  ;;    "Flagged messages" ?f) t)
+  (add-to-list
+   'mu4e-bookmarks
+   '("flag:flagged"
+     "Flagged messages" ?f) t)
 
-  ;; (add-to-list
-  ;;  'mu4e-bookmarks
-  ;;  '("(maildir:\"/[Google Mail]/.Sent Mail\" OR maildir:\"/royal holloway/.sent\") AND date:7d..now"
-  ;;    "Sent in last 7 days" ?s) t)
+  (add-to-list
+   'mu4e-bookmarks
+   '("(maildir:\"lokesh-gmail/[Gmail]/Sent Mail\" OR maildir:\"lokesh-yahoo/Sent Mail\" OR mailir:\"office-arc/Sent Items\") AND date:7d..now"
+     "Sent in last 7 days" ?s) t)
 
 #+end_src
 
