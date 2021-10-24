@@ -7,3 +7,6 @@
 [submodule ".xmonad/xmobar"]
 	path = .xmonad/xmobar
 	url = git@github.com:jaor/xmobar.git
+[submodule ".emacs.d"]
+	path = .emacs.d
+	url = git@github.com:lokesh1197/.emacs.d.git
