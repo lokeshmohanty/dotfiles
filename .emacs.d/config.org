@@ -21,6 +21,17 @@ Taken from [[*[[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-m
 ** Package Management with Straight
 
 - Clean up unused repos with =straight-remove-unused-repos=
+ 
+- [[https://github.com/jwiegley/use-package][Use package]] information
+
+| Keyword   | Remarks                                                                             |
+|-----------+-------------------------------------------------------------------------------------|
+| =:init=     | execute code before package loads                                                   |
+| =:config=   | execute code after package loads                                                    |
+| =:commands= | creates autoloads for the commands and defers loading of module until they are used |
+| =:bind=     | shortcut for adding to =:commands= and creating a keybinding at =:init=                 |
+| =:demand=   | force loads ignoring =:bind= and =:commands=                                            |
+| =:delight=  | hide mode name from mode-line                                                       |
 
 #+begin_src emacs-lisp
 
@@ -169,7 +180,6 @@ You can test themes by using the counsel-load-theme.
 #+begin_src emacs-lisp
 
   (use-package doom-themes
-                                          ;:ensure t
     :config
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
           doom-themes-enable-italic t) ; if nil, italics is universally disabled
