@@ -498,6 +498,9 @@ myManageHook = composeAll
      ]
      -- <+> namedScratchpadManageHook myScratchPads
 
+screenShot = "scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/Screenshots/'"
+clipboardScreenshot = "scrot -se 'xclip -selection clipboard -t image/png -i $f'"
+  
 -- START_KEYS
 myKeys :: [(String, X ())]
 myKeys =
@@ -613,17 +616,21 @@ myKeys =
         , ("M-<F1>", spawn "sxiv -r -q -t -o /home/lokesh/Pictures/Wallpapers/*")
         , ("M-<F2>", spawn "find /home/lokesh/Pictures/Wallpapers// -type f | shuf -n 1 | xargs xwallpaper --stretch")
 
-    -- KB_GROUP Emacs (CTRL-e followed by a key)
+    -- KB_GROUP Apps
         , ("M1-e e", spawn myEmacs)                 -- start emacs
-        , ("M1-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
-        , ("M1-e d", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
-        , ("M1-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
-        , ("M1-e m", spawn (myEmacs ++ ("--eval '(mu4e)'")))      -- mu4e email
-        , ("M1-e n", spawn (myEmacs ++ ("--eval '(elfeed)'")))    -- elfeed rss
-        , ("M1-e s", spawn (myEmacs ++ ("--eval '(eshell)'")))    -- eshell
-        , ("M1-e v", spawn (myEmacs ++ ("--eval '(+vterm/here nil)'"))) -- vterm if on Doom Emacs
+        , ("M-t 1", spawn "picom-trans 95")
+        , ("M-t 2", spawn "picom-trans 90")
+        , ("M-t 3", spawn "picom-trans 85")
+        , ("M-t 4", spawn "picom-trans 80")
+        -- , ("M1-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
+        -- , ("M1-e d", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
+        -- , ("M1-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
+        -- , ("M1-e m", spawn (myEmacs ++ ("--eval '(mu4e)'")))      -- mu4e email
+        -- , ("M1-e n", spawn (myEmacs ++ ("--eval '(elfeed)'")))    -- elfeed rss
+        -- , ("M1-e s", spawn (myEmacs ++ ("--eval '(eshell)'")))    -- eshell
+        -- , ("M1-e v", spawn (myEmacs ++ ("--eval '(+vterm/here nil)'"))) -- vterm if on Doom Emacs
         -- , ("M1-e w", spawn (myEmacs ++ ("--eval '(eww \"distrotube.com\")'"))) -- eww browser if on GNU Emacs
-        , ("M1-e w", spawn (myEmacs ++ ("--eval '(doom/window-maximize-buffer(eww \"distrotube.com\"))'"))) -- eww browser if on Doom Emacs
+        -- , ("M1-e w", spawn (myEmacs ++ ("--eval '(doom/window-maximize-buffer(eww \"distrotube.com\"))'"))) -- eww browser if on Doom Emacs
 
     -- KB_GROUP Function Keys
         -- TODO: write a script to show the current brightness
@@ -644,7 +651,8 @@ myKeys =
         , ("<XF86Calculator>", runOrRaise "qalculate-gtk" (resource =? "qalculate-gtk"))
         , ("<XF86Eject>", spawn "toggleeject")
         -- , ("<Print>", spawn "dm-maim")
-        , ("<Print>", spawn "scrotd 0")
+        , ("<Print>", spawn screenShot)
+        , ("S-<Print>", spawn clipboardScreenshot)
         ]
     -- Appending search engine prompts to keybindings list.
     -- Look at "search engines" section of this config for values for "k".
