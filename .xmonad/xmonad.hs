@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-deprecations #-} -- remove this to check deprecations
 -- Base
 import XMonad
 import System.Directory
@@ -65,6 +66,7 @@ import XMonad.Prompt.FuzzyMatch
 import XMonad.Prompt.Man
 import XMonad.Prompt.Pass
 import XMonad.Prompt.Shell
+import XMonad.Prompt.RunOrRaise
 import XMonad.Prompt.Ssh
 import XMonad.Prompt.Unicode
 import XMonad.Prompt.XMonad
@@ -122,17 +124,14 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 
 myStartupHook :: X ()
 myStartupHook = do
-    -- spawnOnce "lxsession &"
+    spawnOnce "lxsession &"
     spawnOnce "picom &"
     spawnOnce "nm-applet &"
     spawnOnce "volumeicon &"
-    -- spawnOnce "conky -c $HOME/.config/conky/doomone-xmonad.conkyrc"
     spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 &"
     -- The below are commented out as they don't work.
-    -- spawnOnce "setxkbmap -option caps:swapescape"
-    -- spawnOnce "setxkbmap -option ctrl:swap_lalt_lctl"
+    -- spawnOnce "setxkbmap -option ctrl:swapcaps"
     -- spawn "source ~/.bashrc"
-    -- spawnOnce "export PATH=\"$PATH:$HOME/.local/bin\""
     spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
     -- uncomment to restore last saved wallpaper
     -- spawnOnce "xargs xwallpaper --stretch < ~/.xwallpaper"
@@ -142,6 +141,7 @@ myStartupHook = do
     -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
     -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
     spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
+    spawnOnce "redshift &"
     setWMName "LG3D"
 
 myColorizer :: Window -> Bool -> X (String, String)
@@ -458,20 +458,20 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
              where
                myDefaultLayout =     withBorder myBorderWidth tall
+                                 ||| tallAccordion
+                                 ||| wideAccordion
                                  ||| Main.magnify
                                  ||| noBorders monocle
-                                 ||| floats
                                  ||| noBorders tabs
+                                 ||| floats
                                  ||| grid
                                  ||| spirals
                                  ||| threeCol
                                  ||| threeRow
-                                 ||| tallAccordion
-                                 ||| wideAccordion
 
 
 myWorkspaces :: [String]
-myWorkspaces = map (wrap " " " ") ["term", "web", "code", "util", "media", "notes", "other", "vbox", "meet"]
+myWorkspaces = map (wrap " " " ") ["main", "web", "code", "irc/mail", "media", "notes", "other", "vbox", "meet"]
 
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
 
@@ -487,8 +487,8 @@ myManageHook = composeAll
      -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
      -- I'm doing it this way because otherwise I would have to write out the full
      -- name of my workspaces and the names would be very long if using clickable workspaces.
-     [ className =? "mpv"       --> doShift ( myWorkspaces !! 7 )
-     , className =? "Gimp"      --> doShift ( myWorkspaces !! 8 )
+     [ className =? "mpv"       --> doShift ( myWorkspaces !! 4 )
+     , className =? "Gimp"      --> doShift ( myWorkspaces !! 4 )
      , className =? "Gimp"      --> doFloat
      , className =? "ringcentral"         --> doFloat
      , title =? "Mozilla Firefox"     --> doShift ( myWorkspaces !! 1 )
@@ -509,6 +509,7 @@ myKeys =
     -- KB_GROUP Run Prompt
         -- , ("M-S-<Return>", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
         , ("M-p", shellPrompt dtXPConfig) -- Xmonad Shell Prompt
+        , ("M-C-p", runOrRaisePrompt dtXPConfig) -- run a program, open a file, or raise an already running program
     -- Other Prompts
         , ("M-o m", manPrompt dtXPConfig)          -- manPrompt
         , ("M-o p", passPrompt dtXPConfig)         -- passPrompt
@@ -566,7 +567,7 @@ myKeys =
         , ("M-S-j", windows W.swapDown)   -- Swap focused window with next window
         , ("M-S-k", windows W.swapUp)     -- Swap focused window with prev window
         , ("M-<Backspace>", promote)      -- Moves focused window to master, others maintain order
-        , ("M-S-<Tab>", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
+        -- , ("M-S-<Tab>", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
         , ("M-M1-<Tab>", rotAllDown)       -- Rotate all the windows in the current stack
 
     -- KB_GROUP Layouts
@@ -668,7 +669,7 @@ main = do
         --                        <+> serverModeEventHook
         --                        <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn)
         --                        <+> docksEventHook
-        , handleEventHook    = docksEventHook
+        , handleEventHook    = docksEventHook -- deprecated
                                -- Uncomment this line to enable fullscreen support on things like YouTube/Netflix.
                                -- This works perfect on SINGLE monitor systems. On multi-monitor systems,
                                -- it adds a border around the window if screen does not have focus. So, my solution
