@@ -118,7 +118,6 @@
 
 #+end_src
 
-
 * Others
 ** SSH
 *** Generate a new SSH key
@@ -205,6 +204,16 @@ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
   #+begin_src shell
   wget -qO- https://get.haskellstack.org/ | sh
   #+end_src
+
+** Emacs
+*** When emacs hangs
+#+begin_src shell
+pkill -SIGUSR2 emacs
+#+end_src
+
+Then run `M-x toggle-debug-on-quit`
+
+source: [[https://emacs.stackexchange.com/a/21645][StackExchange]]
 
 * Tips
 ** Miscellaneous
