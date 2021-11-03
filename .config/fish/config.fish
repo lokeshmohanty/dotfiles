@@ -6,4 +6,7 @@ set -x VISUAL nvim
 
 nvm use v14.16.0
 
-alias mplayer="mplayer -af scaletempo -vf screenshot"
+source ~/.shell_aliases
+# if test -e ~/.shell_aliases
+#     source ~/.shell_aliases
+# end

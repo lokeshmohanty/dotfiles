@@ -2,5 +2,8 @@
 # runs your .bashrc and is recommended by the bash info pages.
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
-PATH=$PATH:$HOME/.local/bin
-export PATH
+# PATH=$PATH:$HOME/.local/bin
+# export PATH
+    
+# source "$HOME/.guix-profile/etc/profile"
+# source "$HOME/.config/guix/current/etc/profile"
