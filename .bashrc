@@ -96,10 +96,10 @@ export NVM_DIR="/home/lokesh/.nvm"
 
 # Start commands
 ## Unset previous key options
-setxkbmap -option
+# setxkbmap -option
 
-## Swap ctrl and capslock
-setxkbmap -option ctrl:swapcaps
+## Swap ctrl and capslock, being set in ~/.xprofile
+# setxkbmap -option ctrl:swapcaps
 
 # Use starship to set prompt
 eval "$(starship init bash)"
