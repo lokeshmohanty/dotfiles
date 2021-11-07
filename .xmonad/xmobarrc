@@ -11,7 +11,7 @@ Config {
     -- , alpha = 200
     , position = TopSize L 100 24
     -- , position = TopW L 100
-    , iconRoot = "/home/lokesh/.dotfiles/xmonad/xpm"
+    , iconRoot = "/home/lokesh/.xmonad/xpm"
     -- , persistent   = True -- default: False
     -- , overrideRedirect = True -- default: False
 
@@ -75,7 +75,7 @@ Config {
         ]
     , sepChar = "%"
     , alignSep = "}{"
-    , template = "<icon=haskell_20.xpm/> <fc=#666666><fn=1>|</fn></fc> %StdinReader% }{ \
+    , template = "<icon=haskell_20.xpm/> <fc=#666666>|</fc> %StdinReader% }{ \
             \ <box type=Bottom width=2 mb=2 color=#ecbe7b><fc=#ecbe7b>%cpu%</fc></box> \
             \ <box type=Bottom width=2 mb=2 color=#4d9900><fc=#4d9900>%coretemp%</fc></box> \
             \ <box type=Bottom width=2 mb=2 color=#c68c53><fc=#c68c53>%memory%</fc></box> \

@@ -129,18 +129,9 @@ myStartupHook = do
     spawnOnce "nm-applet &"
     spawnOnce "volumeicon &"
     spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 &"
-    -- The below are commented out as they don't work.
-    -- spawnOnce "setxkbmap -option ctrl:swapcaps"
-    -- spawn "source ~/.bashrc"
     spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
-    -- uncomment to restore last saved wallpaper
-    -- spawnOnce "xargs xwallpaper --stretch < ~/.xwallpaper"
-    --uncomment to set a random wallpaper on login
-    -- spawnOnce "find /usr/share/backgrounds/dtos-backgrounds/ -type f | shuf -n 1 | xargs xwallpaper --stretch"
-
     -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
-    -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
-    spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
+    spawnOnce "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"  -- feh set random wallpaper
     spawnOnce "redshift &"
     setWMName "LG3D"
 
@@ -618,12 +609,11 @@ myKeys =
 
     -- KB_GROUP Apps
         , ("M1-e e", spawn myEmacs)                 -- start emacs
-        , ("M-t 1", spawn "picom-trans 95")
-        , ("M-t 2", spawn "picom-trans 90")
-        , ("M-t 3", spawn "picom-trans 85")
-        , ("M-t 4", spawn "picom-trans 80")
-        -- , ("M1-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
-        -- , ("M1-e d", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
+        , ("M1-e 1", spawn "picom-trans 95")
+        , ("M1-e 2", spawn "picom-trans 90")
+        , ("M1-e 3", spawn "picom-trans 85")
+        , ("M1-e 4", spawn "picom-trans 80")
+        -- , ("M1-e b", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
         -- , ("M1-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
         -- , ("M1-e m", spawn (myEmacs ++ ("--eval '(mu4e)'")))      -- mu4e email
         -- , ("M1-e n", spawn (myEmacs ++ ("--eval '(elfeed)'")))    -- elfeed rss
@@ -705,7 +695,7 @@ main = do
               , ppHiddenNoWindows = xmobarColor "#82AAFF" "" -- . clickable
               -- , ppHiddenNoWindows = xmobarColor "#82AAFF" "" . wrap "*" ""  . clickable (zip myWorkspaces [1..]) -- . clickable     -- Hidden workspaces (no windows)
               , ppTitle = xmobarColor "#b3afc2" "" . shorten 60               -- Title of active window
-              , ppSep =  "<fc=#666666> <fn=1>|</fn> </fc>"                    -- Separator character
+              , ppSep =  "<fc=#666666> | </fc>"                    -- Separator character
               , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"            -- Urgent workspace
               , ppExtras  = [windowCount]                                     -- # of windows current workspace
               , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]                    -- order of things in xmobar
