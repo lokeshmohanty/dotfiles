@@ -8,7 +8,7 @@ Config {
     , bgColor = "#282c34"
     , fgColor = "#bbc2cf"
     -- , fgColor      = "#ff6c6b"
-    -- , alpha = 200
+    , alpha = 100
     , position = TopSize L 100 24
     -- , position = TopW L 100
     , iconRoot = "/home/lokesh/.xmonad/xpm"
@@ -87,3 +87,7 @@ Config {
             \ %trayerpad%"
     -- , template = "<icon=haskell_20.xpm/> <fc=#666666>|</fc> %StdinReader% }{ <box type=Bottom width=2 mb=2 color=#ecbe7b><fc=#ecbe7b>%cpu%</fc></box> %cpu% | %coretemp% | %memory% | %battery% | %dynnetwork% | %date% | %trayerpad%"   -- #69DFFA
 }
+
+-- Local Variables:
+-- mode: haskell
+-- End:
