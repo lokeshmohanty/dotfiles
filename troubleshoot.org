@@ -215,6 +215,16 @@ Then run `M-x toggle-debug-on-quit`
 
 source: [[https://emacs.stackexchange.com/a/21645][StackExchange]]
 
+** Pandoc
+
+- Convert html to org (-o: output, -f: from, -t: to)
+#+begin_src shell
+
+  pandoc -o test.org -f html -t org test.html
+
+#+end_src
+
+
 * Tips
 ** Miscellaneous
 
