@@ -1,8 +1,8 @@
 fish_vi_key_bindings
 
 set PATH ~/.local/bin $PATH
-set -x EDITOR nvim
-set -x VISUAL nvim
+set -x EDITOR emacsclient
+set -x VISUAL emacsclient
 
 nvm use v14.16.0
 

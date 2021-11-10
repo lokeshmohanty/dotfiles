@@ -33,8 +33,8 @@ shopt -s histappend
  bind "set show-all-if-ambiguous On"
 
 # Set the default editor
-export EDITOR=nvim
-export VISUAL=nvim
+export EDITOR=emacsclient
+export VISUAL=emacsclient
 
 # # To have colors for ls and all grep commands such as grep, egrep and zgrep
 # export CLICOLOR=1
