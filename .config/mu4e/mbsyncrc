@@ -1,9 +1,17 @@
+# -*- mode: conf -*-
+
 # mbsyncrc based on
 # http://www.ict4g.net/adolfo/notes/2014/12/27/EmacsIMAP.html
 
+# Common Configuration
+Create Both
+Expunge Both
+SyncState *
+
+# ================================================================================
+
 # ACCOUNT INFORMATION
 IMAPAccount lokesh-gmail
-# Address to connect to
 Host imap.gmail.com
 User lokesh1197@gmail.com
 PassCmd "pass mu4e/lokesh-gmail"
@@ -41,9 +49,6 @@ Channel lokesh-gmail
 Far :lokesh-gmail-remote:
 Near :lokesh-gmail-local:
 Patterns *
-Create Both
-Expunge Both
-SyncState *
 
 # ================================================================================
 
@@ -69,9 +74,6 @@ Channel office-arc
 Far :office-arc-remote:
 Near :office-arc-local:
 Patterns *
-Create Both
-Expunge Both
-SyncState *
 
 # ================================================================================
 
@@ -96,10 +98,6 @@ Channel befreier-gmail
 Far :befreier-gmail-remote:
 Near :befreier-gmail-local:
 Patterns *
-Create Both
-Expunge Both
-SyncState *
-
 
 # ================================================================================
 
@@ -125,17 +123,13 @@ Channel ineffable-gmail
 Far :ineffable-gmail-remote:
 Near :ineffable-gmail-local:
 Patterns *
-Create Both
-Expunge Both
-SyncState *
-
 
 # ================================================================================
 
 IMAPAccount lokesh-yahoo
 # Address to connect to
 Host imap.mail.yahoo.com
-User lokesh1197@yahoo.com
+User lokesh1197@rocketmail.com
 PassCmd "pass mu4e/lokesh-yahoo"
 AuthMechs LOGIN
 SSLType IMAPS
@@ -154,6 +148,3 @@ Channel lokesh-yahoo
 Far :lokesh-yahoo-remote:
 Near :lokesh-yahoo-local:
 Patterns *
-Create Both
-Expunge Both
-SyncState *

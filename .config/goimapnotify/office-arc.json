@@ -1,0 +1,15 @@
+{
+  "host": "outlook.office365.com",
+  "port": 993,
+  "tls": true,
+  "tlsOptions": {
+    "rejectUnauthorized": true
+  },
+  "username": "lokesh.mohanty@e-arc.com",
+  "passwordCmd": "pass office/mail",
+  "onNewMail": "mbsync -c ~/.config/mu4e/mbsyncrc --pull --new office-arc:INBOX",
+  "onNewMailPost": "emacsclient -s other -e '(mu4e-update-index)' && notify-send 'New mail in office-arc'",
+  "boxes": [
+    "INBOX"
+  ]
+}
