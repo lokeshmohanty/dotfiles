@@ -3,13 +3,13 @@
 
 * Linux
 ** Process
-- check process
+- check and kill a process listening on a port
   #+begin_src shell
-  sudo netstat -tnpl
-  ,#+begin_src shell
-  - get process by port
-  ,#+begin_src shell
-  sudo netstat -pna | grep <PORT>
+
+    sudo fuser -k <PORT>/tcp
+    sudo netstat -pna | awk -F '[ /]+' '/<PORT>/ {print$7}' | xargs kill
+    lsof -n -i :<PORT> | awk '/LISTEN/ {print $2}' | xargs kill
+
   #+end_src
 
 - Application exists when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
@@ -18,14 +18,19 @@
 
 - Build from source
   #+begin_src shell
+
   make CMAKE_BUILD_TYPE=RelWithDebInfo
   sudo make install
+
   #+end_src
 
   - Dependencies
   #+begin_src shell
+
   sudo apt install cmake pkg-config libtool libtool-bin m4 automake gettext
+
   #+end_src
+
 ** dpkg
 
 - Resolve `trying to overwrite error`
