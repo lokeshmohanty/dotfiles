@@ -103,8 +103,9 @@ myTerminal = "alacritty"    -- Sets default terminal
 myBrowser :: String
 myBrowser = "qutebrowser "  -- Sets qutebrowser as browser
 
-myEmacs :: String
+myEmacs, myOtherEmacs :: String
 myEmacs = "emacsclient -c -a 'emacs' "  -- Makes emacs keybindings easier to type
+myOtherEmacs = "emacsclient -s other -c"
 
 myEditor :: String
 myEditor = "emacsclient -c -a 'emacs' "  -- Sets emacs as editor
@@ -122,14 +123,18 @@ myFocusColor  = "#46d9ff"   -- Border color of focused windows
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
+setRandomWallpaper :: String
+setRandomWallpaper = "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"
+
 myStartupHook :: X ()
 myStartupHook = do
-    spawnOnce "lxsession &"
+    -- spawnOnce "lxsession &"
     spawnOnce "picom &"
     spawnOnce "nm-applet &"
     spawnOnce "volumeicon &"
-    spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 &"
-    spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
+    spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 255 --tint 0x282c34  --height 22 &"
+    -- spawnOnce "/usr/bin/emacs --daemon=other &" -- emacs daemon for other apps like chat and mail
+    -- spawnOnce "emacs --daemon &" -- emacs daemon for the emacsclient, -> graphics not being rendered properly
     -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
     spawnOnce "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"  -- feh set random wallpaper
     spawnOnce "redshift &"
@@ -165,19 +170,20 @@ spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
                    , gs_font         = myFont
                    }
 
-myAppGrid = [ ("Audacity", "audacity")
-                 , ("Deadbeef", "deadbeef")
-                 , ("Emacs", "emacsclient -c -a emacs")
-                 , ("Firefox", "firefox")
-                 , ("Geany", "geany")
-                 , ("Geary", "geary")
-                 , ("Gimp", "gimp")
-                 , ("Kdenlive", "kdenlive")
-                 , ("LibreOffice Impress", "loimpress")
-                 , ("LibreOffice Writer", "lowriter")
-                 , ("OBS", "obs")
-                 , ("PCManFM", "pcmanfm")
-                 ]
+myAppGrid = [ ("Emacs", "emacs")
+            , ("EmacsClient", "emacsclient -c -a emacs")
+            , ("EmacsServer", "emacs --eval 'server-start'")
+            , ("Alacritty", "alacritty")
+            , ("EmacsServer(other)", "emacs --eval 'my/mu4e-server'")
+            , ("EmacsClient(other)", "emacsclient -s other -c")
+            , ("RingCentralMeetings", "ringcentral")
+            , ("QuteBrowser", "qutebrowser")
+            , ("Dbeaver", "dbeaver")
+            , ("Firefox", "firefox")
+            , ("Postman", "postman")
+            , ("Calculator", "qalculate-gtk")
+            , ("Brave Browser", "brave-browser")
+            ]
 
 -- -- Example XPrompt Config
 -- myBackgroundColor = "#151515"
@@ -328,7 +334,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                 , NS "calculator" spawnCalc findCalc manageCalc
                 ]
   where
-    spawnTerm  = myTerminal ++ " -t scratchpad"
+    spawnTerm  = myTerminal ++ " -t scratchpad -e fish"
     findTerm   = title =? "scratchpad"
     manageTerm = customFloating $ W.RationalRect 0 0.9 1 0.1 -- position and size
     -- manageTerm = customFloating $ W.RationalRect l t w h
@@ -337,7 +343,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
     --              w = 0.9
     --              t = 0.95 -h
     --              l = 0.95 -w
-    spawnMocp  = myTerminal ++ " -t mocp -e mocp"
+    spawnMocp  = "emacs" ++ " -t mocp -e mocp"
     findMocp   = title =? "mocp"
     manageMocp = customFloating $ W.RationalRect l t w h
                where
@@ -483,14 +489,15 @@ myManageHook = composeAll
      , className =? "Gimp"      --> doFloat
      , className =? "ringcentral"         --> doFloat
      , title =? "Mozilla Firefox"     --> doShift ( myWorkspaces !! 1 )
-     , className =? "brave-browser"   --> doShift ( myWorkspaces !! 1 )
+     , className =? "brave-browser-beta"   --> doShift ( myWorkspaces !! 1 )
      , className =? "qutebrowser"     --> doShift ( myWorkspaces !! 1 )
      , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
      ]
-     -- <+> namedScratchpadManageHook myScratchPads
+  -- <+> namedScratchpadManageHook myScratchPads
 
 screenShot = "scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/Screenshots/'"
 clipboardScreenshot = "scrot -se 'xclip -selection clipboard -t image/png -i $f'"
+screenlock = "i3lock -c 001a00" -- slock
   
 -- START_KEYS
 myKeys :: [(String, X ())]
@@ -549,9 +556,9 @@ myKeys =
         , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
 
     -- -- KB_GROUP Grid Select (CTR-g followed by a key)
-        , ("M1-g g", spawnSelected' myAppGrid)                 -- grid select favorite apps
-        , ("M1-g t", goToSelected $ mygridConfig myColorizer)  -- goto selected window
-        , ("M1-g b", bringSelected $ mygridConfig myColorizer) -- bring selected window
+        , ("M-g g", spawnSelected' myAppGrid)                 -- grid select favorite apps
+        , ("M-g t", goToSelected $ mygridConfig myColorizer)  -- goto selected window
+        , ("M-g b", bringSelected $ mygridConfig myColorizer) -- bring selected window
 
     -- KB_GROUP Windows navigation
         , ("M-m", windows W.focusMaster)  -- Move focus to the master window
@@ -596,9 +603,9 @@ myKeys =
     -- Toggle show/hide these programs.  They run on a hidden workspace.
     -- When you toggle them to show, it brings them to your current workspace.
     -- Toggle them to hide and it sends them back to hidden workspace (NSP).
-        , ("M-s t", namedScratchpadAction myScratchPads "terminal")
-        , ("M-s m", namedScratchpadAction myScratchPads "mocp")
-        , ("M-s c", namedScratchpadAction myScratchPads "calculator")
+        , ("M-s m", namedScratchpadAction myScratchPads "terminal")
+        -- , ("M-s m", namedScratchpadAction myScratchPads "mocp")
+        -- , ("M-s c", namedScratchpadAction myScratchPads "calculator")
 
     -- KB_GROUP Set wallpaper
     -- Set wallpaper with either 'xwallwaper'. Type 'SUPER+F1' to launch sxiv in the
@@ -608,14 +615,19 @@ myKeys =
         , ("M-<F2>", spawn "find /home/lokesh/Pictures/Wallpapers// -type f | shuf -n 1 | xargs xwallpaper --stretch")
 
     -- KB_GROUP Apps
-        , ("M1-e e", spawn myEmacs)                 -- start emacs
+        , ("M-e", spawn "xdg-open ~/")                 -- start default file viewer
+        , ("M-a", spawn "emacsclient --eval '(emacs-everywhere)'")  -- edit any text in emacs
+        , ("M1-e e", spawn myEmacs)                    -- start emacs
+        , ("M1-e b", spawn setRandomWallpaper)         -- set random background
+        , ("M1-e m", spawn myOtherEmacs)               -- mu4e email
+        , ("M1-e 0", spawn "picom-trans 100")
         , ("M1-e 1", spawn "picom-trans 95")
         , ("M1-e 2", spawn "picom-trans 90")
         , ("M1-e 3", spawn "picom-trans 85")
         , ("M1-e 4", spawn "picom-trans 80")
+
         -- , ("M1-e b", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
         -- , ("M1-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
-        -- , ("M1-e m", spawn (myEmacs ++ ("--eval '(mu4e)'")))      -- mu4e email
         -- , ("M1-e n", spawn (myEmacs ++ ("--eval '(elfeed)'")))    -- elfeed rss
         -- , ("M1-e s", spawn (myEmacs ++ ("--eval '(eshell)'")))    -- eshell
         -- , ("M1-e v", spawn (myEmacs ++ ("--eval '(+vterm/here nil)'"))) -- vterm if on Doom Emacs
@@ -643,6 +655,7 @@ myKeys =
         -- , ("<Print>", spawn "dm-maim")
         , ("<Print>", spawn screenShot)
         , ("S-<Print>", spawn clipboardScreenshot)
+        , ("M-S-l", spawn screenlock)
         ]
     -- Appending search engine prompts to keybindings list.
     -- Look at "search engines" section of this config for values for "k".
