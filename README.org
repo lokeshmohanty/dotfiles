@@ -149,10 +149,11 @@ displaying messages and the deletion of files.
   - alsa-lib-devel
   - wireless_tools-devel
   - libXpm-devel
+** Nvm (Node Version Manager)
+- To set default version, run ~nvm alias default <version>~
+
 * Bookmarked Applications
 - `git`
-- `neovim`/`doom-emacs`
-- `mupdf`
 - `aria2`
 - `redshift`
 - `ntfs-3g`
@@ -161,7 +162,7 @@ displaying messages and the deletion of files.
 - `qutebrowser`(web browser)
 - `mplayer`, `mpv`(video player)
 - `feh`(image viewer)
-- `krita`/`gimp`(image editor)
+- `gimp`(image editor)
 - `audacity`(audio editor)
 - `kdenlive`(video editor)
 - `surge`(instant site publish)(`npm i -g surge`)
@@ -170,7 +171,8 @@ displaying messages and the deletion of files.
 - Gemini protocol tools -> `amfora`(client), `agate`(server)
 - `node`
 - `haskell stack`
-- `guix`(package manager)
+- Package Managers: guix
+- Download Managers: fdm, jdownloader
 
   ### To try
   - App Outlet
