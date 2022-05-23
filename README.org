@@ -151,6 +151,9 @@ displaying messages and the deletion of files.
   - libXpm-devel
 ** Nvm (Node Version Manager)
 - To set default version, run ~nvm alias default <version>~
+** Redsift
+- To go to default: ~redshift -x~
+- To set a temperature T(eg: 3000): ~redshift -O 3000~
 
 * Bookmarked Applications
 - `git`
