@@ -71,12 +71,18 @@ alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' 
 # Add all shell aliases
 [[ -f ~/.shell_aliases ]] && . ~/.shell_aliases
 
+# Add flutter/bin to path
+export PATH="$PATH:$HOME/Applications/flutter/bin"
+
 # Add .local/bin and .bin to path
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.bin"
 
 # Add GOPATH/bin to path
 export PATH="$PATH:$HOME/go/bin"
+
+# Add android/sdk/tools/bin to path
+export PATH="$PATH:$HOME/Android/Sdk/tools/bin"
 
 # Add dynamic library path (added due to libvterm)
 # export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu"
@@ -103,3 +109,15 @@ export NVM_DIR="/home/lokesh/.nvm"
 
 # Use starship to set prompt
 eval "$(starship init bash)"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# export SDKMAN_DIR="$HOME/.sdkman"
+# [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+PATH="/home/lokesh/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/lokesh/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/lokesh/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/lokesh/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/lokesh/perl5"; export PERL_MM_OPT;
+
+[ -f "/home/lokesh/.ghcup/env" ] && source "/home/lokesh/.ghcup/env" # ghcup-env
