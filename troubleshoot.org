@@ -12,7 +12,9 @@
 
   #+end_src
 
-- Application exists when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
+- Application exits when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
+** cron
+https://serverfault.com/a/449652
 
 ** neovim
 

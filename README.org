@@ -154,6 +154,13 @@ displaying messages and the deletion of files.
 ** Redsift
 - To go to default: ~redshift -x~
 - To set a temperature T(eg: 3000): ~redshift -O 3000~
+** Wireshark
+*** Display filter
+https -> ssl.handshake.type == 1
+http -> http.request
+
+http server name -> http.host
+https server name -> tls.handshake.extensions_server_name
 
 * Bookmarked Applications
 - `git`
@@ -162,7 +169,7 @@ displaying messages and the deletion of files.
 - `ntfs-3g`
 - `os-prober`
 - `stacer`(cpu monitor)
-- `qutebrowser`(web browser)
+- `qutebrowser`, surf(web browser)
 - `mplayer`, `mpv`(video player)
 - `feh`(image viewer)
 - `gimp`(image editor)
@@ -176,6 +183,7 @@ displaying messages and the deletion of files.
 - `haskell stack`
 - Package Managers: guix
 - Download Managers: fdm, jdownloader
+- File Manager: lf
 
   ### To try
   - App Outlet
