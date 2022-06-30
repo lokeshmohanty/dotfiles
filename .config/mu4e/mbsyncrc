@@ -15,6 +15,7 @@ IMAPAccount lokesh-gmail
 Host imap.gmail.com
 User lokesh1197@gmail.com
 PassCmd "pass mu4e/lokesh-gmail"
+# PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"smtp.gmail.com\\\" :user \\\"lokesh1197@gmail.com\\\")\" | cut -d '\"' -f2"
 AuthMechs LOGIN
 SSLType IMAPS
 SSLVersions TLSv1.2
@@ -57,6 +58,7 @@ IMAPAccount office-arc
 Host outlook.office365.com
 User lokesh.mohanty@e-arc.com
 PassCmd "pass office/mail"
+# PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"smtp.office365.com\\\" :user \\\"lokesh.mohanty@e-arc.com\\\")\" | cut -d '\"' -f2"
 AuthMechs LOGIN
 SSLType IMAPS
 SSLVersions TLSv1.2
@@ -80,7 +82,8 @@ Patterns *
 IMAPAccount befreier-gmail
 Host imap.gmail.com
 User befreier19@gmail.com
-PassCmD "pass gmail/befreier"
+PassCmd "pass gmail/befreier"
+# PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"smtp.gmail.com\\\" :user \\\"befreier19@gmail.com\\\")\" | cut -d '\"' -f2"
 AuthMechs LOGIN
 SSLType IMAPS
 SSLVersions TLSv1.2
@@ -106,6 +109,7 @@ IMAPAccount ineffable-gmail
 Host imap.gmail.com
 User ineffable97@gmail.com
 PassCmd "pass gmail/ineffable"
+# PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"smtp.gmail.com\\\" :user \\\"ineffable97@gmail.com\\\")\" | cut -d '\"' -f2"
 AuthMechs LOGIN
 SSLType IMAPS
 SSLVersions TLSv1.2
@@ -131,6 +135,7 @@ IMAPAccount lokesh-yahoo
 Host imap.mail.yahoo.com
 User lokesh1197@rocketmail.com
 PassCmd "pass mu4e/lokesh-yahoo"
+# PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"smtp.mail.yahoo.com\\\" :user \\\"lokesh1197@yahoo.com\\\")\" | cut -d '\"' -f2"
 AuthMechs LOGIN
 SSLType IMAPS
 SSLVersions TLSv1.2

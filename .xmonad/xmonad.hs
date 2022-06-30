@@ -128,15 +128,15 @@ setRandomWallpaper = "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"
 
 myStartupHook :: X ()
 myStartupHook = do
-    -- spawnOnce "lxsession &"
+    spawnOnce "lxsession &"
     spawnOnce "picom &"
     spawnOnce "nm-applet &"
     spawnOnce "volumeicon &"
     spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 255 --tint 0x282c34  --height 22 &"
     -- spawnOnce "/usr/bin/emacs --daemon=other &" -- emacs daemon for other apps like chat and mail
-    -- spawnOnce "emacs --daemon &" -- emacs daemon for the emacsclient, -> graphics not being rendered properly
-    -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
-    spawnOnce "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"  -- feh set random wallpaper
+    spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient, -> graphics not being rendered properly
+    spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
+    -- spawnOnce "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"  -- feh set random wallpaper
     spawnOnce "redshift &"
     setWMName "LG3D"
 

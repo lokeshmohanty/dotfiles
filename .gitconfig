@@ -11,3 +11,7 @@
 
 [pull]
 	rebase = true
+[core]
+	autocrlf = false
+[github]
+	user = lokesh1197
