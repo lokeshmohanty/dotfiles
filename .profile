@@ -26,7 +26,5 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-## Others
-
-# Swap Capslock and ESC
-setxkbmap -option ctrl:swapcaps
+ENV=$HOME/.bashrc; export ENV
+XDG_CONFIG_HOME=$HOME/.config; export XDG_CONFIG_HOME

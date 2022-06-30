@@ -33,8 +33,8 @@ shopt -s histappend
  bind "set show-all-if-ambiguous On"
 
 # Set the default editor
-export EDITOR=emacsclient
-export VISUAL=emacsclient
+export EDITOR="emacsclient -c -a vi"
+export VISUAL="emacsclient -c -a vi"
 
 # # To have colors for ls and all grep commands such as grep, egrep and zgrep
 # export CLICOLOR=1
@@ -87,17 +87,17 @@ export PATH="$PATH:$HOME/Android/Sdk/tools/bin"
 # Add dynamic library path (added due to libvterm)
 # export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu"
 
-# Load guix paths
-export GUIX_PROFILE="/home/lokesh/.guix-profile"
-# . "$GUIX_PROFILE/etc/profile"
-source "$HOME/.guix-profile/etc/profile"
-source "$HOME/.config/guix/current/etc/profile"
+# # Load guix paths
+# export GUIX_PROFILE="/home/lokesh/.guix-profile"
+# # . "$GUIX_PROFILE/etc/profile"
+# source "$HOME/.guix-profile/etc/profile"
+# source "$HOME/.config/guix/current/etc/profile"
 
 
 # Load nvm paths
-export NVM_DIR="/home/lokesh/.nvm"
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && [ "$SHELL" = "/bin/bash" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
 # Start commands
