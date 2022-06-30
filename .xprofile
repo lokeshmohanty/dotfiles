@@ -1,7 +1,1 @@
-#!/bin/sh
-
-source ~/.profile
-source ~/.bashrc 2> /dev/null
-
-## Swap ctrl and capslock
-setxkbmap -option ctrl:swapcaps
+/home/lokesh/.config/x11/xprofile

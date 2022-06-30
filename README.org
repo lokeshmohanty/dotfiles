@@ -14,6 +14,18 @@ curl -Lks https://raw.githubusercontent.com/lokesh1197/dotfiles/master/.bin/inst
 #+end_src
 
 * Applicatoin Wise Readme
+** Suckless Apps
+- [[https://github.com/lokesh1197/dwm][dwm]]
+ libraries which might be required:
+  - xcb, libxcb-xkb-dev, x11-xkb-utils, libx11-xcb-dev, libxkbcommon-x11-dev
+  - libx11-dev
+  - libxinerama-dev
+  - libxft-dev
+  - libx11-xcb-dev
+  - libxcb-res0-dev
+  - build [[https://github.com/uditkarode/libxft-bgra][libxft-bgra]]
+- [[https://github.com/lokesh1197/dwmblocks][dwmblocks]]
+- [[https://github.com/lokesh1197/st][st]]
 ** Zsh
 *** Configuration Files
 
@@ -196,6 +208,30 @@ https server name -> tls.handshake.extensions_server_name
 3. Create a script to restore backed up dotfiles
 4. Add functionality to update dotfiles
 
-* Troubleshooting
+* Tips
 1. for python errors in `neovim` run `pip install neovim` as root
+2. Location for system wide application: /usr/local/bin
 See [[file:troubleshoot.org][troubleshoot.org]] for more.
+
+* New Programs
+- dwm
+- dwmblocks
+- st
+- groff
+- zathura
+- lf, ueberzug(for image previewing inside lf)(use pip to install)
+- dunst (notification)
+- pipewire (used as an audio server similar to pulseaudio)
+- pinentry (collection of dialog programs to allow GnuPG to read passphrases and PIN numbers securely)
+- newsboat (rss reader)
+- mpd (music player daemon)
+- ncmpcpp (mpd client)
+
+* Linked files
+#+begin_src shell
+
+  ln -s ~/.config/x11/xprofile ~/.xprofile
+  ln -s ~/.config/shell/profile ~/.zprofile
+  ln -s ~/.config/gtk-2.0/gtkrc-2.0 ~/.gtkrc-2.0
+
+#+end_src

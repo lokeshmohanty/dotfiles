@@ -314,6 +314,11 @@ sudo lsof -t -i:9000
   loginctl list-sessions --no-legend | while read id rest; do echo; loginctl show-session $id; done
   #+end_src
 
+- find the package a file came from
+  #+begin_src shell
+    dpkg -S <file path>
+  #+end_src
+
 ** Scrot
 - Generate thumbnail, <num> is percentage of original size
   #+begin_src shell
