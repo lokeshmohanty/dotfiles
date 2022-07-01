@@ -1,11 +1,17 @@
 #!/bin/sh
 
-# This script is called on startup to remap keys.
-# Decrease key repeat delay to 300ms and increase key repeat rate to 50 per second.
-xset r rate 300 50
-# Map the caps lock key to super, and map the menu key to right super.
-setxkbmap -option caps:super,altwin:menu_win
-# When caps lock is pressed only once, treat it as escape.
-killall xcape 2>/dev/null ; xcape -e 'Super_L=Escape'
-# Turn off caps lock if on since there is no longer a key for it.
-xset -q | grep "Caps Lock:\s*on" && xdotool key Caps_Lock
+# # This script is called on startup to remap keys.
+# # Decrease key repeat delay to 300ms and increase key repeat rate to 50 per second.
+# xset r rate 300 50
+# # Map the caps lock key to super, and map the menu key to right super.
+# setxkbmap -option caps:super,altwin:menu_win
+# # When caps lock is pressed only once, treat it as escape.
+# killall xcape 2>/dev/null ; xcape -e 'Super_L=Escape'
+# # Turn off caps lock if on since there is no longer a key for it.
+# xset -q | grep "Caps Lock:\s*on" && xdotool key Caps_Lock
+
+# Use CapsLock as both Escape(alone) and Ctrl(modifier)
+# setxkbmap -option 'caps:ctrl_modifier'
+# killall xcape 2>/dev/null; xcape -e 'Caps_Lock=Escape' -t 150
+setxkbmap -option ctrl:swapcaps
+killall xcape 2>/dev/null; xcape -e 'Control_L=Escape' -t 150

@@ -152,9 +152,5 @@ Please run:
 and replace \`libxft\`. Afterwards, you may start the graphical server by running \`startx\`."
 fi
 
-# Use CapsLock as both Escape(alone) and Ctrl(modifier)
-setxkbmap -option 'caps:ctrl_modifier'
-xcape -e 'Caps_Lock=Escape' -t 100
-
 # Switch escape and caps if tty and no passwd required:
 # sudo -n loadkeys ${XDG_DATA_HOME:-$HOME/.local/share}/larbs/ttymaps.kmap 2>/dev/null
