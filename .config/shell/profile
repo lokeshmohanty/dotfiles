@@ -1,19 +1,28 @@
 #!/bin/zsh
 
+# Set an env variable to know that this file has been already sourced
+# case ":$CONFIG_SOURCED:" in
+#     *:"$HOME/.config/shell/profile":*) exit 1;;
+#     *) export CONFIG_SOURCED=$CONFIG_SOURCED:$HOME/.config/shell/profile;;
+# esac
+
 # profile file. Runs on login. Environmental variables are set here.
 
 # If you don't plan on reverting to bash, you can remove the link in ~/.profile
 # to clean up.
 
 # Adds `~/.local/bin` to $PATH
-export PATH="$PATH:${$(find ~/.local/bin -type d -printf %p:)%%:}"
+# export PATH="$PATH:${$(find ~/.local/bin -type d -printf %p:)%%:}"
+BIN=$HOME/.local/bin
+export PATH=$PATH:$BIN:$BIN/statusbar:$BIN/cron
 
-unsetopt PROMPT_SP
+# unsetopt PROMPT_SP
 
 # Default programs:
 export EDITOR="nvim"
+# export TERMINAL="alacritty"
 export TERMINAL="st"
-export BROWSER="brave"
+export BROWSER="qutebrowser"
 
 # ~/ Clean-up:
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -60,6 +69,15 @@ export QT_QPA_PLATFORMTHEME="gtk2"	# Have QT use gtk2 theme.
 export MOZ_USE_XINPUT2="1"		# Mozilla smooth scrolling/touchpads.
 export AWT_TOOLKIT="MToolkit wmname LG3D"	#May have to install wmname
 export _JAVA_AWT_WM_NONREPARENTING=1	# Fix for Java applications in dwm
+
+# FZF
+export FZF_DEFAULT_COMMAND="rf --files --hidden"
+# INITIAL_QUERY=""
+# RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+# export FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY'" \
+#   fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+#       --ansi --disabled --query "$INITIAL_QUERY" \
+#       --height=50% --layout=reverse
 
 # This is the list for lf icons:
 export LF_ICONS="di=📁:\
@@ -142,15 +160,18 @@ ex=🎯:\
 
 [ ! -f ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ] && shortcuts >/dev/null 2>&1 &
 
-if pacman -Qs libxft-bgra >/dev/null 2>&1; then
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# if pacman -Qs libxft-bgra >/dev/null 2>&1; then
 	# Start graphical server on user's current tty if not already running.
 	[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
-else
-	echo "\033[31mIMPORTANT\033[0m: Note that \033[32m\`libxft-bgra\`\033[0m must be installed for this build of dwm.
-Please run:
-	\033[32myay -S libxft-bgra-git\033[0m
-and replace \`libxft\`. Afterwards, you may start the graphical server by running \`startx\`."
-fi
+# else
+# 	echo "\033[31mIMPORTANT\033[0m: Note that \033[32m\`libxft-bgra\`\033[0m must be installed for this build of dwm.
+# Please run:
+# 	\033[32myay -S libxft-bgra-git\033[0m
+# and replace \`libxft\`. Afterwards, you may start the graphical server by running \`startx\`."
+# fi
 
 # Switch escape and caps if tty and no passwd required:
 # sudo -n loadkeys ${XDG_DATA_HOME:-$HOME/.local/share}/larbs/ttymaps.kmap 2>/dev/null

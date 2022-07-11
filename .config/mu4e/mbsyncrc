@@ -11,7 +11,7 @@ SyncState *
 # ================================================================================
 
 # ACCOUNT INFORMATION
-IMAPAccount lokesh-gmail
+IMAPAccount lokesh1197@gmail.com
 Host imap.gmail.com
 User lokesh1197@gmail.com
 PassCmd "pass mu4e/lokesh-gmail"
@@ -27,13 +27,13 @@ CertificateFile /etc/ssl/certs/ca-certificates.crt
 # - THE LOCAL STORAGE IS WHERE WE STORE THE EMAIL ON OUR COMPUTER
 
 # REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)
-IMAPStore lokesh-gmail-remote
-Account lokesh-gmail
+IMAPStore lokesh1197@gmail.com-remote
+Account lokesh1197@gmail.com
 
-# LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p ~/Maildir/lokesh-gmail)
-MaildirStore lokesh-gmail-local
-Path ~/Maildir/lokesh-gmail/
-Inbox ~/Maildir/lokesh-gmail/Inbox
+# LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p ~/.local/share/mail/lokesh1197@gmail.com)
+MaildirStore lokesh1197@gmail.com-local
+Path ~/.local/share/mail/lokesh1197@gmail.com/
+Inbox ~/.local/share/mail/lokesh1197@gmail.com/INBOX
 # REQUIRED ONLY IF YOU WANT TO DOWNLOAD ALL SUBFOLDERS; SYNCING SLOWS DOWN
 SubFolders Verbatim
 
@@ -46,9 +46,9 @@ SubFolders Verbatim
 # 2 "!DIR" TO EXCLUDE "DIR"
 # 3 "DIR" TO MATCH DIR
 
-Channel lokesh-gmail
-Far :lokesh-gmail-remote:
-Near :lokesh-gmail-local:
+Channel lokesh1197@gmail.com
+Far :lokesh1197@gmail.com-remote:
+Near :lokesh1197@gmail.com-local:
 Patterns *
 
 # ================================================================================
@@ -68,8 +68,8 @@ IMAPStore office-arc-remote
 Account office-arc
 
 MaildirStore office-arc-local
-Path ~/Maildir/office-arc/
-Inbox ~/Maildir/office-arc/Inbox
+Path ~/.local/share/mail/office-arc/
+Inbox ~/.local/share/mail/office-arc/INBOX
 SubFolders Verbatim
 
 Channel office-arc
@@ -79,7 +79,7 @@ Patterns *
 
 # ================================================================================
 
-IMAPAccount befreier-gmail
+IMAPAccount befreier19@gmail.com
 Host imap.gmail.com
 User befreier19@gmail.com
 PassCmd "pass gmail/befreier"
@@ -89,22 +89,22 @@ SSLType IMAPS
 SSLVersions TLSv1.2
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore befreier-gmail-remote
-Account befreier-gmail
+IMAPStore befreier19@gmail.com-remote
+Account befreier19@gmail.com
 
-MaildirStore befreier-gmail-local
-Path ~/Maildir/befreier-gmail/
-Inbox ~/Maildir/befreier-gmail/Inbox
+MaildirStore befreier19@gmail.com-local
+Path ~/.local/share/mail/befreier19@gmail.com/
+Inbox ~/.local/share/mail/befreier19@gmail.com/INBOX
 SubFolders Verbatim
 
-Channel befreier-gmail
-Far :befreier-gmail-remote:
-Near :befreier-gmail-local:
+Channel befreier19@gmail.com
+Far :befreier19@gmail.com-remote:
+Near :befreier19@gmail.com-local:
 Patterns *
 
 # ================================================================================
 
-IMAPAccount ineffable-gmail
+IMAPAccount ineffable97@gmail.com
 # Address to connect to
 Host imap.gmail.com
 User ineffable97@gmail.com
@@ -115,22 +115,22 @@ SSLType IMAPS
 SSLVersions TLSv1.2
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore ineffable-gmail-remote
-Account ineffable-gmail
+IMAPStore ineffable97@gmail.com-remote
+Account ineffable97@gmail.com
 
-MaildirStore ineffable-gmail-local
-Path ~/Maildir/ineffable-gmail/
-Inbox ~/Maildir/ineffable-gmail/Inbox
+MaildirStore ineffable97@gmail.com-local
+Path ~/.local/share/mail/ineffable97@gmail.com/
+Inbox ~/.local/share/mail/ineffable97@gmail.com/INBOX
 SubFolders Verbatim
 
-Channel ineffable-gmail
-Far :ineffable-gmail-remote:
-Near :ineffable-gmail-local:
+Channel ineffable97@gmail.com
+Far :ineffable97@gmail.com-remote:
+Near :ineffable97@gmail.com-local:
 Patterns *
 
 # ================================================================================
 
-IMAPAccount lokesh-yahoo
+IMAPAccount lokesh1197@yahoo.com
 # Address to connect to
 Host imap.mail.yahoo.com
 User lokesh1197@rocketmail.com
@@ -141,15 +141,15 @@ SSLType IMAPS
 SSLVersions TLSv1.2
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore lokesh-yahoo-remote
-Account lokesh-yahoo
+IMAPStore lokesh1197@yahoo.com-remote
+Account lokesh1197@yahoo.com
 
-MaildirStore lokesh-yahoo-local
-Path ~/Maildir/lokesh-yahoo/
-Inbox ~/Maildir/lokesh-yahoo/Inbox
+MaildirStore lokesh1197@yahoo.com-local
+Path ~/.local/share/mail/lokesh1197@yahoo.com/
+Inbox ~/.local/share/mail/lokesh1197@yahoo.com/INBOX
 SubFolders Verbatim
 
-Channel lokesh-yahoo
-Far :lokesh-yahoo-remote:
-Near :lokesh-yahoo-local:
+Channel lokesh1197@yahoo.com
+Far :lokesh1197@yahoo.com-remote:
+Near :lokesh1197@yahoo.com-local:
 Patterns *

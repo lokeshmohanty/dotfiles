@@ -43,7 +43,8 @@ alias \
 	xi="sudo xbps-install" \
 	xr="sudo xbps-remove -R" \
 	xq="xbps-query" \
-	z="zathura"
+	z="zathura" \
+	pk="ps -ef | fzf | awk '{print $2}' | xargs kill"
 
 alias \
 	lf="lfub" \
