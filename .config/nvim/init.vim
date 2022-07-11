@@ -1,5 +1,4 @@
 let mapleader =","
-
 if ! filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/plug.vim"'))
 	echo "Downloading junegunn/vim-plug to manage plugins..."
 	silent !mkdir -p ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/
@@ -9,14 +8,27 @@ endif
 
 call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
 Plug 'preservim/nerdtree'
-Plug 'junegunn/goyo.vim'
 Plug 'jreybert/vimagit'
-Plug 'lukesmithxyz/vimling'
+Plug 'tpope/vim-fugitive'
 Plug 'vimwiki/vimwiki'
 Plug 'vim-airline/vim-airline'
-Plug 'tpope/vim-commentary'
-Plug 'ap/vim-css-color'
+Plug 'junegunn/goyo.vim'
+Plug 'ap/vim-css-color'  " preview colors in source code while editing
+
+" LSP Server alternative
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+" (Optional) Multi-entry selection UI.
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" Plug 'nicwest/vim-http'  " make http requests from buffers
+" Plug 'axvr/org.vim'
 call plug#end()
 
 set title
@@ -59,12 +71,18 @@ set noshowcmd
         let NERDTreeBookmarksFile = '~/.vim' . '/NERDTreeBookmarks'
     endif
 
-" vimling:
-	nm <leader><leader>d :call ToggleDeadKeys()<CR>
-	imap <leader><leader>d <esc>:call ToggleDeadKeys()<CR>a
-	nm <leader><leader>i :call ToggleIPA()<CR>
-	imap <leader><leader>i <esc>:call ToggleIPA()<CR>a
-	nm <leader><leader>q :call ToggleProse()<CR>
+" Vimagit
+	let g:magit_default_fold_level = 0
+
+" LanguageClient
+	let g:LanguageClient_serverCommands = {
+	\ 'javascript': ['typescript-language-server', '--stdio'],
+	\ 'typescript': ['typescript-language-server', '--stdio'],
+	\ }
+
+	nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+	nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+	nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " Shortcutting split navigation, saving a keypress:
 	map <C-h> <C-w>h
@@ -97,7 +115,8 @@ set noshowcmd
 " Ensure files are read as what I want:
 	let g:vimwiki_ext2syntax = {'.Rmd': 'markdown', '.rmd': 'markdown','.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 	map <leader>v :VimwikiIndex<CR>
-	let g:vimwiki_list = [{'path': '~/.local/share/nvim/vimwiki', 'syntax': 'markdown', 'ext': '.md'}]
+	let g:vimwiki_list = [{'path': '~/.local/share/nvim/vimwiki', 'syntax': 'markdown', 'ext': '.md', 'template_path': '', 'custom_wiki2html': '$HOME/.config/nvim/plugged/vimwiki/autoload/vimwiki/customwiki2html.sh'}]
+	" let g:vimwiki_customwiki2html = '~/.config/nvim/plugged/vimwiki/autoload/vimwiki/customwiki2html.sh'
 	autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown
 	autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
 	autocmd BufRead,BufNewFile *.tex set filetype=tex
@@ -106,10 +125,10 @@ set noshowcmd
 	cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 " Enable Goyo by default for mutt writing
-	autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
-	autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo | set bg=light
-	autocmd BufRead,BufNewFile /tmp/neomutt* map ZZ :Goyo\|x!<CR>
-	autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
+	" autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
+	" autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo | set bg=light
+	" autocmd BufRead,BufNewFile /tmp/neomutt* map ZZ :Goyo\|x!<CR>
+	" autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
 
 " Automatically deletes all trailing whitespace and newlines at end of file on save. & reset cursor position
  	autocmd BufWritePre * let currPos = getpos(".")
@@ -124,7 +143,7 @@ set noshowcmd
 	autocmd BufRead,BufNewFile Xresources,Xdefaults,xresources,xdefaults set filetype=xdefaults
 	autocmd BufWritePost Xresources,Xdefaults,xresources,xdefaults !xrdb %
 " Recompile dwmblocks on config edit.
-	autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid -f dwmblocks }
+	" autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid -f dwmblocks }
 
 " Turns off highlighting on the bits of code that are changed, so the line that is changed is highlighted but the actual text that has changed stands out on the line and is readable.
 if &diff
@@ -153,4 +172,4 @@ nnoremap <leader>h :call ToggleHiddenAll()<CR>
 " Here leader is ";".
 " So ":vs ;cfz" will expand into ":vs /home/<user>/.config/zsh/.zshrc"
 " if typed fast without the timeout.
-source ~/.config/nvim/shortcuts.vim
+" source ~/.config/nvim/shortcuts.vim
