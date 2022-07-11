@@ -26,6 +26,7 @@ curl -Lks https://raw.githubusercontent.com/lokesh1197/dotfiles/master/.bin/inst
   - build [[https://github.com/uditkarode/libxft-bgra][libxft-bgra]]
 - [[https://github.com/lokesh1197/dwmblocks][dwmblocks]]
 - [[https://github.com/lokesh1197/st][st]]
+  - if st crashes when trying to display emoji, install unifont package
 ** Zsh
 *** Configuration Files
 
@@ -128,7 +129,7 @@ displaying messages and the deletion of files.
   ```
     stack setup
   ```
-  
+
   - Create `stack.yaml` file if it doesn't exist
   ```
     stack init
@@ -200,8 +201,8 @@ https server name -> tls.handshake.extensions_server_name
   ### To try
   - App Outlet
   - Open broadcast software
-    
-* TODOs 
+
+* TODOs
 
 1. Add functionality to automate including new dotfiles
 2. Create a script to install my preferred apps
@@ -219,13 +220,25 @@ See [[file:troubleshoot.org][troubleshoot.org]] for more.
 - st
 - groff
 - zathura
-- lf, ueberzug(for image previewing inside lf)(use pip to install)
+- lf(requires nerd-fonts for icons), ueberzug(for image previewing inside lf)
 - dunst (notification)
 - pipewire (used as an audio server similar to pulseaudio)
 - pinentry (collection of dialog programs to allow GnuPG to read passphrases and PIN numbers securely)
 - newsboat (rss reader)
 - mpd (music player daemon)
 - ncmpcpp (mpd client)
+- sixv (for viewing images), xwallpaper( for setting wallpaper), pywal (use pip to install)(for terminal color scheme based on wallpaper)
+- urlscan (urlview replacement)
+- pavucontrol (control pulseaudio devices)
+- ytfzf (search on youtube and watch videos using mpv)
+- sc-im/visidata (spreadsheet editor)
+
+** Requirements
+- dwmblocks: geoip, transmission, pamixer
+- lf previewer: bat, atool, mediainfo ffmpegthumbnailer odt2txt
+
+** From Source
+- andmarti1424/sc-im
 
 * Linked files
 #+begin_src shell

@@ -33,6 +33,15 @@ https://serverfault.com/a/449652
 
   #+end_src
 
+  - Installing libraries
+  #+begin_src shell
+
+  # add the location to /etc/ld.so.conf.d (for ubuntu) before running the below command
+  sudo ldconfig
+
+  #+end_src
+
+
 ** dpkg
 
 - Resolve `trying to overwrite error`
@@ -94,7 +103,7 @@ https://serverfault.com/a/449652
   #+begin_src shell
   --unsafe-perm=true --allow-root
   #+end_src
-    
+
 ** locate command
 
 - Update the database
@@ -286,15 +295,19 @@ sudo lsof -t -i:9000
 
 - Splitting/Compression
   #+begin_src shell
-  ,* create archives
-  $ tar cz my_large_file_1 my_large_file_2 | split -b 1024MiB - myfiles_split.tgz_
-  ,* uncompress
-  $ cat myfiles_split.tgz_* | tar xz
+    # compress
+    tar -czvf compressed.tar.gz file
+
+    # create archives
+    tar cz my_large_file_1 my_large_file_2 | split -b 1024MiB - myfiles_split.tgz_
+
+    # uncompress
+    cat myfiles_split.tgz_* | tar xz
   #+end_src
-  
+
 - Remove dangling symbolic links
   #+begin_src shell
-  find . -xtype l 2>/dev/null -exec rm {} \
+    find . -xtype l 2>/dev/null -exec rm {} \
   #+end_src
 
 * Handy Commands
@@ -319,11 +332,16 @@ sudo lsof -t -i:9000
     dpkg -S <file path>
   #+end_src
 
+- find the list of files that came from a package
+  #+begin_src shell
+    dpkg -L <package name>
+  #+end_src
+
 ** Scrot
 - Generate thumbnail, <num> is percentage of original size
   #+begin_src shell
   scrot --thumb <num>
-  #+end_src 
+  #+end_src
 
 - Execute operations on saved images
   #+begin_src shell
@@ -385,23 +403,35 @@ sudo lsof -t -i:9000
 
 - gpg basic commands(armor flag outputs to ascii text instead of binary)
   #+begin_src shell
-  gpg --full-generate-key
-  gpg --list-keys
-  gpg --encrypt --receipent <receipent name/any string> <file>
-  gpg --encrypt --armor --receipent <receipent name/any string> <file> 
-  gpg --decrypt <file>
-  gpg --output <file> --decrypt <encrypted-file>
-  gpg --sign <file>
-  gpg --clearsign <file>
-  gpg --detach-sign <file>
+    gpg --full-generate-key
+    gpg --list-keys (to list all keys)
+    gpg --list-secret-keys (to list only private keys)
+    gpg --encrypt --receipent <receipent name/any string> <file>
+    gpg --encrypt --armor --receipent <receipent name/any string> <file>
+    gpg --decrypt <file>
+    gpg --output <file> --decrypt <encrypted-file>
+    gpg --sign <file>
+    gpg --clearsign <file>
+    gpg --detach-sign <file>
   #+end_src
-  
+
 - Start gpg-agent
-#+begin_src shell
-# Check if gpg-agent is already running
-pgrep gpg-agent
+  #+begin_src shell
+    # Check if gpg-agent is already running
+    pgrep gpg-agent
 
-# If it's not running, you can start it with this command
-gpg-connect-agent /bye
-#+end_src
+    # If it's not running, you can start it with this command
+    gpg-connect-agent /bye
+  #+end_src
 
+- export/import private keys
+  #+begin_src shell
+    gpg --export-secret-keys <key-id> > private.key
+    gpg --import private.key
+  #+end_src
+
+- delete keys
+  #+begin_src shell
+    gpg --delete-keys
+    gpg --delete-secret-keys
+  #+end_src
