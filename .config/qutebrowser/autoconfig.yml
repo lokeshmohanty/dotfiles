@@ -20,3 +20,5 @@ settings:
     global:
       DEFAULT: https://duckduckgo.com/?q={}
       g: https://www.google.com.ar/search?q={}
+  window.transparent:
+    global: true
