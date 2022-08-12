@@ -1,3 +1,5 @@
+-- -*- mode: haskell; -*-
+
 Config {
     -- font = "xft:FantasqueSansMono Nerd Font:size=10:bold:antialias=true"
     font = "xft:Ubuntu:weight=bold:pixelsize=11:antialias=true:hinting=true"
@@ -8,22 +10,22 @@ Config {
     , bgColor = "#282c34"
     , fgColor = "#bbc2cf"
     -- , fgColor      = "#ff6c6b"
-    , alpha = 100
+    , alpha = 150
     , position = TopSize L 100 24
     -- , position = TopW L 100
-    , iconRoot = "/home/lokesh/.xmonad/xpm"
+    , iconRoot = "/home/lokesh/.config/xmonad/xpm"
     -- , persistent   = True -- default: False
     -- , overrideRedirect = True -- default: False
 
     , commands =
-        [ Run Cpu 
+        [ Run Cpu
             [ "-t", "<action=`alacritty -e htop`><fc=#a9a1e1><fn=1></fn></fc> cpu: <total>%</action>"
             , "-L","3" , "-l","#bbc2cf"
             , "-H","50" , "-h","#fb4934"
             , "-n","#bbc2cf"
             ] 20
         , Run Memory
-            [ "-t", "<fc=#51afef><fn=1></fn></fc> mem: <used>M (<usedratio>%)"
+            [ "-t", "<fc=#51afef><fn=1></fn></fc> ram: <used>M (<usedratio>%)"
             , "-H","80"
             , "-L","10"
             , "-l","#bbc2cf"
@@ -39,7 +41,7 @@ Config {
             , "-l","#bbc2cf"
             , "-n","#bbc2cf"
             ] 50
-        , Run CoreTemp 
+        , Run CoreTemp
             [ "-t", "<fc=#CDB464><fn=1></fn></fc> <core0>°C"
             , "-L", "30" , "-l", "lightblue"
             , "-H", "75" , "-h", "#aa4450"
@@ -54,13 +56,13 @@ Config {
             , "-o", "<fc=#cccc00><fn=1></fn> <left>% (<timeleft>)</fc>"     -- discharging status
             , "-O", "<fc=#cccc00><fn=1></fn> <left>% (Charging)</fc>"       -- charging status
             , "-i", "<fc=#cccc00><fn=1></fn> Charged</fc>" -- charged status
-            , "-a", "notify-send -u critical 'Battery running out!!'"
-            , "-A", "98"
+            -- , "-a", "notify-send -u critical 'Battery running out!!'"
+            -- , "-A", "10"
             ] 50
         , Run Date "<icon=calendar-clock-icon_24.xpm/> <fc=#ee9a00>%a, %0d %b, %H:%M:%S</fc>" "date" 10
-        , Run DiskU [("/", "hdd: <free> free")] [] 600
+        , Run DiskU [("/", "rom: <free> free")] [] 600
         , Run Uptime ["-t", "uptime: <hours>h <minutes>m"] 600
-        , Run Com "/home/lokesh/.xmonad/trayer-padding-icon.sh" [] "trayerpad" 20
+        , Run Com "/home/lokesh/.config/xmonad/trayer-padding-icon.sh" [] "trayerpad" 20
         , Run StdinReader
 
         -- Other plugins(not being used right now)
@@ -87,7 +89,3 @@ Config {
             \ %trayerpad%"
     -- , template = "<icon=haskell_20.xpm/> <fc=#666666>|</fc> %StdinReader% }{ <box type=Bottom width=2 mb=2 color=#ecbe7b><fc=#ecbe7b>%cpu%</fc></box> %cpu% | %coretemp% | %memory% | %battery% | %dynnetwork% | %date% | %trayerpad%"   -- #69DFFA
 }
-
--- Local Variables:
--- mode: haskell
--- End:

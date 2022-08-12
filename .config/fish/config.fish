@@ -1,5 +1,8 @@
 fish_vi_key_bindings
 
+# set fish greeting to none
+set fish_greeting
+
 set PATH ~/Applications/flutter/bin $PATH
 set PATH ~/.bin $PATH
 
@@ -21,7 +24,7 @@ set -x VISUAL emacsclient
 
 # nvm use v14.18.2
 
-source ~/.shell_aliases
-# if test -e ~/.shell_aliases
-#     source ~/.shell_aliases
-# end
+# source ~/.shell_aliases
+if test -e ~/.shell_aliases
+    source ~/.shell_aliases
+end

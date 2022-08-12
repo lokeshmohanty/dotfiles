@@ -8,7 +8,7 @@ import qualified XMonad.StackSet as W
 
 -- Actions
 import XMonad.Actions.CopyWindow (kill1)
-import XMonad.Actions.CycleWS (Direction1D(..), moveTo, shiftTo, WSType(..), nextScreen, prevScreen, nextWS, prevWS, shiftToNext, shiftToPrev)
+import XMonad.Actions.CycleWS (Direction1D(..), moveTo, shiftTo, WSType(..), nextScreen, prevScreen, nextWS, prevWS, shiftNextScreen)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.MouseResize
 import XMonad.Actions.Promote
@@ -16,6 +16,7 @@ import XMonad.Actions.RotSlaves (rotSlavesDown, rotAllDown)
 import XMonad.Actions.WindowGo (runOrRaise)
 import XMonad.Actions.WithAll (sinkAll, killAll)
 import qualified XMonad.Actions.Search as S
+-- import XMonad.Actions.SpawnOn (spawnOn)
 
 -- Data
 import Data.Char (isSpace, toUpper)
@@ -41,6 +42,7 @@ import XMonad.Layout.SimplestFloat
 import XMonad.Layout.Spiral
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ThreeColumns
 
 -- Layouts modifiers
@@ -75,6 +77,7 @@ import Control.Arrow (first)
 -- Utilities
 import XMonad.Util.Dmenu
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.NamedActions
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
@@ -124,21 +127,51 @@ windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
 setRandomWallpaper :: String
-setRandomWallpaper = "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"
+-- setRandomWallpaper = "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"
+setRandomWallpaper = "feh --randomize --bg-fill ~/.local/share/wallpapers/P_* --bg-fill ~/.local/share/wallpapers/0*"
 
 myStartupHook :: X ()
-myStartupHook = do
-    spawnOnce "lxsession &"
-    spawnOnce "picom &"
-    spawnOnce "nm-applet &"
-    spawnOnce "volumeicon &"
+myStartupHook = do 
+    -- spawnOnce "lxsession &"
+    -- spawnOnce "picom &"
+    -- spawnOnce "nm-applet &"
+    -- spawnOnce "volumeicon &"
     spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 255 --tint 0x282c34  --height 22 &"
     -- spawnOnce "/usr/bin/emacs --daemon=other &" -- emacs daemon for other apps like chat and mail
-    spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient, -> graphics not being rendered properly
-    spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
+    -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient, -> graphics not being rendered properly
+    -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
     -- spawnOnce "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"  -- feh set random wallpaper
-    spawnOnce "redshift &"
+    spawnOnce "~/.screenlayout/dual-monitors.sh" -- set monitor layout
+    spawnOnce "redshift -l 12.98:77.58 -t 4500:2500 -b 1.0:0.8 &"
+    spawnOnce "xsetroot -cursor_name left_ptr" --set default X cursor as left_ptr
+    spawnOnce myEmacs
+    spawnOnce "brave"
+    -- spawnOn (myWorkspaces !! 0) myEmacs
+    -- spawnOn (myWorkspaces !! 1) "qutebrowser"
+    -- spawnOn (myWorkspaces !! 1) "brave"
     setWMName "LG3D"
+
+myNavigation :: TwoD a (Maybe a)
+myNavigation = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+ where navKeyMap = M.fromList [
+          ((0,xK_Escape), cancel)
+         ,((0,xK_Return), select)
+         ,((0,xK_slash) , substringSearch myNavigation)
+         ,((0,xK_Left)  , move (-1,0)  >> myNavigation)
+         ,((0,xK_h)     , move (-1,0)  >> myNavigation)
+         ,((0,xK_Right) , move (1,0)   >> myNavigation)
+         ,((0,xK_l)     , move (1,0)   >> myNavigation)
+         ,((0,xK_Down)  , move (0,1)   >> myNavigation)
+         ,((0,xK_j)     , move (0,1)   >> myNavigation)
+         ,((0,xK_Up)    , move (0,-1)  >> myNavigation)
+         ,((0,xK_k)     , move (0,-1)  >> myNavigation)
+         ,((0,xK_y)     , move (-1,-1) >> myNavigation)
+         ,((0,xK_i)     , move (1,-1)  >> myNavigation)
+         ,((0,xK_n)     , move (-1,1)  >> myNavigation)
+         ,((0,xK_m)     , move (1,-1)  >> myNavigation)
+         ,((0,xK_space) , setPos (0,0) >> myNavigation)
+         ]
+       navDefaultHandler = const myNavigation
 
 myColorizer :: Window -> Bool -> X (String, String)
 myColorizer = colorRangeFromClassName
@@ -154,6 +187,7 @@ mygridConfig colorizer = (buildDefaultGSConfig myColorizer)
     { gs_cellheight   = 40
     , gs_cellwidth    = 200
     , gs_cellpadding  = 6
+    , gs_navigate     = myNavigation
     , gs_originFractX = 0.5
     , gs_originFractY = 0.5
     , gs_font         = myFont
@@ -170,20 +204,67 @@ spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
                    , gs_font         = myFont
                    }
 
-myAppGrid = [ ("Emacs", "emacs")
-            , ("EmacsClient", "emacsclient -c -a emacs")
-            , ("EmacsServer", "emacs --eval 'server-start'")
-            , ("Alacritty", "alacritty")
-            , ("EmacsServer(other)", "emacs --eval 'my/mu4e-server'")
-            , ("EmacsClient(other)", "emacsclient -s other -c")
-            , ("RingCentralMeetings", "ringcentral")
-            , ("QuteBrowser", "qutebrowser")
-            , ("Dbeaver", "dbeaver")
-            , ("Firefox", "firefox")
-            , ("Postman", "postman")
-            , ("Calculator", "qalculate-gtk")
-            , ("Brave Browser", "brave-browser")
-            ]
+gsCategories =
+  [ ("Internet",   "xdotool key super+alt+1")
+  , ("Multimedia", "xdotool key super+alt+2")
+  , ("Office",     "xdotool key super+alt+3")
+  , ("Settings",   "xdotool key super+alt+4")
+  , ("System",     "xdotool key super+alt+5")
+  , ("Utilities",  "xdotool key super+alt+6")
+  ]
+
+gsInternet =
+  [ ("Brave", "brave")
+  , ("Firefox", "firefox")
+  , ("Qutebrowser", "qutebrowser")
+  , ("Transmission", "transmission-gtk")
+  , ("Microsoft Teams", "teams")
+  , ("Zoom", "zoom")
+  ]
+
+gsMultimedia =
+  [ ("Audacity", "audacity")
+  , ("Blender", "blender")
+  , ("Deadbeef", "deadbeef")
+  , ("Kdenlive", "kdenlive")
+  , ("OBS Studio", "obs")
+  , ("VLC", "vlc")
+  ]
+
+gsOffice =
+  [ ("Document Viewer", "evince")
+  , ("LibreOffice", "libreoffice")
+  , ("LO Base", "lobase")
+  , ("LO Calc", "localc")
+  , ("LO Draw", "lodraw")
+  , ("LO Impress", "loimpress")
+  , ("LO Math", "lomath")
+  , ("LO Writer", "lowriter")
+  ]
+
+gsSettings =
+  [ ("ARandR", "arandr")
+  , ("ArchLinux Tweak Tool", "archlinux-tweak-tool")
+  , ("Customize Look and Feel", "lxappearance")
+  , ("Firewall Configuration", "sudo gufw")
+  ]
+
+gsSystem =
+  [ ("Alacritty", "alacritty")
+  , ("Bash", (myTerminal ++ " -e bash"))
+  , ("Htop", (myTerminal ++ " -e htop"))
+  , ("Fish", (myTerminal ++ " -e fish"))
+  , ("PCManFM", "pcmanfm")
+  , ("Virt-Manager", "virt-manager")
+  , ("Zsh", (myTerminal ++ " -e zsh"))
+  ]
+
+gsUtilities =
+  [ ("Emacs", "emacs")
+  , ("Emacsclient", "emacsclient -c -a 'emacs'")
+  , ("Nitrogen", "nitrogen")
+  , ("Vim", (myTerminal ++ " -e nvim"))
+  ]
 
 -- -- Example XPrompt Config
 -- myBackgroundColor = "#151515"
@@ -336,7 +417,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
   where
     spawnTerm  = myTerminal ++ " -t scratchpad -e fish"
     findTerm   = title =? "scratchpad"
-    manageTerm = customFloating $ W.RationalRect 0 0.9 1 0.1 -- position and size
+    manageTerm = customFloating $ W.RationalRect 0.3 0.3 0.4 0.4 -- position and size
     -- manageTerm = customFloating $ W.RationalRect l t w h
     --            where
     --              h = 0.9
@@ -379,6 +460,15 @@ tall     = renamed [Replace "tall"]
            $ subLayout [] (smartBorders Simplest)
            $ limitWindows 12
            $ mySpacing 8
+           $ ResizableTall 1 (3/100) (1/2) []
+tallMirror = renamed [Replace "tall"]
+           $ smartBorders
+           $ windowNavigation
+           $ addTabs shrinkText myTabTheme
+           $ subLayout [] (smartBorders Simplest)
+           $ limitWindows 12
+           $ mySpacing 8
+           $ Mirror
            $ ResizableTall 1 (3/100) (1/2) []
 magnify  = renamed [Replace "magnify"]
            $ smartBorders
@@ -455,17 +545,17 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
              where
                myDefaultLayout =     withBorder myBorderWidth tall
+                                 ||| tallMirror
                                  ||| tallAccordion
                                  ||| wideAccordion
                                  ||| Main.magnify
                                  ||| noBorders monocle
                                  ||| noBorders tabs
                                  ||| floats
-                                 ||| grid
+                                 -- ||| grid
                                  ||| spirals
                                  ||| threeCol
                                  ||| threeRow
-
 
 myWorkspaces :: [String]
 myWorkspaces = map (wrap " " " ") ["main", "web", "code", "irc/mail", "media", "notes", "other", "vbox", "meet"]
@@ -484,24 +574,41 @@ myManageHook = composeAll
      -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
      -- I'm doing it this way because otherwise I would have to write out the full
      -- name of my workspaces and the names would be very long if using clickable workspaces.
-     [ className =? "mpv"       --> doShift ( myWorkspaces !! 4 )
-     , className =? "Gimp"      --> doShift ( myWorkspaces !! 4 )
-     , className =? "Gimp"      --> doFloat
-     , className =? "ringcentral"         --> doFloat
-     , title =? "Mozilla Firefox"     --> doShift ( myWorkspaces !! 1 )
-     , className =? "brave-browser-beta"   --> doShift ( myWorkspaces !! 1 )
-     , className =? "qutebrowser"     --> doShift ( myWorkspaces !! 1 )
+     [ className =? "mpv"         --> doShift ( myWorkspaces !! 4 )
+     , className =? "Gimp"        --> doShift ( myWorkspaces !! 4 )
+     -- , className =? "Gimp"        --> doFloat
+     , title =? "Mozilla Firefox"   --> doShift ( myWorkspaces !! 1 )
+     , className =? "Brave-browser" --> doShift ( myWorkspaces !! 1 )
+     -- , className =? "qutebrowser"   --> doShift ( myWorkspaces !! 1 )
      , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
      ]
   -- <+> namedScratchpadManageHook myScratchPads
 
 screenShot = "scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/Screenshots/'"
 clipboardScreenshot = "scrot -se 'xclip -selection clipboard -t image/png -i $f'"
-screenlock = "i3lock -c 001a00" -- slock
-  
+-- screenlock = "i3lock -c 001a00" -- slock
+screenlock = "slock"
+
+ -- NamedActions
+-- subtitle' ::  String -> ((KeyMask, KeySym), NamedAction)
+-- subtitle' x = ((0,0), NamedAction $ map toUpper
+--                       $ sep ++ "\n-- " ++ x ++ " --\n" ++ sep)
+--   where
+--     sep = replicate (6 + length x) '-'
+
+-- showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
+-- showKeybindings x = addName "Show Keybindings" $ io $ do
+--   h <- spawnPipe $ "yad --text-info --fontname=\"SauceCodePro Nerd Font Mono 12\" --fore=#46d9ff back=#282c36 --center --geometry=1200x800 --title \"XMonad keybindings\""
+--   --hPutStr h (unlines $ showKm x) -- showKM adds ">>" before subtitles
+--   hPutStr h (unlines $ showKmSimple x) -- showKmSimple doesn't add ">>" to subtitles
+--   hClose h
+--   return ()
+
 -- START_KEYS
 myKeys :: [(String, X ())]
 myKeys =
+        -- let subKeys str ks = subtitle' str : mkNamedKeymap c $
+        -- subKeys "Xmonad Essentials"
     -- KB_GROUP Xmonad
         [ ("M-q", spawn "xmonad --recompile && xmonad --restart")    -- Restarts xmonad
         , ("M-S-q", io exitSuccess)              -- Quits xmonad
@@ -509,11 +616,12 @@ myKeys =
 
     -- KB_GROUP Run Prompt
         -- , ("M-S-<Return>", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
-        , ("M-p", shellPrompt dtXPConfig) -- Xmonad Shell Prompt
+        -- , ("M-p", shellPrompt dtXPConfig) -- Xmonad Shell Prompt
+        , ("M-d", spawn "dmenu_run")          -- dmenu
         , ("M-C-p", runOrRaisePrompt dtXPConfig) -- run a program, open a file, or raise an already running program
     -- Other Prompts
-        , ("M-o m", manPrompt dtXPConfig)          -- manPrompt
-        , ("M-o p", passPrompt dtXPConfig)         -- passPrompt
+        -- , ("M-o p", passPrompt dtXPConfig)         -- passPrompt
+        , ("M-o p", spawn "passmenu")         -- passmenu using dmenu
         , ("M-o g", passGeneratePrompt dtXPConfig) -- passGeneratePrompt
         , ("M-o r", passRemovePrompt dtXPConfig)   -- passRemovePrompt
         , ("M-o s", sshPrompt dtXPConfig)          -- sshPrompt
@@ -525,27 +633,25 @@ myKeys =
 
     -- KB_GROUP Useful programs to have a keybinding for launch
         , ("M-<Return>", spawn (myTerminal))
+        , ("M-b", spawn (myBrowser))
         , ("M-M1-h", spawn (myTerminal ++ " -e htop"))
         , ("M-M1-h", spawn (myTerminal ++ " -e htop"))
-
-        -- , ("M-.", nextWS)
-        -- , ("M-,", prevWS)
-        -- , ("M-<Escape>-l", shiftToNext)
-        -- , ("M-<Escape>-h", shiftToPrev)
 
     -- KB_GROUP Kill windows
         , ("M-x", kill1)     -- Kill the currently focused client
         , ("M-S-x", killAll)   -- Kill all windows on current workspace
         , ("M-M1-x", spawn "xkill") -- Select a window to kill forcefully
 
-    -- KB_GROUP Workspaces
+    -- KB_GROUP Workspaces -- Xmonad.Actions.CycleWS
         , ("M-.", nextScreen)  -- Switch focus to next monitor
         , ("M-,", prevScreen)  -- Switch focus to prev monitor
         , ("M-S-<KP_Add>", shiftTo Next nonNSP >> moveTo Next nonNSP)       -- Shifts focused window to next ws
         , ("M-S-<KP_Subtract>", shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to prev ws
+        , ("M-<Tab>", nextScreen)  -- Switch focus to next monitor
+        , ("M-S-<Tab>", shiftNextScreen)  -- Shifts focused window to next monitor
 
     -- KB_GROUP Floating windows
-        , ("M-f", sendMessage (T.Toggle "floats")) -- Toggles my 'floats' layout
+        -- , ("M-f", sendMessage (T.Toggle "floats")) -- Toggles my 'floats' layout
         , ("M-t", withFocused $ windows . W.sink)  -- Push floating window back to tile
         , ("M-S-t", sinkAll)                       -- Push ALL floating windows to tile
 
@@ -556,9 +662,30 @@ myKeys =
         , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
 
     -- -- KB_GROUP Grid Select (CTR-g followed by a key)
-        , ("M-g g", spawnSelected' myAppGrid)                 -- grid select favorite apps
+        -- , ("M-g g", spawnSelected' myAppGrid)                 -- grid select favorite apps
         , ("M-g t", goToSelected $ mygridConfig myColorizer)  -- goto selected window
         , ("M-g b", bringSelected $ mygridConfig myColorizer) -- bring selected window
+        -- , ("C-g g", addName "Select favorite apps"     $ runSelectedAction' defaultGSConfig gsCategories)
+        , ("M-g-g", spawnSelected' $ gsInternet ++ gsMultimedia ++ gsOffice ++ gsSettings ++ gsSystem ++ gsUtilities)
+        , ("M-M1-c", spawnSelected' gsCategories)
+        , ("M-M1-t", goToSelected $ mygridConfig myColorizer)
+        , ("M-M1-b", bringSelected $ mygridConfig myColorizer)
+        , ("M-M1-1", spawnSelected' gsInternet)
+        , ("M-M1-2", spawnSelected' gsMultimedia)
+        , ("M-M1-3", spawnSelected' gsOffice)
+        , ("M-M1-4", spawnSelected' gsSettings)
+        , ("M-M1-5", spawnSelected' gsSystem)
+        , ("M-M1-6", spawnSelected' gsUtilities)
+        -- , ("M-M1-<Return>", addName "Select favorite apps" $ spawnSelected' $ gsInternet ++ gsMultimedia ++ gsOffice ++ gsSettings ++ gsSystem ++ gsUtilities)
+        -- , ("M-M1-c", addName "Select favorite apps"    $ spawnSelected' gsCategories)
+        -- , ("M-M1-t", addName "Goto selected window"    $ goToSelected $ mygridConfig myColorizer)
+        -- , ("M-M1-b", addName "Bring selected window"   $ bringSelected $ mygridConfig myColorizer)
+        -- , ("M-M1-1", addName "Menu of Internet apps"   $ spawnSelected' gsInternet)
+        -- , ("M-M1-2", addName "Menu of multimedia apps" $ spawnSelected' gsMultimedia)
+        -- , ("M-M1-3", addName "Menu of office apps"     $ spawnSelected' gsOffice)
+        -- , ("M-M1-4", addName "Menu of settings apps"   $ spawnSelected' gsSettings)
+        -- , ("M-M1-5", addName "Menu of system apps"     $ spawnSelected' gsSystem)
+        -- , ("M-M1-6", addName "Menu of utilities apps"  $ spawnSelected' gsUtilities)
 
     -- KB_GROUP Windows navigation
         , ("M-m", windows W.focusMaster)  -- Move focus to the master window
@@ -572,8 +699,9 @@ myKeys =
         , ("M-M1-<Tab>", rotAllDown)       -- Rotate all the windows in the current stack
 
     -- KB_GROUP Layouts
-        , ("M-<Tab>", sendMessage NextLayout)           -- Switch to next layout
-        , ("M-<Space>", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
+        -- , ("M-<Space>", sendMessage NextLayout)           -- Switch to next layout
+        -- , ("M-S-<Tab>", sendMessage PreviousLayout)     -- Switch to previous layout
+        , ("M-f", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
 
     -- KB_GROUP Increase/decrease windows in the master pane or the stack
         , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
@@ -581,11 +709,11 @@ myKeys =
         , ("M-M1-<Up>", increaseLimit)                   -- Increase # of windows
         , ("M-M1-<Down>", decreaseLimit)                 -- Decrease # of windows
 
-    -- KB_GROUP Window resizing
+    -- KB_GROUP Window resizing (tall)
         , ("M-h", sendMessage Shrink)                   -- Shrink horiz window width
         , ("M-l", sendMessage Expand)                   -- Expand horiz window width
-        , ("M-M1-j", sendMessage MirrorShrink)          -- Shrink vert window width
-        , ("M-M1-k", sendMessage MirrorExpand)          -- Expand vert window width
+        , ("M-S-h", sendMessage MirrorShrink)          -- Shrink vert window width
+        , ("M-S-l", sendMessage MirrorExpand)          -- Expand vert window width
 
     -- KB_GROUP Sublayouts
     -- This is used to push windows to tabbed sublayouts, or pull them out of it.
@@ -643,9 +771,12 @@ myKeys =
         , ("<XF86AudioPlay>", spawn "mocp --play")
         , ("<XF86AudioPrev>", spawn "mocp --previous")
         , ("<XF86AudioNext>", spawn "mocp --next")
-        , ("<XF86AudioMute>", spawn "amixer set Master toggle")
-        , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
-        , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
+        -- , ("<XF86AudioMute>", spawn "amixer set Master toggle")
+        -- , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
+        -- , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
+        , ("<XF86AudioMute>", spawn "pamixer -t")
+        , ("<XF86AudioLowerVolume>", spawn "pamixer --allow-boost -d 3")
+        , ("<XF86AudioRaiseVolume>", spawn "pamixer --allow-boost -i 3")
         , ("<XF86HomePage>", spawn "qutebrowser https://www.google.com/")
         -- , ("<XF86Search>", spawn "dm-websearch")
         , ("<XF86Search>", safeSpawn "firefox" ["https://www.duckduckgo.com/"])
@@ -655,7 +786,11 @@ myKeys =
         -- , ("<Print>", spawn "dm-maim")
         , ("<Print>", spawn screenShot)
         , ("S-<Print>", spawn clipboardScreenshot)
-        , ("M-S-l", spawn screenlock)
+        -- , ("M-S-l", spawn screenlock)
+        , ("M-p", spawn "maimpick") --custom script
+        , ("M-S-p", spawn "maim pic-full-$(date '+%y%m%d-%H%M-%S').png")
+        , ("M-M1-p", spawn "dmenurecord") --custom script
+        , ("M-M1-S-p", spawn "dmenurecord kill") --custom script
         ]
     -- Appending search engine prompts to keybindings list.
     -- Look at "search engines" section of this config for values for "k".
@@ -668,7 +803,9 @@ myKeys =
 
 main :: IO ()
 main = do
-    xmproc <- spawnPipe "xmobar $HOME/.xmonad/xmobarrc"
+    -- xmproc <- spawnPipe "xmobar $HOME/.config/xmonad/xmobarrc"
+    xmproc <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobarrc"
+    xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobarrc1"
     xmonad $ ewmh def
         { manageHook         = manageDocks <+> myManageHook <+> namedScratchpadManageHook myScratchPads
         -- -- Run xmonad commands from command line with "xmonadctl command". Commands include:
@@ -699,7 +836,8 @@ main = do
           -- $ filterOutWsPP.scratchpadWorkspaceTag
           $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
-              { ppOutput = \x -> hPutStrLn xmproc  x
+              -- { ppOutput = \x -> hPutStrLn xmproc x
+              { ppOutput = \x -> hPutStrLn xmproc x >> hPutStrLn xmproc1 x
               , ppCurrent = xmobarColor "#c792ea" "" . wrap "<box type=Bottom width=2 mb=2 color=#c792ea>" "</box>"         -- Current workspace
               , ppVisible = xmobarColor "#c792ea" "" -- . clickable
               -- , ppVisible = xmobarColor "#c792ea" "" . wrap "*" "" . clickable (zip myWorkspaces [1..]) --  . clickable              -- Visible but not current workspace
