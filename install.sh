@@ -15,6 +15,7 @@ symlink_directories() {
     OTHER_DIRECTORIES=(".local/bin/custom" ".local/share/applications")
 
     echo "Symlinking directories..."
+    mkdir -p ${BACKUP_DIR}/.config
     for dir in "${CONFIG_DIRECTORIES[@]}" ;
     do
         if [ -d ${HOME}/.config/${dir} ] ; then
@@ -109,10 +110,16 @@ install_dotfiles() {
 
     DOTFILES_DIR="${HOME}/.dotfiles"
     BACKUP_DIR="${HOME}/.dotfiles/backup"
-    BRANCH="void"
+    BRANCH="voidlinux"
+
+    # xbps-install -Sy
+    # xbps-install -u xbps
+    # xbps-install -Syu
+    # xbps-install xtools
+    install_packages
 
     echo "Cloning dotfiles repository to $DOTFILES_DIR"
-    # git clone -b $BRANCH --recurse-submodules $GIT_CLONE_URL $DOTFILES_DIR
+    git clone -b $BRANCH --recurse-submodules $GIT_CLONE_URL $DOTFILES_DIR
 
     echo "OS_NAME = $(uname)"
     echo "This will create symbolic links of this directory's files in the home directory"
@@ -120,17 +127,20 @@ install_dotfiles() {
     mkdir -p $BACKUP_DIR
 
     echo "Installing dotfiles..."
+    mkdir -p $HOME/.config
+    mkdir -p $HOME/.local/share
+    mkdir -p $HOME/.local/bin
     symlink_directories
     symlink_files
-    install_packages
-    install_xmonad
+
+    # install_xmonad
 
     # get wallpapers
-    git clone https://gitlab.com/lokesh1197/wallpapers.git $HOME/.local/share/wallpapers
+    # git clone https://gitlab.com/lokesh1197/wallpapers.git $HOME/.local/share/wallpapers
 
-    setup_gh
-    install_source_packages
-    
+    # setup_gh
+    # install_source_packages
+
 
     # Install vim plugins if not alread present.
     [ ! -f "/home/$name/.config/nvim/autoload/plug.vim" ] && vim_plugin_install
@@ -235,10 +245,9 @@ superuser_commands() {
 
 case $1 in
     1) superuser_commands;;
-    2) install_packages;;
     *)
         set_dotfiles_remote
-        printf "\nChoose an installation method: \n1) Dotfiles (Create a dotfiles folder and symlink the files)\n2) Bare Repository (Create a bare repository and add all files directly at the home folder)\n(1, 2): " 
+        printf "\nChoose an installation method: \n1) Dotfiles (Create a dotfiles folder and symlink the files)\n2) Bare Repository (Create a bare repository and add all files directly at the home folder)\n(1, 2): "
         read -n 1 installation_method
         case $installation_method in
             1) install_dotfiles;;

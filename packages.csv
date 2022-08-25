@@ -95,6 +95,8 @@ rsync
 sc-im
 smartmontools, required by inxi for smartctl
 socklog-void, logging
+stack, haskell
+starship, shell prompt
 sxiv, image viewer
 texlab, required by emacs for latex lsp
 texlive-full
@@ -111,7 +113,7 @@ winetricks, required by wine
 wmctrl, required by inxi
 xapian-core-devel, required by mu
 xbacklight
-xcape xclip xdotool 
+xcape xclip xdotool
 xcompmgr
 xdg-utils
 xorg-apps, basic for X
