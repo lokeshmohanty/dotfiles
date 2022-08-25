@@ -127,11 +127,11 @@ windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
 setRandomWallpaper :: String
--- setRandomWallpaper = "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"
-setRandomWallpaper = "feh --randomize --bg-fill ~/.local/share/wallpapers/P_* --bg-fill ~/.local/share/wallpapers/0*"
+setRandomWallpaper = "feh --randomize --bg-fill ~/.local/share/wallpapers/*"
+-- setRandomWallpaper = "feh --randomize --bg-fill ~/.local/share/wallpapers/P_* --bg-fill ~/.local/share/wallpapers/0*"
 
 myStartupHook :: X ()
-myStartupHook = do 
+myStartupHook = do
     -- spawnOnce "lxsession &"
     -- spawnOnce "picom &"
     -- spawnOnce "nm-applet &"
@@ -141,11 +141,11 @@ myStartupHook = do
     -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient, -> graphics not being rendered properly
     -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
     -- spawnOnce "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"  -- feh set random wallpaper
-    spawnOnce "~/.screenlayout/dual-monitors.sh" -- set monitor layout
-    spawnOnce "redshift -l 12.98:77.58 -t 4500:2500 -b 1.0:0.8 &"
+    -- spawnOnce "~/.screenlayout/dual-monitors.sh" -- set monitor layout
+    -- spawnOnce "redshift -l 12.98:77.58 -t 4500:2500 -b 1.0:0.8 &"
     spawnOnce "xsetroot -cursor_name left_ptr" --set default X cursor as left_ptr
+    spawnOnce "firefox"
     spawnOnce myEmacs
-    spawnOnce "brave"
     -- spawnOn (myWorkspaces !! 0) myEmacs
     -- spawnOn (myWorkspaces !! 1) "qutebrowser"
     -- spawnOn (myWorkspaces !! 1) "brave"
@@ -584,7 +584,9 @@ myManageHook = composeAll
      ]
   -- <+> namedScratchpadManageHook myScratchPads
 
-screenShot = "scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/Screenshots/'"
+-- screenShot = "scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/Screenshots/'"
+-- clipboardScreenshot = "scrot -se 'xclip -selection clipboard -t image/png -i $f'"
+screenShot = "maimpick"
 clipboardScreenshot = "scrot -se 'xclip -selection clipboard -t image/png -i $f'"
 -- screenlock = "i3lock -c 001a00" -- slock
 screenlock = "slock"
@@ -748,11 +750,11 @@ myKeys =
         , ("M1-e e", spawn myEmacs)                    -- start emacs
         , ("M1-e b", spawn setRandomWallpaper)         -- set random background
         , ("M1-e m", spawn myOtherEmacs)               -- mu4e email
-        , ("M1-e 0", spawn "picom-trans 100")
-        , ("M1-e 1", spawn "picom-trans 95")
-        , ("M1-e 2", spawn "picom-trans 90")
-        , ("M1-e 3", spawn "picom-trans 85")
-        , ("M1-e 4", spawn "picom-trans 80")
+        , ("M1-e 0", spawn "transset 1.00")
+        , ("M1-e 1", spawn "transset 0.90")
+        , ("M1-e 2", spawn "transset 0.85")
+        , ("M1-e 3", spawn "transset 0.80")
+        , ("M1-e 4", spawn "transset 0.75")
 
         -- , ("M1-e b", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
         -- , ("M1-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
@@ -805,7 +807,7 @@ main :: IO ()
 main = do
     -- xmproc <- spawnPipe "xmobar $HOME/.config/xmonad/xmobarrc"
     xmproc <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobarrc"
-    xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobarrc1"
+    -- xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobarrc1"
     xmonad $ ewmh def
         { manageHook         = manageDocks <+> myManageHook <+> namedScratchpadManageHook myScratchPads
         -- -- Run xmonad commands from command line with "xmonadctl command". Commands include:
@@ -837,7 +839,8 @@ main = do
           $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
               -- { ppOutput = \x -> hPutStrLn xmproc x
-              { ppOutput = \x -> hPutStrLn xmproc x >> hPutStrLn xmproc1 x
+                { ppOutput = \x -> hPutStrLn xmproc x
+                  -- >> hPutStrLn xmproc1 x
               , ppCurrent = xmobarColor "#c792ea" "" . wrap "<box type=Bottom width=2 mb=2 color=#c792ea>" "</box>"         -- Current workspace
               , ppVisible = xmobarColor "#c792ea" "" -- . clickable
               -- , ppVisible = xmobarColor "#c792ea" "" . wrap "*" "" . clickable (zip myWorkspaces [1..]) --  . clickable              -- Visible but not current workspace

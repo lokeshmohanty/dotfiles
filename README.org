@@ -5,124 +5,15 @@
 
 Run the below command in terminal. It clones the bare repository at $HOME/.cfg and creates a backup of conflicting files at .config-backup. You can read the source [[file:.bin/install-dotfiles.sh][here]].
 #+begin_src shell
-curl -Lks http://bit.do/lokesh-dotfiles | /bin/bash
+  curl -Lks http://bit.do/lokesh-dotfiles | sudo -u <username> /bin/bash
 #+end_src
 
 Run the below command if the above doesn't work.
 #+begin_src shell
-curl -Lks https://raw.githubusercontent.com/lokesh1197/dotfiles/master/.bin/install-dotfiles.sh | /bin/bash
+  curl -Lks https://raw.githubusercontent.com/lokesh1197/dotfiles/master/.bin/install-dotfiles.sh | sudo -u <username> /bin/bash
 #+end_src
 
-* Applicatoin Wise Readme
-** Suckless Apps
-- [[https://github.com/lokesh1197/dwm][dwm]]
- libraries which might be required:
-  - xcb, libxcb-xkb-dev, x11-xkb-utils, libx11-xcb-dev, libxkbcommon-x11-dev
-  - libx11-dev
-  - libxinerama-dev
-  - libxft-dev
-  - libx11-xcb-dev
-  - libxcb-res0-dev
-  - build [[https://github.com/uditkarode/libxft-bgra][libxft-bgra]]
-- [[https://github.com/lokesh1197/dwmblocks][dwmblocks]]
-- [[https://github.com/lokesh1197/st][st]]
-  - if st crashes when trying to display emoji, install unifont package
-** Zsh
-*** Configuration Files
-
-Zsh has several system-wide and user-local configuration files.
-
-Prezto has one user-local configuration file.
-
-System-wide configuration files are installation-dependent but are installed
-in */etc* by default.
-
-User-local configuration files have the same name as their global counterparts
-but are prefixed with a dot (hidden). Zsh looks for these files in the path
-stored in the `$ZDOTDIR` environmental variable. However, if said variable is
-not defined, Zsh will use the user's home directory.
-
-*** File Descriptions
-
-The configuration files are read in the following order:
-
-  01. /etc/zshenv
-  02. ~/.zshenv
-  03. /etc/zprofile
-  04. ~/.zprofile
-  05. /etc/zshrc
-  06. ~/.zshrc
-  07. ~/.zpreztorc
-  08. /etc/zlogin
-  09. ~/.zlogin
-  10. ~/.zlogout
-  11. /etc/zlogout
-
-**** zshenv
-
-This file is sourced by all instances of Zsh, and thus, it should be kept as
-small as possible and should only define environment variables.
-
-**** zprofile
-
-This file is similar to zlogin, but it is sourced before zshrc. It was added
-for [KornShell][1] fans. See the description of zlogin below for what it may
-contain.
-
-zprofile and zlogin are not meant to be used concurrently but can be done so.
-
-**** zshrc
-
-This file is sourced by interactive shells. It should define aliases,
-functions, shell options, and key bindings.
-
-**** zpreztorc
-
-This file configures Prezto.
-
-**** zlogin
-
-This file is sourced by login shells after zshrc, and thus, it should contain
-commands that need to execute at login. It is usually used for messages such as
-[fortune][2], [msgs][3], or for the creation of files.
-
-This is not the file to define aliases, functions, shell options, and key
-bindings. It should not change the shell environment.
-
-**** zlogout
-
-This file is sourced by login shells during logout. It should be used for
-displaying messages and the deletion of files.
-
-*** Authors
-
-*The authors of these files should be contacted via the [issue tracker][4].*
-
-  - [Sorin Ionescu](https://github.com/sorin-ionescu)
-
-[1]: http://www.kornshell.com
-[2]: http://en.wikipedia.org/wiki/Fortune_(Unix)
-[3]: http://www.manpagez.com/man/1/msgs
-[4]: https://github.com/sorin-ionescu/prezto/issues
-
-*** TODOs
-01. Understand powerlevel9k plugin properly
-02. Try grml-zsh-config
-
-*** Themes to try
-01. adam2
-02. bart
-03. steeef
-04. peepcode
-05. minimal
-06. redhat
-07. zefram
-08. sus
-** Xmonad
-*** Location
- - xmonad: `~/.xmonad/`
- - xinitrc : `~/.xinitrc`
-
+* Xmonad
 *** Commands
 
   - Install GHC with stack
@@ -150,24 +41,12 @@ displaying messages and the deletion of files.
     xmonad --restart
   ```
 
-*** Dependencies (Voidlinux) (To be updated)
-
-**** For xmonad
-  - stack
-  - libXft-devel
-  - libXinerama-devel, libXrandr-devel, libXScrnSaver-devel
-  - pkg-config
-
-**** For xmobar
-  - alsa-lib-devel
-  - wireless_tools-devel
-  - libXpm-devel
-** Nvm (Node Version Manager)
+* Nvm (Node Version Manager)
 - To set default version, run ~nvm alias default <version>~
-** Redsift
+* Redsift
 - To go to default: ~redshift -x~
 - To set a temperature T(eg: 3000): ~redshift -O 3000~
-** Wireshark
+* Wireshark
 *** Display filter
 https -> ssl.handshake.type == 1
 http -> http.request
@@ -182,42 +61,22 @@ https server name -> tls.handshake.extensions_server_name
 - `ntfs-3g`
 - `os-prober`
 - `stacer`(cpu monitor)
-- `qutebrowser`, surf(web browser)
-- `mplayer`, `mpv`(video player)
-- `feh`(image viewer)
+- `qutebrowser`
+- `mpv`(video player)
+- `sxiv`(image viewer)
 - `gimp`(image editor)
 - `audacity`(audio editor)
 - `kdenlive`(video editor)
 - `surge`(instant site publish)(`npm i -g surge`)
 - `ngrok`(make a port public temporarily)
-- `rclone`(for syncing/download-upload from cloud)
-- Gemini protocol tools -> `amfora`(client), `agate`(server)
-- `node`
+- `rclone`(for syncing/download-upload from cloud), `rsync`
+- `nvm` (node version manager)
 - `haskell stack`
-- Package Managers: guix
 - Download Managers: fdm, jdownloader
 - File Manager: lf
+- Open broadcast software
 
-  ### To try
-  - App Outlet
-  - Open broadcast software
-
-* TODOs
-
-1. Add functionality to automate including new dotfiles
-2. Create a script to install my preferred apps
-3. Create a script to restore backed up dotfiles
-4. Add functionality to update dotfiles
-
-* Tips
-1. for python errors in `neovim` run `pip install neovim` as root
-2. Location for system wide application: /usr/local/bin
-See [[file:troubleshoot.org][troubleshoot.org]] for more.
-
-* New Programs
-- dwm
-- dwmblocks
-- st
+** New Programs
 - groff
 - zathura
 - lf(requires nerd-fonts for icons), ueberzug(for image previewing inside lf)
@@ -232,19 +91,3 @@ See [[file:troubleshoot.org][troubleshoot.org]] for more.
 - pavucontrol (control pulseaudio devices)
 - ytfzf (search on youtube and watch videos using mpv)
 - sc-im/visidata (spreadsheet editor)
-
-** Requirements
-- dwmblocks: geoip, transmission, pamixer
-- lf previewer: bat, atool, mediainfo ffmpegthumbnailer odt2txt
-
-** From Source
-- andmarti1424/sc-im
-
-* Linked files
-#+begin_src shell
-
-  ln -s ~/.config/x11/xprofile ~/.xprofile
-  ln -s ~/.config/shell/profile ~/.zprofile
-  ln -s ~/.config/gtk-2.0/gtkrc-2.0 ~/.gtkrc-2.0
-
-#+end_src

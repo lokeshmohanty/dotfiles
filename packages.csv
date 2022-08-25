@@ -1,0 +1,124 @@
+acpi, required by inxi
+alacritty, terminal emulator
+alsa-firmware
+alsa-pipewire
+arandr
+aria2
+autoconf
+bat
+bind-utils, required by inxi for dig
+bluez, bluetooth
+clang, gcc alternative
+cmake
+crda, required due to dmesg issues
+docker
+dosfstools
+dunst
+elogind
+emacs-gtk3
+exfat-utils
+ffmpeg
+ffmpegthumbnailer
+firefox
+fish-shell
+font-inconsolata-otf, fonts
+fzf
+gcc
+gimp
+git
+git, required by xmonad
+github-cli
+glib-devel, required by mu
+gmime-devel, required by mu
+hddtemp, required by inxi
+inxi
+ipmitool, required by inxi
+ipmiutil, required by inxi
+isync
+iwd
+jq
+kdenlive
+libX11-devel, required by xmonad and ueberzug
+libXScrnSaver-devel, required by xmonad
+libXft-devel, required by xmonad
+libXinerama-devel, required by xmonad
+libXrandr-devel, required by xmonad
+libXres-devel, required by ueberzug
+libnotify
+libspa-bluetooth
+libtool
+libtool, required by emacs for vterm
+linux-firmware
+linux-firmware-network
+lm_sensors, required by inxi for sensors
+lshw
+lutris, required by wine
+lynx
+maim
+mesa-dri, modesetting drivers (replacement for xf86-*)
+mesa-vaapi, modesetting drivers (replacement for xf86-*)
+mesa-vdpau, modesetting drivers (replacement for xf86-*)
+meson
+mlocate
+moreutils
+mpv
+msmtp
+mu
+NetworkManager
+ncurses-libtinfo-devel, required by xmonad
+ncurses-libtinfo-libs, required by xmonad
+neofetch
+neomutt
+neovim
+nerd-fonts-otf, fonts
+nerd-fonts-ttf, fonts
+noto-fonts-ttf, fonts
+ntfs-3g
+obs, screen recording
+os-prober
+pass
+pavucontrol
+pipewire
+pkg-config, required by mu
+pkg-config, required by xmonad
+polkit
+postgresql
+python3-dbus
+python3-devel
+python3-pip
+qalculate-gtk
+qutebrowser, very fast browser
+rclone
+redshift
+ripgrep
+rsync
+sc-im
+smartmontools, required by inxi for smartctl
+socklog-void, logging
+sxiv, image viewer
+texlab, required by emacs for latex lsp
+texlive-full
+tlp-rdw, power management and radio management
+tree, required by inxi
+unzip
+upower, required by inxi
+void-repo-nonfree
+wget, required by inxi
+wine, required by wine
+wine-gecko, required by wine
+wine-mono, required by wine
+winetricks, required by wine
+wmctrl, required by inxi
+xapian-core-devel, required by mu
+xbacklight
+xcape xclip xdotool 
+xcompmgr
+xdg-utils
+xorg-apps, basic for X
+xorg-fonts, basic for X
+xorg-input-drivers, basic for X
+xorg-server, basic for X
+xterm
+xtools
+zathura, pdf viewer
+zathura-pdf-mupdf

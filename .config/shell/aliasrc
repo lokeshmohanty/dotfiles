@@ -7,7 +7,7 @@
 [ -f "$XINITRC" ] && alias startx="startx $XINITRC"
 
 # sudo not required for some system commands
-for command in mount umount sv pacman updatedb su shutdown poweroff reboot ; do
+for command in mount umount sv updatedb shutdown poweroff reboot ; do
 	alias $command="sudo $command"
 done; unset command
 
@@ -40,16 +40,8 @@ alias \
 	YT="youtube-viewer" \
 	sdn="shutdown -h now" \
 	e="$EDITOR" \
-	v="$EDITOR" \
-	p="pacman" \
-	xi="sudo xbps-install" \
-	xr="sudo xbps-remove -R" \
-	xq="xbps-query" \
+	xr="sudo xbps-remove -Rv" \
 	z="zathura" \
-	pk="ps -ef | fzf | awk '{print $2}' | xargs kill"
-
-alias \
-	lf="lfub" \
-	magit="nvim -c MagitOnly" \
-	ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc" \
-	weath="less -S ${XDG_DATA_HOME:-$HOME/.local/share}/weatherreport" \
+	pk="ps -ef | fzf | awk '{print $2}' | xargs kill" \
+  void="cd ~/.local/src/void-packages" \
+  src="cd ~/.local/src"

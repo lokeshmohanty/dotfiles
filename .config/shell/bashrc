@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Enable bash programmable completion features in interactive shells
+ [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
+    . /usr/share/bash-completion/bash_completion
+
+set editing-mode vi
+
+# Expand the history size
+export HISTFILESIZE=10000
+export HISTSIZE=500
+
+# Don't put duplicate lines in the history and do not add lines that start with a space
+export HISTCONTROL=erasedups:ignoredups:ignorespace
+
+# Check the window size after each command and, if necessary, update the values of LINES and COLUMNS
+shopt -s checkwinsize
+
+# Causes bash to append to history instead of overwriting it so if you start a new terminal, you have old session history
+shopt -s histappend
+# PROMPT_COMMAND='history -a'
+
+# Ignore case on auto-completion
+# Note: bind used instead of sticking these in .inputrc
+ bind "set completion-ignore-case on"
+
+# Show auto-completion list automatically, without double tab
+ bind "set show-all-if-ambiguous On"
+
+# Set the default editor
+export EDITOR="emacsclient -c -a vi"
+export VISUAL="emacsclient -c -a vi"
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Count all files (recursively) in the current folder
+alias countfiles="for t in files links directories; do echo \`find . -type \${t:0:1} | wc -l\` \$t; done 2> /dev/null"
+
+# Show all logs in /var/log
+alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
+
+[ -s "$NVM_DIR/bash_completion" ] && [ "$SHELL" = "/bin/bash" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Use starship to set prompt
+eval "$(starship init bash)"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# export SDKMAN_DIR="$HOME/.sdkman"
+# [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# PATH="/home/lokesh/perl5/bin${PATH:+:${PATH}}"; export PATH;
+# PERL5LIB="/home/lokesh/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+# PERL_LOCAL_LIB_ROOT="/home/lokesh/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+# PERL_MB_OPT="--install_base \"/home/lokesh/perl5\""; export PERL_MB_OPT;
+# PERL_MM_OPT="INSTALL_BASE=/home/lokesh/perl5"; export PERL_MM_OPT;
+
+# [ -f "/home/lokesh/.ghcup/env" ] && source "/home/lokesh/.ghcup/env" # ghcup-env

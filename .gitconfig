@@ -3,15 +3,10 @@
 	name = Lokesh Mohanty
 	email = lokesh1197@gmail.com
 
-[includeIf "gitdir:~/Repositories/Office/"]
-    path = ~/Repositories/Office/.gitconfig
-
-[url "https://github.com/"]
-	insteadOf = git://github.com/
+[includeIf "gitdir:~/Official/"]
+    path = ~/Official/.gitconfig
 
 [pull]
 	rebase = true
-[core]
-	autocrlf = false
 [github]
 	user = lokesh1197

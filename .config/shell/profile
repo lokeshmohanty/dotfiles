@@ -1,29 +1,14 @@
-#!/bin/zsh
-
-# Set an env variable to know that this file has been already sourced
-# case ":$CONFIG_SOURCED:" in
-#     *:"$HOME/.config/shell/profile":*) exit 1;;
-#     *) export CONFIG_SOURCED=$CONFIG_SOURCED:$HOME/.config/shell/profile;;
-# esac
+#!/bin/sh
 
 # profile file. Runs on login. Environmental variables are set here.
 
-# If you don't plan on reverting to bash, you can remove the link in ~/.profile
-# to clean up.
-
 # Adds `~/.local/bin` to $PATH
-# export PATH="$PATH:${$(find ~/.local/bin -type d -printf %p:)%%:}"
-BIN=$HOME/.local/bin
-export PATH=$PATH:$BIN:$BIN/statusbar:$BIN/cron
-
-# unsetopt PROMPT_SP
+export PATH="$PATH:$(find ~/.local/bin -type d -printf %p:)"
 
 # Default programs:
-export EDITOR="nvim"
-# export TERMINAL="alacritty"
-export TERMINAL="st"
-export BROWSER="qutebrowser"
+export EDITOR="emacsclient -c -a 'nvim'"
 export TERMINAL="alacritty"
+export BROWSER="qutebrowser"
 
 # ~/ Clean-up:
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -53,9 +38,22 @@ export WEECHAT_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/weechat"
 export MBSYNCRC="${XDG_CONFIG_HOME:-$HOME/.config}/mbsync/config"
 export ELECTRUMDIR="${XDG_DATA_HOME:-$HOME/.local/share}/electrum"
 
+# Add flutter/bin to path
+export PATH="$PATH:$XDG_DATA_HOME/flutter/bin"
+
+# Add android/sdk/tools/bin to path
+export PATH="$PATH:$XDG_DATA_HOME/Android/Sdk/tools/bin"
+
+# Add dynamic library path (added due to libvterm)
+# export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu"
+
+# Load nvm paths
+export NVM_DIR="$XDG_DATA_HOME/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
 # Other program settings:
 export DICS="/usr/share/stardict/dic/"
-export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+export SUDO_ASKPASS="$HOME/.local/bin/custom/dmenupass"
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 export LESS=-R
 export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
@@ -68,8 +66,7 @@ export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export QT_QPA_PLATFORMTHEME="gtk2"	# Have QT use gtk2 theme.
 export MOZ_USE_XINPUT2="1"		# Mozilla smooth scrolling/touchpads.
-export AWT_TOOLKIT="MToolkit wmname LG3D"	#May have to install wmname
-export _JAVA_AWT_WM_NONREPARENTING=1	# Fix for Java applications in dwm
+# export AWT_TOOLKIT="MToolkit wmname LG3D"	#May have to install wmname
 
 # FZF
 export FZF_DEFAULT_COMMAND="rf --files --hidden"
@@ -159,22 +156,8 @@ ex=🎯:\
 *.java=♨:\
 "
 
-[ ! -f ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ] && shortcuts >/dev/null 2>&1 &
 # # Start graphical server on user's current tty if not already running.
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
-# if pacman -Qs libxft-bgra >/dev/null 2>&1; then
-	# Start graphical server on user's current tty if not already running.
-	[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
-# else
-# 	echo "\033[31mIMPORTANT\033[0m: Note that \033[32m\`libxft-bgra\`\033[0m must be installed for this build of dwm.
-# Please run:
-# 	\033[32myay -S libxft-bgra-git\033[0m
-# and replace \`libxft\`. Afterwards, you may start the graphical server by running \`startx\`."
-# fi
-
-# Switch escape and caps if tty and no passwd required:
-# sudo -n loadkeys ${XDG_DATA_HOME:-$HOME/.local/share}/larbs/ttymaps.kmap 2>/dev/null
