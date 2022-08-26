@@ -134,15 +134,13 @@ myStartupHook :: X ()
 myStartupHook = do
     -- spawnOnce "lxsession &"
     -- spawnOnce "picom &"
-    -- spawnOnce "nm-applet &"
+    spawnOnce "nm-applet &"
     -- spawnOnce "volumeicon &"
-    spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 255 --tint 0x282c34  --height 22 &"
+    spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 180 --tint 0x282c34  --height 22 &"
     -- spawnOnce "/usr/bin/emacs --daemon=other &" -- emacs daemon for other apps like chat and mail
     -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient, -> graphics not being rendered properly
     -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
-    -- spawnOnce "feh --randomize --bg-fill ~/Pictures/Wallpapers/*"  -- feh set random wallpaper
-    -- spawnOnce "~/.screenlayout/dual-monitors.sh" -- set monitor layout
-    -- spawnOnce "redshift -l 12.98:77.58 -t 4500:2500 -b 1.0:0.8 &"
+    spawnOnce "feh --randomize --bg-fill ~/.local/share/wallpapers/*"  -- feh set random wallpaper
     spawnOnce "xsetroot -cursor_name left_ptr" --set default X cursor as left_ptr
     spawnOnce "firefox"
     spawnOnce myEmacs

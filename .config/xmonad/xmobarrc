@@ -10,7 +10,7 @@ Config {
     , bgColor = "#282c34"
     , fgColor = "#bbc2cf"
     -- , fgColor      = "#ff6c6b"
-    , alpha = 150
+    , alpha = 180
     , position = TopSize L 100 24
     -- , position = TopW L 100
     , iconRoot = "/home/lokesh/.config/xmonad/xpm"

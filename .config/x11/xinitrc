@@ -14,5 +14,5 @@ else
 	. "$HOME/.xprofile"
 fi
 
-# ssh-agent dwm
-ssh-agent xmonad
+# exec dbus-run-session -- xmonad
+ssh-agent dbus-run-session -- xmonad
