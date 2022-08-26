@@ -65,6 +65,8 @@ vim_plugin_install() {
 }
 
 install_xmonad() {
+
+    stack upgrade
     cd $HOME/.config/xmonad
     git clone https://github.com/xmonad/xmonad
     git clone https://github.com/xmonad/xmonad-contrib
@@ -88,6 +90,9 @@ install_packages() {
         packages="$packages $pkg"
     done < $filename
     xi $packages
+
+    # install/update nnn plugins
+    curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 }
 
 setup_gh() {
@@ -99,8 +104,10 @@ install_source_packages() {
     gh repo clone lokesh1197/void-packages
     cd void-packages
 
-    packages="cronie any-desk teams-bin yt-dlp"
     $HOME/.local/src/void-packages/xbps-src binary-bootstrap
+    echo XBPS_ALLOW_RESTRICTED=yes >> etc/conf
+
+    packages="cronie any-desk teams-bin"
     $HOME/.local/src/void-packages/xbps-src pkg $packages
     xi $packages
 }
@@ -116,10 +123,10 @@ install_dotfiles() {
     # xbps-install -u xbps
     # xbps-install -Syu
     # xbps-install xtools
-    install_packages
+    # install_packages
 
     echo "Cloning dotfiles repository to $DOTFILES_DIR"
-    git clone -b $BRANCH --recurse-submodules $GIT_CLONE_URL $DOTFILES_DIR
+    # git clone -b $BRANCH --recurse-submodules $GIT_CLONE_URL $DOTFILES_DIR
 
     echo "OS_NAME = $(uname)"
     echo "This will create symbolic links of this directory's files in the home directory"
@@ -133,7 +140,7 @@ install_dotfiles() {
     symlink_directories
     symlink_files
 
-    # install_xmonad
+    install_xmonad
 
     # get wallpapers
     # git clone https://gitlab.com/lokesh1197/wallpapers.git $HOME/.local/share/wallpapers
@@ -143,7 +150,7 @@ install_dotfiles() {
 
 
     # Install vim plugins if not alread present.
-    [ ! -f "/home/$name/.config/nvim/autoload/plug.vim" ] && vim_plugin_install
+    # [ ! -f "/home/$name/.config/nvim/autoload/plug.vim" ] && vim_plugin_install
 
 
     # if hash python3 2>/dev/null; then
@@ -194,26 +201,36 @@ config config status.showUntrackedFiles no
 cron_commands() {
     [[ $EUID -ne 0 ]] && echo "This script must be run as root." && exit 1
 
+    mkdir -p /etc/cron.weekly
+
     # Periodic trim for ssd
     printf "#!/bin/sh\nfstrim /\nfstrim /home" > /etc/cron.weekly/fstrim
     chmod u+x /etc/cron.weekly/fstrim
 }
 
 runit_commands() {
-    services=("NetworkManager dbus iwd nanoklogd socklog-unix sshd uuidd bluetoothd udevd")
+    services=("NetworkManager" "dbus" "iwd" "nanoklogd" "socklog-unix" "sshd" "uuidd" "bluetoothd" "udevd" "tlp")
     for service in "${services[@]}" ;
     do
-        if [ -d /var/service/${service} ] ; then
-            echo "$service is already enabled"
-        else
-            ln -sv /etc/sv/${service} /var/service/${service}
-        fi
+        # if [ -d "/var/service/${service}" ] ; then
+        #     echo "$service is already enabled"
+        # else
+            ln -sv "/etc/sv/${service}" "/var/service/${service}"
+#         fi
     done
+    # remove dhcpcd as it conflicts with NetworkManager
+    rm -rf /var/service/dhcpcd
+}
+
+voidlinux_fixes() {
+    printf "\n[General]\nUseDefaultInterface=true" >> /etc/iwd/main.conf
+    printf "\n[Device]\nwifi.backend=iwd" >> /etc/NetworkManager/NetworkManager.conf
 }
 
 superuser_commands() {
     [[ $EUID -ne 0 ]] && echo "This script must be run as root." && exit 1
     # Most important command! Get rid of the beep!
+    mkdir -p /etc/modprobe.d
     rmmod pcspkr
     echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
 
@@ -224,6 +241,7 @@ superuser_commands() {
     # echo "export \$(dbus-launch)" >/etc/profile.d/dbus.sh
 
     # Enable tap to click
+    mkdir -p /etc/X11/xorg.conf.d
     [ ! -f /etc/X11/xorg.conf.d/40-libinput.conf ] && printf 'Section "InputClass"
             Identifier "libinput touchpad catchall"
             MatchIsTouchpad "on"
@@ -241,6 +259,15 @@ superuser_commands() {
 
     runit_commands
     cron_commands
+
+    # add user to bluetooth group
+    usermod -aG bluetooth "$(id -u -n)"
+
+    # # fix Boot Error: Unknown key identifier 'zoom'
+    # mkdir -p /etc/udev/hwdb.d
+    # cp /usr/lib/udev/hwdb.d/60-keyboard.hwdb /etc/udev/hwdb.d/
+    # remove the lines with zoom under Lenovo(13=zoom) and Sony(0e=zoom)
+    # udevadm hwdb --update && sudo udevadm control --reload-rules && sudo udevadm trigger
 }
 
 case $1 in
