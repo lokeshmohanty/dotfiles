@@ -15,6 +15,7 @@ se() { cd ~/.local/bin; $EDITOR $(fzf) ;}
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
+  f="fish" \
 	cp="cp -iv" \
 	mv="mv -iv" \
 	rm="rm -vI" \

@@ -4,7 +4,9 @@
  [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
     . /usr/share/bash-completion/bash_completion
 
-set editing-mode vi
+ source ~/.config/shell/aliasrc
+
+set -o vi
 
 # Expand the history size
 export HISTFILESIZE=10000
