@@ -24,7 +24,6 @@ set -x VISUAL emacsclient
 
 # nvm use v14.18.2
 
-# source ~/.shell_aliases
-if test -e ~/.shell_aliases
-    source ~/.shell_aliases
-end
+# if test -e ~/.config/shell/aliasrc
+#     source ~/.config/shell/aliasrc
+# end

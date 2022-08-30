@@ -43,8 +43,6 @@ alias countfiles="for t in files links directories; do echo \`find . -type \${t:
 # Show all logs in /var/log
 alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
 
-[ -s "$NVM_DIR/bash_completion" ] && [ "$SHELL" = "/bin/bash" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # Use starship to set prompt
 eval "$(starship init bash)"
 
@@ -59,3 +57,9 @@ eval "$(starship init bash)"
 # PERL_MM_OPT="INSTALL_BASE=/home/lokesh/perl5"; export PERL_MM_OPT;
 
 # [ -f "/home/lokesh/.ghcup/env" ] && source "/home/lokesh/.ghcup/env" # ghcup-env
+
+# export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# [ -s "$NVM_DIR/bash_completion" ] && [ "$SHELL" = "/bin/bash" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
