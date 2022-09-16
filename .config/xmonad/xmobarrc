@@ -2,9 +2,6 @@
 
 Config {
     -- font = "xft:FantasqueSansMono Nerd Font:size=10:bold:antialias=true"
-    font = "xft:Ubuntu:weight=bold:pixelsize=11:antialias=true:hinting=true"
-    -- font = "xft:Inconsolata:size=10"
-    -- font = "xft:terminus:size=8"
     , additionalFonts = [ "xft:FontAwesome:size=11" ]
     , allDesktops = True
     , bgColor = "#282c34"

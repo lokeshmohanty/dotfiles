@@ -1,11 +1,11 @@
 import XMonad
 
-import XMonad.Hooks.DynamicLog 
+import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers ( isDialog )
 import XMonad.Hooks.StatusBar ( withEasySB, statusBarProp, defToggleStrutsKey )
 import XMonad.Hooks.StatusBar.PP ( PP )
--- import XMonad.Util.ClickableWorkspaces ( clickablePP )
+import XMonad.Util.ClickableWorkspaces ( clickablePP )
 
 import XMonad.Util.EZConfig ( additionalKeysP )
 import XMonad.Util.Loggers ( logTitles )
@@ -23,7 +23,7 @@ main :: IO ()
 main = xmonad
      . ewmhFullscreen -- make fullscreened applications work properly
      . ewmh
-     . withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobarrc1" (pure myXmobarPP)) defToggleStrutsKey
+     . withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobarrc1" (clickablePP myXmobarPP)) defToggleStrutsKey
      $ myConfig
 
 myConfig = def
@@ -37,23 +37,38 @@ myConfig = def
     , ("M-e"  , spawn $ myTerminal
                 ++ " -t nnn -e nnn"                  )
     , ("M-C-e", spawn "dolphin"                      )
+
+    , ("M1-a" , spawn $ "emacsclient --eval '(emacs-everywhere)'")
+    , ("M1-b" , spawn "qutebrowser"                  )
     , ("M1-e" , spawn myEditor                       )
-    , ("M1-d" , spawn $ myEditor
-                ++ " --eval '(emacs-everywhere)'"    )
     , ("M1-d" , spawn $ myEditor
                 ++ " --eval '(dired nil)'"           )
     , ("M1-m" , spawn $ myEditor
                 ++ " --eval '(mu4e)'"                )
+
     , ("M-w"  , spawn $ "feh --randomize --bg-fill "
                 ++ "~/.local/share/wallpapers/*"     )
-    , ("<Print>", unGrab *> spawn "maimpick"         )
+    , ("<Print>", unGrab *> spawn "flameshot gui"    )
+    , ("M-<Print>", unGrab *> spawn "maimpick"       )
+    , ("M-<Page_Up>", spawn "kbd-backlight up"       )
+    , ("M-<Page_Down>", spawn "kbd-backlight down"   )
+    , ("M-<Backspace>", spawn "sysact"               )
     , ("<XF86Calculator>", spawn "qalculate-gtk"     )
     , ("<XF86AudioMute>", spawn "pamixer -t"         )
     , ("<XF86AudioLowerVolume>", spawn "pamixer --allow-boost -d 3")
     , ("<XF86AudioRaiseVolume>", spawn "pamixer --allow-boost -i 3")
     , ("<XF86AudioMicMute>", spawn "pamixer --source 52 -t"        ) -- find source with `pamixer --list-sources`
+
+    -- Temporary
+    , ("M-<F1>", spawn "sxiv -r -q -t -o /home/lokesh/.local/share/wallpapers/*")
+    , ("M-<F2>", spawn "find /home/lokesh/.local/share/wallpapers/* -type f | shuf -n 1 | xargs xwallpaper --stretch")
+    , ("M1-0", spawn "transset 1.00")
+    , ("M1-1", spawn "transset 0.90")
+    , ("M1-2", spawn "transset 0.85")
+    , ("M1-3", spawn "transset 0.80")
+    , ("M1-4", spawn "transset 0.75")
     ]
- 
+
 
 myTerminal :: String
 myTerminal = "alacritty"
@@ -68,7 +83,9 @@ myManageHook :: ManageHook
 myManageHook = composeAll
     [ className =? "Gimp"          --> doFloat
     , className =? "Qalculate-gtk" --> doFloat
+    , className =? "flameshot"     --> doFloat
     , isDialog                     --> doFloat
+    , className =? "Microsoft Teams - Preview" --> doShift "9"
     ]
 
 myLayout = tiled ||| Mirror tiled ||| Full ||| threeCol

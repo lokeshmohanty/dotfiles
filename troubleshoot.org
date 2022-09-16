@@ -120,13 +120,13 @@ https://serverfault.com/a/449652
 
 #+begin_src shell
 
-  # Old way or redirection
+  # Old way of redirection
   # Redirects only stdout
   ls > output
   # Redirects both stdout and stderr by merging stderr with stdout
   ls > output 2>&1
 
-  # New way or redirection
+  # New way of redirection
   # Redirects both stdout and stderr
   ls &> output
   # Redirects both stdout and stderr but appends instead of replacing
@@ -163,6 +163,10 @@ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
   #+begin_src shell
   ssh-add -l
   #+end_src
+
+*** Block password authentication
+ PasswordAuthentication no 
+ UsePAM no
 
 ** Font
 
@@ -214,6 +218,11 @@ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
     #+begin_src shell
     git config --global core.autocrlf input
     #+end_src
+
+- To fix unexpected disconnect while reading sideband packet error while running git clone, run
+  #+begin_src shell
+    git config --global http.postBuffer 157286400
+  #+end_src
 
 ** Haskell
 - Install haskell

@@ -8,10 +8,10 @@
 #     *) export CONFIG_SOURCED=$CONFIG_SOURCED:$HOME/.xprofile;;
 # esac
 
-# source ~/.config/shell/profile
+source ~/.config/shell/profile
 
 xrandr --dpi 142
-remaps &
+~/.local/bin/custom/remaps &
 redshift -l 12.98:77.58 -t 4500:2500 -b 1.0:0.8 &
 
 autostart="xcompmgr pipewire pipewire-pulse"

@@ -19,8 +19,8 @@ set PATH ~/.local/bin $PATH
 set PATH ~/.cabal/bin $PATH
 set PATH ~/.ghcup/bin $PATH
 
-set -x EDITOR emacsclient
-set -x VISUAL emacsclient
+set -x EDITOR "emacsclient -c -a emacs"
+set -x VISUAL "emacsclient -c -a emacs"
 
 # nvm use v14.18.2
 

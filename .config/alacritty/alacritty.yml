@@ -45,7 +45,7 @@ window:
   # Window opacity as a floating point number from `0.0` to `1.0`.
   # The value `0.0` is completely transparent and `1.0` is opaque.
   # opacity: 1.0
-  opacity: 0.70
+  opacity: 0.85
 
   # Window decorations
   #
@@ -341,6 +341,56 @@ schemes:
       cyan:    '#8ec07c'
       white:   '#ebdbb2'
 
+  ### Gruvbox light ###
+  gruvbox_light: &gruvbox_light
+    primary:
+      # hard contrast: background = '0xf9f5d7'
+      background: '0xfbf1c7'
+      # soft contrast: background = '0xf2e5bc'
+      foreground: '0x3c3836'
+    normal:
+      black:   '0xfbf1c7'
+      red:     '0xcc241d'
+      green:   '0x98971a'
+      yellow:  '0xd79921'
+      blue:    '0x458588'
+      magenta: '0xb16286'
+      cyan:    '0x689d6a'
+      white:   '0x7c6f64'
+    bright:
+      black:   '0x928374'
+      red:     '0x9d0006'
+      green:   '0x79740e'
+      yellow:  '0xb57614'
+      blue:    '0x076678'
+      magenta: '0x8f3f71'
+      cyan:    '0x427b58'
+      white:   '0x3c3836'
+
+  ### Gruvbox material ###
+  gruvbox_material: &gruvbox_material
+    primary:
+      background: '0x282828'
+      foreground: '0xdfbf8e'
+    normal:
+      black:   '0x665c54'
+      red:     '0xea6962'
+      green:   '0xa9b665'
+      yellow:  '0xe78a4e'
+      blue:    '0x7daea3'
+      magenta: '0xd3869b'
+      cyan:    '0x89b482'
+      white:   '0xdfbf8e'
+    bright:
+      black:   '0x928374'
+      red:     '0xea6962'
+      green:   '0xa9b665'
+      yellow:  '0xe3a84e'
+      blue:    '0x7daea3'
+      magenta: '0xd3869b'
+      cyan:    '0x89b482'
+      white:   '0xdfbf8e'
+
 ### Monokai ###
   MonokaiPro: &MonokaiPro
     # Default colors
@@ -571,6 +621,8 @@ schemes:
 # *DoomOne
 # *Dracula
 # *GruvboxDark
+# *gruvbox_light
+# *gruvbox_material
 # *MonokaiPro
 # *Nord
 # *OceanicNext
@@ -580,6 +632,7 @@ schemes:
 # *TomorrowNight
 
 colors: *GruvboxDark
+# colors: *gruvbox_light
 
 #######################################
 ##       END OF COLOR SCHEMES        ##
@@ -849,7 +902,7 @@ colors: *GruvboxDark
 # binding with the same triggers is defined. To unset a default binding, it can
 # be mapped to the `ReceiveChar` action. Alternatively, you can use `None` for
 # a no-op if you do not wish to receive input characters for that binding.
-# key_bindings:
+key_bindings:
 #     # (Windows, Linux, and BSD only)
 #   - { key: V,         mods: Control|Shift, action: Paste                       }
 #   - { key: C,         mods: Control|Shift, action: Copy                        }
@@ -858,7 +911,7 @@ colors: *GruvboxDark
 #   - { key: Equals,    mods: Control,       action: IncreaseFontSize            }
 #   - { key: Plus,      mods: Control,       action: IncreaseFontSize            }
 #   - { key: Minus,     mods: Control,       action: DecreaseFontSize            }
-#   - { key: F11,       mods: None,          action: ToggleFullscreen            }
+  - { key: F11,       mods: None,          action: ToggleFullscreen            }
 #   - { key: Paste,     mods: None,          action: Paste                       }
 #   - { key: Copy,      mods: None,          action: Copy                        }
 #   - { key: L,         mods: Control,       action: ClearLogNotice              }
@@ -867,4 +920,3 @@ colors: *GruvboxDark
 #   - { key: PageDown,  mods: None,          action: ScrollPageDown, mode: ~Alt  }
 #   - { key: Home,      mods: Shift,         action: ScrollToTop,    mode: ~Alt  }
 #   - { key: End,       mods: Shift,         action: ScrollToBottom, mode: ~Alt  }
-

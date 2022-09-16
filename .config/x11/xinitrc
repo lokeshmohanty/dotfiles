@@ -16,7 +16,7 @@ fi
 
 # Set up an icon tray
 
-trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 127 --tint 0x5f5f5f --height 25 &
+trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x282c34 --height 25 &
 
 # trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 180 --tint 0x282c34  --height 22 &
 
@@ -26,19 +26,22 @@ xsetroot -cursor_name left_ptr
 # Set a nice background
 feh --randomize --bg-fill ~/.local/share/wallpapers/*
 
-# Fire up screensaver
-# xscreensaver -no-splash &
+# Volume Manager
+if [ -x /usr/bin/nm-applet ] ; then
+    pasystray &
+fi
 
-# Volume Management
-pasystray &
+# Power Manager
+if [ -x /usr/bin/nm-applet ] ; then
+    xfce4-power-manager &
+fi
 
-# Power Management
-xfce4-power-manager &
-
+# Network Manager
 if [ -x /usr/bin/nm-applet ] ; then
    nm-applet --sm-disable &
 fi
 
-# exec xmonad
+firefox &
+emacs --eval "(server-start)" &
 
 ssh-agent dbus-run-session -- xmonad
