@@ -1,7 +1,7 @@
-#+TITLE: Dotfiles (Configuration files for GNU/Linux based OS)
+#+TITLE: Dotfiles (Configuration files for GNU/Linux based OS) (optimized for voidlinux)
 #+AUTHOR: Lokesh Mohanty
 
-* Installation
+* Installation (outdated)
 
 Run the below command in terminal. It clones the bare repository at $HOME/.cfg and creates a backup of conflicting files at .config-backup. You can read the source [[file:.bin/install-dotfiles.sh][here]].
 #+begin_src shell
@@ -43,9 +43,6 @@ Run the below command if the above doesn't work.
 
 * Nvm (Node Version Manager)
 - To set default version, run ~nvm alias default <version>~
-* Redsift
-- To go to default: ~redshift -x~
-- To set a temperature T(eg: 3000): ~redshift -O 3000~
 * Wireshark
 *** Display filter
 https -> ssl.handshake.type == 1
@@ -54,40 +51,3 @@ http -> http.request
 http server name -> http.host
 https server name -> tls.handshake.extensions_server_name
 
-* Bookmarked Applications
-- `git`
-- `aria2`
-- `redshift`
-- `ntfs-3g`
-- `os-prober`
-- `stacer`(cpu monitor)
-- `qutebrowser`
-- `mpv`(video player)
-- `sxiv`(image viewer)
-- `gimp`(image editor)
-- `audacity`(audio editor)
-- `kdenlive`(video editor)
-- `surge`(instant site publish)(`npm i -g surge`)
-- `ngrok`(make a port public temporarily)
-- `rclone`(for syncing/download-upload from cloud), `rsync`
-- `nvm` (node version manager)
-- `haskell stack`
-- Download Managers: fdm, jdownloader
-- File Manager: lf
-- Open broadcast software
-
-** New Programs
-- groff
-- zathura
-- lf(requires nerd-fonts for icons), ueberzug(for image previewing inside lf)
-- dunst (notification)
-- pipewire (used as an audio server similar to pulseaudio)
-- pinentry (collection of dialog programs to allow GnuPG to read passphrases and PIN numbers securely)
-- newsboat (rss reader)
-- mpd (music player daemon)
-- ncmpcpp (mpd client)
-- sixv (for viewing images), xwallpaper( for setting wallpaper), pywal (use pip to install)(for terminal color scheme based on wallpaper)
-- urlscan (urlview replacement)
-- pavucontrol (control pulseaudio devices)
-- ytfzf (search on youtube and watch videos using mpv)
-- sc-im/visidata (spreadsheet editor)

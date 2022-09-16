@@ -41,7 +41,7 @@ if [ -x /usr/bin/nm-applet ] ; then
    nm-applet --sm-disable &
 fi
 
-firefox &
+google-chrome-stable &
 emacs --eval "(server-start)" &
 
 ssh-agent dbus-run-session -- xmonad

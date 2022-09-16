@@ -23,7 +23,7 @@ main :: IO ()
 main = xmonad
      . ewmhFullscreen -- make fullscreened applications work properly
      . ewmh
-     . withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobarrc1" (clickablePP myXmobarPP)) defToggleStrutsKey
+     . withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobarrc" (clickablePP myXmobarPP)) defToggleStrutsKey
      $ myConfig
 
 myConfig = def
@@ -85,6 +85,7 @@ myManageHook = composeAll
     , className =? "Qalculate-gtk" --> doFloat
     , className =? "flameshot"     --> doFloat
     , isDialog                     --> doFloat
+    , className =? "Google-chrome" --> doShift "2"
     , className =? "Microsoft Teams - Preview" --> doShift "9"
     ]
 

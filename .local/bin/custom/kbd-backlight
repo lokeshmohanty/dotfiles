@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# you can find source by running: xbacklight -list | grep backlight
+SOURCE="tpacpi::kbd_backlight"
+COMMAND="xbacklight -ctrl ${SOURCE}"
+
+function send_notification() {
+	brightness=$(printf "%.0f\n" $($COMMAND -get))
+	dunstify -a "changebacklightbrightness" -u low -r 9991 -h int:value:"$brightness" -i "brightness-$1" "Backlight: $brightness%" -t 2000
+}
+
+case $1 in
+up)
+	$COMMAND -inc 50
+	send_notification $1
+	;;
+down)
+	$COMMAND -dec 50
+	send_notification $1
+	;;
+esac

@@ -98,7 +98,7 @@ install_packages() {
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     nvm install --lts
     nvm use --lts
-    npm i -g yaml-language-server
+    npm i -g yaml-language-server surge
 
     # install/update nnn plugins
     curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
