@@ -11,7 +11,7 @@ set_dotfiles_remote() {
 }
 
 symlink_directories() {
-    CONFIG_DIRECTORIES=("emacs" "fish" "qutebrowser" "xmonad" "shell" "zathura" "nvim" "starship")
+    CONFIG_DIRECTORIES=("emacs" "fish" "qutebrowser" "xmonad" "shell" "zathura" "nvim" "starship" "sxiv")
     OTHER_DIRECTORIES=(".local/bin/custom" ".local/share/applications")
 
     echo "Symlinking directories..."
@@ -91,6 +91,15 @@ install_packages() {
     done < $filename
     xi $packages
 
+    # python packages
+    pip install ueberzug pyright matplotlib cmake-language-server
+
+    # npm packages
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    nvm install --lts
+    nvm use --lts
+    npm i -g yaml-language-server
+
     # install/update nnn plugins
     curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 }
@@ -111,6 +120,27 @@ install_source_packages() {
     $HOME/.local/src/void-packages/xbps-src pkg $packages
     xi $packages
 }
+
+install_extra_packages() {
+    mkdir -p $HOME/.local/src
+    cd $HOME/.local/src
+    repositories=(
+        "lokesh1197/mutt-wizard"
+        "pystardust/ytfzf"
+        "djcb/mu"
+    )
+    for repo in $repositories ;
+    do
+        gh repo clone $repo
+    done
+
+    tars=("https://github.com/ventoy/Ventoy/releases")
+}
+
+package_extra_steps() {
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
 
 install_dotfiles() {
     echo "Installing using the dotfiles method (i.e., by creating symlinks)"
@@ -209,7 +239,7 @@ cron_commands() {
 }
 
 runit_commands() {
-    services=("NetworkManager" "dbus" "iwd" "nanoklogd" "socklog-unix" "sshd" "uuidd" "bluetoothd" "udevd" "tlp")
+    services=("NetworkManager" "dbus" "iwd" "nanoklogd" "socklog-unix" "sshd" "uuidd" "bluetoothd" "udevd" "tlp" "cronie")
     for service in "${services[@]}" ;
     do
         # if [ -d "/var/service/${service}" ] ; then
@@ -262,6 +292,17 @@ superuser_commands() {
 
     # add user to bluetooth group
     usermod -aG bluetooth "$(id -u -n)"
+
+    # set default grub timeout to 1
+    sed -i s/^(GRUB_TIMEOUT=)[0-9]*$/11/ /etc/default/grub
+    update-grub
+
+    # give user access to /sys/class/leds for xbacklight
+    mkdir -p /etc/udev/rules.d/
+    touch /etc/udev/rules.d/90-leds.rules
+    echo 'SUBSYSTEM=="leds", ACTION=="add"' >> /etc/udev/rules.d/90-leds.rules
+    echo 'RUN+="/bin/chgrp video /sys/class/leds/%k/brightness"' >> /etc/udev/rules.d/90-leds.rules
+    echo 'RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"' >> /etc/udev/rules.d/90-leds.rules
 
     # # fix Boot Error: Unknown key identifier 'zoom'
     # mkdir -p /etc/udev/hwdb.d
