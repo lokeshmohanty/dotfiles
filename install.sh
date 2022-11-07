@@ -92,7 +92,7 @@ install_packages() {
     xi $packages
 
     # python packages
-    pip install ueberzug pyright matplotlib cmake-language-server
+    pip install ueberzug pyright matplotlib cmake-language-server inkscape-figures
 
     # npm packages
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
@@ -102,6 +102,11 @@ install_packages() {
 
     # install/update nnn plugins
     curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
+
+    # gpg enable pinentry
+    mkdir -p $HOME/.local/share/gnupg
+    echo "enable-ssh-support" > "$HOME/.local/share/gnupg/gpg-agent.conf"
+    echo "pinentry-program /bin/pinentry-gtk-2" >> "$HOME/.local/share/gnupg/gpg-agent.conf"
 }
 
 setup_gh() {
@@ -139,6 +144,12 @@ install_extra_packages() {
 
 package_extra_steps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+    # wine extra packages
+    xi vkd3d vkd3d-32bit mesa-vulkan-radeon mesa-vulkan-radeon-32bit Vulkan-Tools amdvlk amdvlk-32bit
+
+    # then using winetricks install dxvk in 32bit
+
 }
 
 
@@ -270,7 +281,7 @@ superuser_commands() {
     # # Use system notifications for Brave on Artix
     # echo "export \$(dbus-launch)" >/etc/profile.d/dbus.sh
 
-    # Enable tap to click
+    # Enable tap to click and natural scrolling
     mkdir -p /etc/X11/xorg.conf.d
     [ ! -f /etc/X11/xorg.conf.d/40-libinput.conf ] && printf 'Section "InputClass"
             Identifier "libinput touchpad catchall"
@@ -279,6 +290,7 @@ superuser_commands() {
             Driver "libinput"
     # Enable left mouse button by tapping
     Option "Tapping" "on"
+    Option "NaturalScrolling" "true"
     EndSection' >/etc/X11/xorg.conf.d/40-libinput.conf
 
     # Force modesetting driver
@@ -297,6 +309,7 @@ superuser_commands() {
     sed -i s/^(GRUB_TIMEOUT=)[0-9]*$/11/ /etc/default/grub
     update-grub
 
+    # replace add with change to give write access to brightness in 90-backlight.rules file
     # give user access to /sys/class/leds for xbacklight
     mkdir -p /etc/udev/rules.d/
     touch /etc/udev/rules.d/90-leds.rules

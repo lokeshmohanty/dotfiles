@@ -27,21 +27,34 @@ xsetroot -cursor_name left_ptr
 feh --randomize --bg-fill ~/.local/share/wallpapers/*
 
 # Volume Manager
-if [ -x /usr/bin/nm-applet ] ; then
+if [ -x /usr/bin/pasystray ] ; then
     pasystray &
 fi
 
 # Power Manager
-if [ -x /usr/bin/nm-applet ] ; then
+if [ -x /usr/bin/xfce4-power-manager ] ; then
     xfce4-power-manager &
 fi
 
 # Network Manager
-if [ -x /usr/bin/nm-applet ] ; then
+if [ -x /bin/nm-applet ] ; then
    nm-applet --sm-disable &
 fi
 
+# Notification Daemon
+if [ -x /bin/dunst ] ; then
+   dunst &
+fi
+
+# Protect eyes from strain
+if [ -x /bin/redshift ] ; then
+   # redshift -l 12.98:77.58 -t 4500:2500 -b 1.0:0.8 &
+   redshift -O 4000
+fi
+
+# flatpak run com.microsoft.Teams
 google-chrome-stable &
 emacs --eval "(server-start)" &
+# emacs --eval "(progn (setq server-name \"Communication\") (server-start))" --name Communication &
 
 ssh-agent dbus-run-session -- xmonad

@@ -11,6 +11,7 @@ avahi, for automatic configuration with zeroconf
 bat, formatted cat alternative
 bind-utils, required by inxi for dig
 bluez, bluetooth
+bottom, process/system monitor
 clang, gcc alternative
 cmake, c++ build generator
 crda,required due to dmesg issues
@@ -30,10 +31,11 @@ ffmpegthumbnailer
 firefox, web browser
 fish-shell
 flatpak, applicaton sandboxing and distribution framework
-flameshot, screenshot tool with upload features
-font-inconsolata-otf, fonts
 font-adobe-source-code-pro, fonts
-fzf
+font-inconsolata-otf, fonts
+font-firacode, fonts for nano emacs
+fonts-roboto-ttf, fonts for nano emacs
+fzf, fuzzy finder
 gcc, c and c++ compiler
 gdb, c and c++ debugger
 gimp, image editor and manipulator
@@ -45,16 +47,20 @@ glibc-32bit,required by steam
 gmime-devel,required by mu
 hddtemp,required by inxi
 hplip, for configuring hp printers
+hunspell, for spell checking
+hunspell-en_US, english dictionary for spell checking
 inkscape, generate scalable graphics
 inxi, display system information
 ipmitool,required by inxi
 ipmiutil,required by inxi
 isync
+jump, fuzzy directory jumper learns from history
 jupyterlab, python notebook
 jq, required by ueberzug
 kdenlive, video editor
 libdrm-32bit, required by steam
 libglapi-32bit, required by steam
+libgomp-devel, required for using openmp
 libX11-devel,required by xmonad and ueberzug
 libXScrnSaver-devel,required by xmonad
 libXft-devel,required by xmonad
@@ -89,7 +95,6 @@ ncurses-libtinfo-devel, required by xmonad
 ncurses-libtinfo-libs, required by xmonad
 neofetch
 neomutt
-neovim, text editor
 nerd-fonts-otf,fonts
 nerd-fonts-ttf,fonts
 nnn, file browser
@@ -106,6 +111,7 @@ pass, password manager
 pasystray, system tray for volume
 pavucontrol
 perf, performance monitoring tool
+pinentry-gtk, GUI for gpg passphrase entry
 pipewire
 pkg-config, required by xmonad
 polkit
@@ -115,6 +121,7 @@ python-Pygments, required by latex package minted
 python3-dbus
 python3-devel
 python3-pip
+python3-tkinter, for matplotlib gui backend
 qalculate-gtk, calculator gui
 qrcp, transfer files to/from phone by generating a qrcode
 qutebrowser,very fast browser
@@ -139,6 +146,8 @@ trayer-srg,system trayer for xmobar
 tree,required by inxi
 unzip
 upower,required by inxi
+valgrind, tool to check memory
+vim, text editor
 void-multilib-repo, for 32-bit packages
 void-multilib-repo-nonfree, nonfree 32-bit packages
 void-repo-nonfree
@@ -164,4 +173,5 @@ xtools
 xwallpaper, set wallpaper for X
 yt-dlp, youtube downloader
 zathura, pdf viewer
+zathura-djvu, djvu reader
 zathura-pdf-mupdf, use mupdf as zathura backend

@@ -50,4 +50,8 @@ http -> http.request
 
 http server name -> http.host
 https server name -> tls.handshake.extensions_server_name
+* Note
+Currently disabled services:
+- cupsd, avahi-daemon: printer daemons
+- bluetoothd: bluetooth daemon
 
