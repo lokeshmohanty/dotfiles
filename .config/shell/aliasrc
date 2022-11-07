@@ -46,3 +46,15 @@ alias \
 	pk="ps -ef | fzf | awk '{print $2}' | xargs kill" \
   void="cd ~/.local/src/void-packages" \
   src="cd ~/.local/src"
+
+# nnn
+export NNN_PLUG="m:xdgdefault;c:rsynccp;i:imgview;e:gpge;f:fzplug;h:fzhist;o:fzopen;d:dragdrop;C:cdpath;j:autojump;k:pskill;p:preview-tui;n:nmount"
+# show folders as bold white instead of blue
+export NNN_FCOLORS="0000E6310000000000000000"
+# required for previewing
+export NNN_FIFO="/tmp/nnn.fifo"
+# show hidden files at the top
+export LC_COLLATE="C"
+export NNN_USE_EDITOR=1
+export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
+alias nnn="nnn -e"                            # use the $EDITOR variable for text
