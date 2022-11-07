@@ -158,6 +158,9 @@ ex=🎯:\
 *.java=♨:\
 "
 
+# start the emacs daemon to replace vi/vim usage
+emacs --bg-daemon=term
+
 source .bashrc
 source ~/.config/shell/aliasrc
 
