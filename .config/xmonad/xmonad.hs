@@ -10,6 +10,7 @@ import XMonad.Util.ClickableWorkspaces ( clickablePP )
 import XMonad.Util.EZConfig ( additionalKeysP )
 import XMonad.Util.Loggers ( logTitles )
 import XMonad.Util.Ungrab ( unGrab )
+import XMonad.Util.SpawnOnce (spawnOnce)
 -- import Xmonad.Util.NamedActions ( addDescrKeys, sendMessage' )
 
 import XMonad.Layout.Magnifier ( magnifiercz' )
@@ -17,6 +18,9 @@ import XMonad.Layout.ThreeColumns ( ThreeCol(ThreeColMid) )
 import XMonad.Layout.Renamed ( renamed, Rename(Replace) )
 
 import XMonad.Hooks.EwmhDesktops ( ewmh, ewmhFullscreen )
+import XMonad.Hooks.SetWMName ( setWMName )
+import XMonad.Operations ( kill )
+-- XMonad.Operations save/restore state
 
 
 main :: IO ()
@@ -26,21 +30,30 @@ main = xmonad
      . withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobarrc" (clickablePP myXmobarPP)) defToggleStrutsKey
      $ myConfig
 
+-- Default keybindings: "M-S-/"
 myConfig = def
     { modMask    = mod4Mask      -- Rebind Mod to the Super key
     , layoutHook = myLayout      -- Use custom layouts
     , manageHook = myManageHook  -- Match on certain windows
+    , startupHook = myStartupHook
     , terminal   = myTerminal    -- Use alacritty instead of xterm
     }
   `additionalKeysP`
     [ ("M-S-z", spawn "slock"                        )
+    , ("M-x"  , kill                                 )
+    , ("M-S-x", spawn "xkill"                        )
+    , ("M-d"  , spawn "dmenu_run"                    )
     , ("M-e"  , spawn $ myTerminal
-                ++ " -t nnn -e nnn"                  )
+                ++ " -t nnn -e nnn -e"               )
     , ("M-C-e", spawn "dolphin"                      )
+    -- , ("M-p"  , spawn "rofi -show drun -show-icons -display-drun ''")
+    , ("M-p", spawn "~/.config/rofi/scripts/launcher_t7")
 
     , ("M1-a" , spawn $ "emacsclient --eval '(emacs-everywhere)'")
     , ("M1-b" , spawn "qutebrowser"                  )
     , ("M1-e" , spawn myEditor                       )
+    , ("M1-t" , spawn $ myTerminal
+                ++ " -t ec -e emacsclient -s term -nw -c"  )
     , ("M1-d" , spawn $ myEditor
                 ++ " --eval '(dired nil)'"           )
     , ("M1-m" , spawn $ myEditor
@@ -48,11 +61,14 @@ myConfig = def
 
     , ("M-w"  , spawn $ "feh --randomize --bg-fill "
                 ++ "~/.local/share/wallpapers/*"     )
-    , ("<Print>", unGrab *> spawn "flameshot gui"    )
+    , ("<Print>", unGrab *> spawn "maimpick select-copy")
     , ("M-<Print>", unGrab *> spawn "maimpick"       )
     , ("M-<Page_Up>", spawn "kbd-backlight up"       )
     , ("M-<Page_Down>", spawn "kbd-backlight down"   )
-    , ("M-<Backspace>", spawn "sysact"               )
+    -- , ("M-<Backspace>", spawn "sysact"               )
+    , ("M-<Backspace>", spawn "~/.config/rofi/scripts/powermenu_t5")
+    , ("<XF86Favorites>", spawn "~/.config/rofi/scripts/launcher_t7")
+    , ("<XF86Display>", spawn "arandr"               )
     , ("<XF86Calculator>", spawn "qalculate-gtk"     )
     , ("<XF86AudioMute>", spawn "pamixer -t"         )
     , ("<XF86AudioLowerVolume>", spawn "pamixer --allow-boost -d 3")
@@ -83,10 +99,11 @@ myManageHook :: ManageHook
 myManageHook = composeAll
     [ className =? "Gimp"          --> doFloat
     , className =? "Qalculate-gtk" --> doFloat
-    , className =? "flameshot"     --> doFloat
+    , className =? "Arandr"        --> doFloat
     , isDialog                     --> doFloat
     , className =? "Google-chrome" --> doShift "2"
     , className =? "Microsoft Teams - Preview" --> doShift "9"
+    , appName =? "Communication" --> doShift "8"
     ]
 
 myLayout = tiled ||| Mirror tiled ||| Full ||| threeCol
@@ -127,3 +144,9 @@ myXmobarPP = def
     yellow   = xmobarColor "#f1fa8c" ""
     red      = xmobarColor "#ff5555" ""
     lowWhite = xmobarColor "#bbbbbb" ""
+
+myStartupHook :: X()
+myStartupHook = do
+  spawnOnce "dunst"
+  spawnOnce "flatpak run com.microsoft.Teams"
+  setWMName "LG3D"

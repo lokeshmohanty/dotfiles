@@ -41,10 +41,10 @@ if [ -x /bin/nm-applet ] ; then
    nm-applet --sm-disable &
 fi
 
-# Notification Daemon
-if [ -x /bin/dunst ] ; then
-   dunst &
-fi
+# Notification Daemon, need to be started after x11 display
+# if [ -x /bin/dunst ] ; then
+#    dunst &
+# fi
 
 # Protect eyes from strain
 if [ -x /bin/redshift ] ; then
@@ -55,6 +55,7 @@ fi
 # flatpak run com.microsoft.Teams
 google-chrome-stable &
 emacs --eval "(server-start)" &
-# emacs --eval "(progn (setq server-name \"Communication\") (server-start))" --name Communication &
+emacs --eval "(progn (setq server-name \"communication\") (server-start) (mu4e) (mu4e-dashboard))" --name Communication &
 
-ssh-agent dbus-run-session -- xmonad
+# ssh-agent dbus-run-session -- xmonad
+exec dbus-launch --sh-syntax --exit-with-session xmonad
