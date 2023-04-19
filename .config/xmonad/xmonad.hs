@@ -84,7 +84,7 @@ myKeymap =
     , ("M-<Page_Up>", spawn "kbd-backlight up"                      )
     , ("M-<Page_Down>", spawn "kbd-backlight down"                  )
     -- , ("M-<Backspace>", spawn "sysact"                           )
-    , ("M-<Backspace>", spawn "~/.config/rofi/scripts/powermenu_t4" )
+    , ("M-<Backspace>", spawn "~/.config/rofi/scripts/powermenu_t3" )
     , ("<XF86Favorites>", spawn "~/.config/rofi/scripts/launcher_t7")
     , ("<XF86Display>", spawn "arandr"                              )
     , ("<XF86MonBrightnessUp>"  , spawn $ myScriptsPrefix ++ "brightness.sh up"  )
@@ -178,7 +178,7 @@ myStartupHook = do
   spawnOnce "/usr/bin/picom &"
   spawnOnce "/home/lokesh/.local/bin/custom/remaps"
   spawnOnce "feh --randomize --bg-fill ~/.local/share/wallpapers/*"
-  spawnOnce " trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 105 --tint 0x282c34 --height 25 &"
+  spawnOnce " trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 55 --tint 0x282c34 --height 25 &"
   spawnOnce "nm-applet &"
   setDefaultCursor xC_left_ptr
 
