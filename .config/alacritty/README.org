@@ -1,0 +1,41 @@
+#+title: Alacritty Config
+#+author: Lokesh Mohanty
+
+* Font
+References: [[https://github.com/alacritty/alacritty][github]]
+
+#+begin_src yaml-ts :tangle alacritty.yml
+  font:
+    normal:
+      family: Iosevka Fixed SS07
+      style: Regular
+    bold:
+      family: Iosevka Fixed SS07
+      style: Bold
+    italic:
+      family: Iosevka Fixed SS07
+      style: Italic
+    bold_italic:
+      family: Iosevka Fixed SS07
+      style: Bold Italic
+    size: 14
+    offset:
+      x: 1
+      y: 1
+    draw_bold_text_with_bright_colors: true
+#+end_src
+
+* Theme
+References: [[https://github.com/alacritty/alacritty-theme][github]]
+
+#+begin_src yaml-ts :tangle alacritty.yml
+  import:
+   - ~/.config/alacritty/themes/themes/gruvbox_dark.yaml
+#+end_src
+
+* Window
+
+#+begin_src yaml-ts :tangle alacritty.yml
+  window:
+    opacity: 0.75
+#+end_src
