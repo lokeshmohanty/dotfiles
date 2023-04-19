@@ -10,3 +10,7 @@
 	rebase = true
 [github]
 	user = lokesh1197
+[commit]
+	gpgsign = true
+[init]
+	defaultBranch = main
