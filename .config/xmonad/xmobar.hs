@@ -1,14 +1,13 @@
--- -*- mode: haskell; -*-
 Config { overrideRedirect = True
-       , font     = "xft:iosevka-9"
-       -- , font = "xft:Ubuntu:weight=bold:pixelsize=11:antialias=true:hinting=true"
-       -- , font = "xft:Inconsolata:size=10"
-       -- , font = "xft:terminus:size=8"
-      , additionalFonts = [ "xft:FontAwesome:size=11" ]
+       -- , font     = "xft:iosevka-13"
+       -- , font = "xft:Ubuntu:weight=bold:pixelsize=15:antialias=true:hinting=true"
+       , font = "xft:Inconsolata:italic:size=11"
+       -- , font = "xft:terminus:size=11"
+      , additionalFonts = [ "xft:FontAwesome:size=11", "xft:NerdFont:size=11" ]
       , bgColor = "#282c34"
       , fgColor = "#bbc2cf"
       , position = TopW L 100
-      , alpha    = 200
+      , alpha    = 150
       , iconRoot = "/home/lokesh/.config/xmonad/xpm"
       , commands = [ Run Weather "EGPF"
                        [ "--template", "<weather> <tempC>°C"
@@ -41,13 +40,25 @@ Config { overrideRedirect = True
                        , "-n","#bbc2cf"
                        , "-S", "True"
                        ] 50
+                  , Run Battery
+                      [ "-t" , "<acstatus>"
+                      , "-L", "30", "-l", "#fb4934" -- #ff5555
+                      , "-H", "80", "-h", "#98be65"
+                      , "-n", "#bbc2cf"
+                      , "--"
+                      , "-o", "<fc=#cccc00><fn=1></fn> <left>% (<timeleft>)</fc>" -- discharging status
+                      , "-O", "<fc=#cccc00><fn=1></fn> <left>% (Charging)</fc>"   -- charging status
+                      -- , "-O", "<fc=#cccc00><fn=1>\uf12a5</fn> <left>% (Charging)</fc>"   -- charging status
+                      , "-i", "<fc=#cccc00><fn=1></fn> Charged</fc>"              -- charged status
+                      , "-a", "notify-send -u critical 'Battery running out!!'"
+                      , "-A", "30"
+                      ] 50
                    , Run Date "%a %d-%m-%Y <fc=#8be9fd>%H:%M:%S</fc>" "date" 10
-                   , Run Com "/home/lokesh/.config/xmonad/trayer-padding-icon.sh" [] "trayerpad" 20
+                   , Run Com "/home/lokesh/.config/xmonad/scripts/trayer-padding-icon.sh" [] "trayerpad" 20
                    , Run Locks
-                   -- , Run XMonadLog
                    , Run UnsafeXMonadLog
                    ]
       , sepChar  = "%"
       , alignSep = "}{"
-      , template = " <icon=haskell_20.xpm/> %UnsafeXMonadLog% }{ %locks% | %cpu% | %multicoretemp% | %memory% | %dynnetwork% | %date% | %trayerpad% "
+      , template = " <icon=haskell_20.xpm/> %UnsafeXMonadLog% }{ %locks% | %cpu% | %multicoretemp% | %memory% | %dynnetwork% | %battery% | %date% | %trayerpad% "
       }
