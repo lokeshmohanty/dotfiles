@@ -176,6 +176,7 @@ myStartupHook = do
   -- spawnOnce "dunst"
   spawnOnce "lxpolkit &" -- polkit authentication agent (https://wiki.archlinux.org/title/Polkit#Authentication_agents)
   spawnOnce "/usr/bin/picom &"
+  spawnOnce "touchegg &" -- enable touchpad guestures (configure with touche from flatpak)
   spawnOnce "/home/lokesh/.local/bin/custom/remaps"
   spawnOnce "feh --randomize --bg-fill ~/.local/share/wallpapers/*"
   spawnOnce " trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 55 --tint 0x282c34 --height 25 &"
