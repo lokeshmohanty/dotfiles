@@ -1,3 +1,12 @@
 [submodule ".config/emacs"]
 	path = .config/emacs
 	url = git@github.com:lokesh1197/.emacs.d.git
+[submodule ".config/xmonad/xmonad"]
+	path = .config/xmonad/xmonad
+	url = https://github.com/xmonad/xmonad
+[submodule ".config/xmonad/xmonad-contrib"]
+	path = .config/xmonad/xmonad-contrib
+	url = https://github.com/xmonad/xmonad-contrib
+[submodule ".config/xmonad/xmobar"]
+	path = .config/xmonad/xmobar
+	url = https://codeberg.org/xmobar/xmobar.git

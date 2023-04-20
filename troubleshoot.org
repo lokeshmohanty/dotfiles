@@ -383,6 +383,32 @@ source: [[https://emacs.stackexchange.com/a/21645][StackExchange]]
     git config --global http.postBuffer 157286400
 #+end_src
 
+*** Submodule
+References: [[https://www.vogella.com/tutorials/GitSubmodules/article.html][blog]]
+
+- Add
+#+begin_src shell
+  git submodule add <url>
+#+end_src
+
+- Remove
+#+begin_src shell
+  git rm <path-to-submodule>
+  rm -rf .git/modules/<path-to-submodule>
+  git config --remove-section submodule.<path-to-submodule>
+#+end_src
+
+- Fetch
+#+begin_src shell
+  git submodule add <url>
+#+end_src
+
+*** Config
+- Auto sign commits in git with gpg key
+#+begin_src shell
+  git config --global user.signingkey <gpg-key>
+  git config --global commit.gpgsign true
+#+end_src
 
 * Ubuntu
 - Lock user

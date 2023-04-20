@@ -1,7 +1,18 @@
 #+TITLE: Dotfiles (Configuration files for GNU/Linux based OS) (optimized for voidlinux)
 #+AUTHOR: Lokesh Mohanty
 
-* Installation (outdated)
+* Installation
+
+Clone to ~~/.dotfiles~ and later symlink the configurations required
+
+#+begin_src shell
+  # To clone without submodules:
+  # git clone https://github.com/lokesh1197/dotfiles ~/.dotfiles
+  git clone --recurse-submodules https://github.com/lokesh1197/dotfiles ~/.dotfiles
+#+end_src
+
+
+** (outdated)
 
 Run the below command in terminal. It clones the bare repository at $HOME/.cfg and creates a backup of conflicting files at .config-backup. You can read the source [[file:.bin/install-dotfiles.sh][here]].
 #+begin_src shell
