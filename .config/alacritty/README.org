@@ -1,6 +1,13 @@
 #+title: Alacritty Config
 #+author: Lokesh Mohanty
 
+* Settings
+
+#+begin_src yaml-ts :tangle alacritty.yml
+  env:
+    TERM: xterm-256color
+#+end_src
+
 * Font
 References: [[https://github.com/alacritty/alacritty][github]]
 
