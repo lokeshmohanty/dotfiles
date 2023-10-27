@@ -10,3 +10,6 @@
 [submodule ".config/xmonad/xmobar"]
 	path = .config/xmonad/xmobar
 	url = https://codeberg.org/xmobar/xmobar.git
+[submodule ".config/alacritty/themes"]
+	path = .config/alacritty/themes
+	url = https://github.com/alacritty/alacritty-theme

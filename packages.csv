@@ -170,7 +170,7 @@ wmctrl,required by inxi
 xapian-core-devel,required by mu
 xbacklight
 xcape xclip xdotool
-xcompmgr, compositor for X
+picom, compositor for X
 xdg-utils
 xfce-power-manager
 xorg-apps,basic for X
@@ -179,7 +179,6 @@ xorg-input-drivers,basic for X
 xorg-server,basic for X
 xterm
 xtools
-xwallpaper, set wallpaper for X
 yt-dlp, youtube downloader
 zathura, pdf viewer
 zathura-djvu, djvu reader

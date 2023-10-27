@@ -92,16 +92,16 @@ install_packages() {
     xi $packages
 
     # python packages
-    pip install ueberzug pyright matplotlib cmake-language-server inkscape-figures
+    # pip install pyright matplotlib 
 
     # npm packages
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
     nvm install --lts
     nvm use --lts
-    npm i -g yaml-language-server surge
+    # npm i -g surge
 
     # install/update nnn plugins
-    curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
+    # curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 
     # gpg enable pinentry
     mkdir -p $HOME/.local/share/gnupg
@@ -111,6 +111,13 @@ install_packages() {
 
 setup_gh() {
     gh auth login
+}
+
+setup_imap() {
+    go install gitlab.com/shackra/goimapnotify@latest
+    # goimapnotify -conf ~/.dotfiles/.config/imap/go-gmail.json
+    # goimapnotify -conf ~/.dotfiles/.config/imap/go-yahoo.json
+    # goimapnotify -conf ~/.dotfiles/.config/imap/go-outlook.json
 }
 
 install_source_packages() {
@@ -142,6 +149,18 @@ install_extra_packages() {
     tars=("https://github.com/ventoy/Ventoy/releases")
 }
 
+install_emacs() {
+    # https://git.savannah.gnu.org/cgit/emacs.git/tree/INSTALL
+		mkdir -p ~/.local/src
+		cd ~/.local/src
+    git clone git://git.sv.gnu.org/emacs.git
+    cd emacs
+    ./autogen.sh
+    ./configure --with-mailutils --with-native-compilation --with-json --with-imagemagick
+		--with-cairo --with-tree-sitter --with-gif --with-png --with-jpeg --with-rsvg
+		--with-tiff
+}
+
 package_extra_steps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
@@ -159,12 +178,14 @@ install_dotfiles() {
     DOTFILES_DIR="${HOME}/.dotfiles"
     BACKUP_DIR="${HOME}/.dotfiles/backup"
     BRANCH="voidlinux"
+		OS=$(grep "ID" /etc/os-release | cut -d= -f2 | head -n1)
 
-    # xbps-install -Sy
-    # xbps-install -u xbps
-    # xbps-install -Syu
-    # xbps-install xtools
-    # install_packages
+		if [[ $(grep "ID" /etc/os-release | head -n1 | cut -d= -f2) == "void" ]]; then
+				xbps-install -Sy
+				xbps-install -u xbps
+				xbps-install -Syu
+				install_packages
+		fi
 
     echo "Cloning dotfiles repository to $DOTFILES_DIR"
     # git clone -b $BRANCH --recurse-submodules $GIT_CLONE_URL $DOTFILES_DIR
@@ -193,7 +214,6 @@ install_dotfiles() {
     # Install vim plugins if not alread present.
     # [ ! -f "/home/$name/.config/nvim/autoload/plug.vim" ] && vim_plugin_install
 
-
     # if hash python3 2>/dev/null; then
     #     python3 -m pip install --user neovim
     #     python3 -m pip install --user pynvim
@@ -204,10 +224,10 @@ install_dotfiles() {
 
     # nvim -E -c ":call dein#install()" -c ":UpdateRemotePlugins" -c q
 
-    # # echo "Installing submodule (s)..."
-    # # git submodule update --init --recursive
+    # echo "Installing submodule (s)..."
+    # git submodule update --init --recursive
 
-    # echo "Done. Reload your terminal."
+    echo "Done. Reload your terminal."
 }
 
 install_bare_repo() {
@@ -326,6 +346,7 @@ superuser_commands() {
 
 case $1 in
     1) superuser_commands;;
+		2) install_emacs
     *)
         set_dotfiles_remote
         printf "\nChoose an installation method: \n1) Dotfiles (Create a dotfiles folder and symlink the files)\n2) Bare Repository (Create a bare repository and add all files directly at the home folder)\n(1, 2): "

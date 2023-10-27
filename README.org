@@ -1,4 +1,4 @@
-#+TITLE: Dotfiles (Configuration files for GNU/Linux based OS) (optimized for voidlinux)
+#+TITLE: Dotfiles (Configuration files for GNU/Linux based OS)
 #+AUTHOR: Lokesh Mohanty
 
 * Installation
@@ -25,32 +25,71 @@ Run the below command if the above doesn't work.
 #+end_src
 
 * Xmonad
-*** Commands
+- Install GHC with stack
 
-  - Install GHC with stack
-  ```
-    stack setup
-  ```
+#+begin_src shell
+  stack setup
+#+end_src
 
-  - Create `stack.yaml` file if it doesn't exist
-  ```
-    stack init
-  ```
+- Create `stack.yaml` file if it doesn't exist
 
-  - To build and install or update
-  ```
-    stack install
-  ```
+#+begin_src shell
+  stack init
+#+end_src
 
-  - Recompile `xmonad.hs`
-  ```
-    xmonad --recompile
-  ```
+- To build and install or update
 
-  - Restart `xmonad.hs`
-  ```
-    xmonad --restart
-  ```
+#+begin_src shell
+  stack install
+#+end_src
+
+- To recompile and restart
+
+#+begin_src shell
+  xmonad --recompile
+  xmonad --restart
+#+end_src
+
+* Mail management
+*References*: [[https://unix.stackexchange.com/a/632794][xoauth2-setup]]
+
+Using ~mutt-wizard~ (email account management), ~mbsync~ (sync maildir),
+~msmtp~ (send mail), ~notmuch~ (mail indexer) and ~emacs~ (notmuch backend)
+
+*General Steps*:
+1. Use ~mutt-wizard~ to generate ~mbsync~ and ~msmtp~ configuration
+2. Use ~mailsync~ command from ~mutt-wizard~ to sync mail
+3. Use ~emacs~ to view and send mails
+
+*Steps to handle oauth2*:
+1. Install xoauth2 library for mbsync: clone ~cyrus-sasl-xoauth2~ repository and build it
+
+#+begin_src shell
+  git clone https://github.com/moriyoshi/cyrus-sasl-xoauth2.git
+  cd cyrus-sasl-xoauth2
+  ./autogen.sh && ./configure
+  # change pkglibdir to the location where sasl2 libraries are present in the Makefile
+  make
+  sudo make install
+#+end_src
+
+2. Install mbsync using the above library: clone ~isync~ repository and build it
+
+#+begin_src shell
+  git clone https://git.code.sf.net/p/isync/isync
+  cd isync
+  ./autogen.sh && ./configure && make
+  sudo make install
+#+end_src
+
+3. Get the tokens using oauth2: clone ~M365-IMAP~ repository and follow the readme
+
+#+begin_src shell
+  git clone https://github.com/UvA-FNWI/M365-IMAP
+  cd M365-IMAP
+  pip install msal								# python dependency
+  python refresh_token.py					# to be used to get access token
+#+end_src
 
 * Nvm (Node Version Manager)
 - To set default version, run ~nvm alias default <version>~

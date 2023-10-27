@@ -1,22 +1,14 @@
 #!/bin/sh
 
-# This file runs when a DM logs you into a graphical session.
-# If you use startx/xinit like a Chad, this file will also be sourced.
-
-# case ":$CONFIG_SOURCED:" in
-#     *:"$HOME/.xprofile":*) exit 1;;
-#     *) export CONFIG_SOURCED=$CONFIG_SOURCED:$HOME/.xprofile;;
-# esac
-
-source ~/.config/shell/profile
+# source ~/.config/shell/profile
 
 xrandr --dpi 142
-~/.local/bin/custom/remaps &
+~/.local/bin/custom/remaps
 redshift -l 12.98:77.58 -t 4500:2500 -b 1.0:0.8 &
 
-autostart="xcompmgr pipewire pipewire-pulse"
-# autostart="mpd xcompmgr dunst unclutter pipewire"
+# autostart="xcompmgr pipewire pipewire-pulse"
+# # autostart="mpd xcompmgr dunst unclutter pipewire"
 
-for program in $autostart; do
-	pidof -s "$program" || "$program" &
-done >/dev/null 2>&1
+# for program in $autostart; do
+# 	pidof -s "$program" || "$program" &
+# done >/dev/null 2>&1

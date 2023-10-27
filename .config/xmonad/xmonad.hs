@@ -54,33 +54,28 @@ myKeymap =
     , ("M-S-q", confirmPrompt XMonad.Prompt.def "Exit?" $ io exitSuccess)
     , ("M-x"  , kill                                                   )
     , ("M-S-x", spawn "xkill"                                          )
-    , ("M-d"  , spawn "~/.config/rofi/scripts/launcher_t7"             )
+    , ("M-d"  , spawn "~/.config/rofi/scripts/launcher_t7"             ) -- credits: https://github.com/adi1090x/rofi
 
     , ("M-n"  , nextWS                                                 )
     , ("M-p"  , prevWS                                                 )
     , ("M-S-n", shiftToNext                                            )
     , ("M-S-p", shiftToPrev                                            )
 
-    , ("M-C-e"  , spawn $ myTerminal
-                ++ " -t nnn -e nnn -e"                                 )
+    , ("M-C-e"  , spawn $ myTerminal ++ " -t nnn -e nnn -e"            )
     , ("M-e", spawn "nautilus"                                         )
     -- , ("M-p"  , spawn "rofi -show drun -show-icons -display-drun ''")
-    -- , ("M-p", spawn "~/.config/rofi/scripts/launcher_t7"               )
 
-    , ("M1-a" , spawn $ "emacsclient --eval '(emacs-everywhere         )'" )
-    , ("M1-b" , spawn "qutebrowser"                                    )
+    , ("M-a" , spawn $ "emacsclient --eval '(emacs-everywhere)'" )
     , ("M1-e" , spawn myEditor                                         )
-    , ("M1-t" , spawn $ myTerminal
-                ++ " -t ec -e emacsclient -s term -nw -c"              )
-    , ("M1-d" , spawn $ myEditor
-                ++ " --eval '(dired nil                                )'" )
-    , ("M1-m" , spawn $ myEditor
-                ++ " --eval '(mu4e                                     )'" )
+    , ("M1-t" , spawn $ myTerminal ++ " -t ec -e emacsclient -s term -nw -c")
+    , ("M1-d" , spawn $ myEditor ++ " --eval '(dired nil)'" )
+    , ("M1-m" , spawn $ myEditor ++ " --eval '(notmuch)'" )
 
     , ("M-w"  , spawn $ "feh --randomize --bg-fill "
                 ++ "~/.local/share/wallpapers/*"                    )
     , ("<Print>", unGrab *> spawn "maimpick select-copy"            )
-    , ("M-<Print>", unGrab *> spawn "maimpick"                      )
+    , ("M-<Print>", unGrab *> spawn "flameshot gui"                 )
+    , ("M-S-<Print>", unGrab *> spawn "vokoscreenNG"                )
     , ("M-<Page_Up>", spawn "kbd-backlight up"                      )
     , ("M-<Page_Down>", spawn "kbd-backlight down"                  )
     -- , ("M-<Backspace>", spawn "sysact"                           )
@@ -97,13 +92,11 @@ myKeymap =
     , ("<XF86AudioRaiseVolume>", spawn $ myScriptsPrefix ++ "volume.sh up"        )
     , ("<XF86AudioMicMute>"    , spawn $ myScriptsPrefix ++ "volume.sh mute-mic"  )
 
+    -- Transparency (picom)
+    , ("M-=", spawn "picom-trans -c +5")
+    , ("M--", spawn "picom-trans -c -5")
     -- Temporary
     , ("M-<F1>", spawn "sxiv -r -q -t -o /home/lokesh/.local/share/wallpapers/*")
-    , ("M1-0", spawn "picom-trans 100") -- transset 1.00
-    , ("M1-1", spawn "picom-trans 90")  -- transset 0.90
-    , ("M1-2", spawn "picom-trans 85")  -- transset 0.85
-    , ("M1-3", spawn "picom-trans 80")  -- transset 0.80
-    , ("M1-4", spawn "picom-trans 75")  -- transset 0.75
     ]
 
 
@@ -121,15 +114,17 @@ myScriptsPrefix = "/home/lokesh/.config/xmonad/scripts/"
 -- and can be accessed with className
 myManageHook :: ManageHook
 myManageHook = composeAll
-    [ className =? "Gimp"          --> doFloat
-    , className =? "Qalculate-gtk" --> doFloat
-    , className =? "Arandr"        --> doFloat
-    , className =? "Pavucontrol"   --> doFloat
-    , isDialog                     --> doFloat
-    , className =? "Google-chrome" --> doShift "2"
+    [ className =? "Gimp"           --> doFloat
+    , className =? "Qalculate-gtk"  --> doFloat
+    , className =? "Arandr"         --> doFloat
+    , className =? "Pavucontrol"    --> doFloat
+    , isDialog                      --> doFloat
+    -- , appName   =? "Navigator"     --> doFloat -- Firefox popups
+    , className =? "firefox"  --> doShift "2"
+    , (className =? "Firefox"            <&&> resource =? "Dialog") --> doFloat
+    , (className =? "Google-chrome"      <&&> resource =? "Dialog") --> doFloat
+    , (className =? "org.gnome.Nautilus" <&&> resource =? "Dialog") --> doFloat
     , className =? "Microsoft Teams - Preview" --> doShift "9"
-    , appName =? "Communication" --> doShift "8"
-    , className =? "Thunderbird" --> doShift "8"
     ]
 
 myLayout = tiled ||| Mirror tiled ||| Full ||| Grid ||| threeCol
@@ -176,7 +171,7 @@ myStartupHook = do
   -- spawnOnce "dunst"
   spawnOnce "lxpolkit &" -- polkit authentication agent (https://wiki.archlinux.org/title/Polkit#Authentication_agents)
   spawnOnce "/usr/bin/picom &"
-  spawnOnce "touchegg &" -- enable touchpad guestures (configure with touche from flatpak)
+  spawnOnce "redshift -l 12.98:77.58 -t 4500:2500 -b 1.0:0.8 &"
   spawnOnce "/home/lokesh/.local/bin/custom/remaps"
   spawnOnce "feh --randomize --bg-fill ~/.local/share/wallpapers/*"
   spawnOnce " trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 55 --tint 0x282c34 --height 25 &"
@@ -187,9 +182,9 @@ myStartupHook = do
   return () >> checkKeymap myConfig myKeymap
 
   -- Add hot corners
-  addScreenCorners [ (SCLowerLeft,  prevWS)
-                   , (SCLowerRight, nextWS)
-                   -- , (SCUpperLeft, spawnSelected' myAppGrid)
-                   -- , (SCUpperRight, goToSelected $ mygridConfig' myColorizer)
-                   ]
+  -- addScreenCorners [ (SCLowerLeft,  prevWS)
+  --                  , (SCLowerRight, nextWS)
+  --                  -- , (SCUpperLeft, spawnSelected' myAppGrid)
+  --                  -- , (SCUpperRight, goToSelected $ mygridConfig' myColorizer)
+  --                  ]
   setWMName "LG3D"

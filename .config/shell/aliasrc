@@ -4,57 +4,81 @@
 [ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
 
 # Use $XINITRC variable if file exists.
-[ -f "$XINITRC" ] && alias startx="startx $XINITRC"
+# [ -f "$XINITRC" ] && alias startx="startx $XINITRC"
 
 # sudo not required for some system commands
 for command in mount umount sv updatedb shutdown poweroff reboot ; do
-	alias $command="sudo $command"
+    alias $command="sudo $command"
 done; unset command
 
 se() { cd ~/.local/bin; $EDITOR $(fzf) ;}
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
-  f="fish" \
-	cp="cp -iv" \
-	mv="mv -iv" \
-	rm="rm -vI" \
-	bc="bc -ql" \
-	mkd="mkdir -pv" \
-	yt="yt-dlp --embed-metadata -i" \
-	yta="yt -x -f bestaudio/best" \
-	ffmpeg="ffmpeg -hide_banner"
+    f="fish" \
+    cp="cp -iv" \
+    mv="mv -iv" \
+    rm="rm -vI" \
+    bc="bc -ql" \
+    mkd="mkdir -pv" \
+    yt="yt-dlp --embed-metadata -i" \
+    yta="yt -x -f bestaudio/best" \
+    ffmpeg="ffmpeg -hide_banner"
 
 # Colorize commands when possible.
 alias \
-	ls="ls -hN --color=auto --group-directories-first" \
-	grep="grep --color=auto" \
-	diff="diff --color=auto" \
-	ccat="highlight --out-format=ansi" \
-	ip="ip -color=auto"
+    ls="ls -hN --color=auto --group-directories-first" \
+    grep="grep --color=auto" \
+    diff="diff --color=auto" \
+    ccat="highlight --out-format=ansi" \
+    ip="ip -color=auto"
 
 # These common commands are just too long! Abbreviate them.
 alias \
-	ka="killall" \
-	g="git" \
-	trem="transmission-remote" \
-	YT="youtube-viewer" \
-	sdn="shutdown -h now" \
-	e="$EDITOR" \
-	xr="sudo xbps-remove -Rv" \
-	z="zathura" \
-	pk="ps -ef | fzf | awk '{print $2}' | xargs kill" \
-  void="cd ~/.local/src/void-packages" \
-  src="cd ~/.local/src"
+    ka="killall" \
+    g="git" \
+    trem="transmission-remote" \
+    YT="youtube-viewer" \
+    sdn="shutdown -h now" \
+    ec="$EDITOR" \
+    xr="sudo xbps-remove -Rv" \
+    z="zathura" \
+    pk="ps -ef | fzf | awk '{print $2}' | xargs kill" \
+    void="cd ~/.local/src/void-packages" \
+    src="cd ~/.local/src"
 
 # nnn
-export NNN_PLUG="m:xdgdefault;c:rsynccp;i:imgview;e:gpge;f:fzplug;h:fzhist;o:fzopen;d:dragdrop;C:cdpath;j:autojump;k:pskill;p:preview-tui;n:nmount"
+NNN_PLUG="m:xdgdefault"
+NNN_PLUG="$NNN_PLUG;c:rsynccp"
+NNN_PLUG="$NNN_PLUG;i:imgview"
+NNN_PLUG="$NNN_PLUG;e:gpge"
+NNN_PLUG="$NNN_PLUG;f:fzplug"
+NNN_PLUG="$NNN_PLUG;h:fzhist"
+NNN_PLUG="$NNN_PLUG;o:fzopen"
+NNN_PLUG="$NNN_PLUG;d:dragdrop"
+NNN_PLUG="$NNN_PLUG;C:cdpath"
+NNN_PLUG="$NNN_PLUG;j:autojump"
+NNN_PLUG="$NNN_PLUG;k:pskill"
+NNN_PLUG="$NNN_PLUG;p:preview-tui"
+NNN_PLUG="$NNN_PLUG;n:nmount"
+NNN_PLUG="$NNN_PLUG;v:addtoplaylist"
+export NNN_PLUG
+
 # show folders as bold white instead of blue
 export NNN_FCOLORS="0000E6310000000000000000"
+
 # required for previewing
 export NNN_FIFO="/tmp/nnn.fifo"
+
 # show hidden files at the top
 export LC_COLLATE="C"
+
 export NNN_USE_EDITOR=1
 export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
-alias nnn="nnn -e"                            # use the $EDITOR variable for text
+
+# use the $EDITOR variable for text
+alias nnn="nnn -e"
+
+# Node version manager
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

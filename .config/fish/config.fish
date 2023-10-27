@@ -1,30 +1,34 @@
-fish_vi_key_bindings
+# to fix rsync, sftp errors
+if status --is-interactive
 
-# set fish greeting to none
-set fish_greeting
+	fish_vi_key_bindings
 
-set PATH ~/Applications/flutter/bin $PATH
-set PATH ~/.bin $PATH
+	# set fish greeting to none
+	set fish_greeting
 
-# Add GOPATH/bin to path
-set PATH ~/go/bin $PATH
+	# set PATH ~/Applications/flutter/bin $PATH
+	# set PATH ~/.bin $PATH
 
-# Add android/sdk/tools/bin to path
-set PATH ~/Android/Sdk/tools/bin $PATH
+	# Add GOBIN to path
+	set PATH $GOBIN $PATH
 
-# Add .local/bin and .bin to path
-set PATH ~/.local/bin $PATH
+	# Add android/sdk/tools/bin to path
+	# set PATH ~/Android/Sdk/tools/bin $PATH
 
-# Add cabal and ghcup binaries to path
-set PATH ~/.cabal/bin $PATH
-set PATH ~/.ghcup/bin $PATH
+	# Add .local/bin and .bin to path
+	set PATH ~/.local/bin $PATH
 
-set -x EDITOR "emacsclient -s term"
-set -x VISUAL "emacsclient -s term"
-alias ec="emacsclient -s term"
+	# Add cabal and ghcup binaries to path
+	# set PATH ~/.cabal/bin $PATH
+	# set PATH ~/.ghcup/bin $PATH
 
-# nvm use v14.18.2
+	# nvm use v14.18.2
 
-# if test -e ~/.config/shell/aliasrc
-#     source ~/.config/shell/aliasrc
-# end
+	if test -e ~/.config/shell/aliasrc
+			bass source ~/.config/shell/aliasrc
+	end
+
+  conda activate rl
+
+  set -x NIX_CONFIG "experimental-features = nix-command flakes"
+end

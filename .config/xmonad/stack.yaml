@@ -4,7 +4,7 @@
 # Reference: https://brianbuccola.com/how-to-install-xmonad-and-xmobar-via-stack/
 
 resolver: lts-20.18
-# resolver: ghc-9.2.7
+# resolver: ghc-9.2.8
 
 packages:
 - xmobar

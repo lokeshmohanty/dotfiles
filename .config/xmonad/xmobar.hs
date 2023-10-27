@@ -12,12 +12,12 @@ Config { overrideRedirect = True
        -- , font = "xft:Ubuntu:weight=bold:pixelsize=15:antialias=true:hinting=true"
        , font = "xft:Inconsolata:italic:size=11"
        -- , font = "xft:terminus:size=11"
-      , additionalFonts = [ "xft:FontAwesome:size=11" ]
+      , additionalFonts = [ "xft:FontAwesome:size=11", "xft:Mononoki Nerd Font:pixelsize=11:antialias=true:hinting=true" ]
       , bgColor = "#282c34"
       , fgColor = "#bbc2cf"
       , position = TopW L 100
       , alpha    = 200
-      , iconRoot = "/home/lokesh/.config/xmonad/xpm"
+      -- , iconRoot = "/home/lokesh/.config/xmonad/xpm"
       , commands = [ Run Cpu
                        [ "-t", "<fn=1>\xf26c</fn> <total>%"
                        , "-L", "5" , "-H", "50"
@@ -55,13 +55,13 @@ Config { overrideRedirect = True
                    , Run Date "<fn=1>\xf073</fn> %a %d %b %H:%M" "date" 10
                    , Run Com "/home/lokesh/.config/xmonad/scripts/trayer-padding-icon.sh" [] "trayerpad" 20
                    , Run DiskU [("/", "<fn=1>\xf019</fn> <free> free")] [] 600
-                   , Run Uptime ["-t", "<fn=1>\xf0a6</fn> <hours>h <minutes>m"] 600
+                   , Run Uptime ["-t", "<fn=1>\xf0aa</fn> <hours>h <minutes>m"] 600
                    , Run Locks
                    , Run UnsafeXMonadLog
                    ]
       , sepChar  = "%"
       , alignSep = "}{"
-      , template = "<icon=haskell_20.xpm/> %UnsafeXMonadLog% }{ \
+      , template = "<icon=/home/lokesh/.dotfiles/.config/xmonad/xpm/haskell_20.xpm/> %UnsafeXMonadLog% }{ \
             \ %locks% \
             \<action=`alacritty -e /home/lokesh/.config/xmonad/scripts/weather.sh` button=1>\
             \ <box type=Bottom width=2 mb=2 color=#ffffb3><fc=#ffffb3>%VOBG%</fc></box> \
@@ -70,7 +70,6 @@ Config { overrideRedirect = True
             \ <box type=Bottom width=2 mb=2 color=#ecbe7b><fc=#ecbe7b>%cpu%, %multicoretemp%</fc></box> \
             \ <box type=Bottom width=2 mb=2 color=#c68c53><fc=#c68c53>%memory%</fc></box> \
             \</action>\
-            \ <box type=Bottom width=2 mb=2 color=#a9a1e1><fc=#a9a1e1>%disku%</fc></box> \
             \ <box type=Bottom width=2 mb=2 color=#98be65><fc=#98be65>%uptime%</fc></box> \
             \<action=`flatpak run com.github.d4nj1.tlpui` button=1>\
             \ <box type=Bottom width=2 mb=2 color=#cccc00><fc=#cccc00>%battery%</fc></box> \
@@ -79,5 +78,5 @@ Config { overrideRedirect = True
             \ <box type=Bottom width=2 mb=2 color=#46d9ff><fc=#46d9ff>%date%</fc></box> \
             \</action>\
             \ %trayerpad%"
-            -- other colors: #c678dd, #00cc00
+            -- other colors: #c678dd (pink), #00cc00 (green), #a9a1e1 (green)
       }

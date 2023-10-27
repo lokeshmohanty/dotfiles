@@ -54,8 +54,10 @@ fi
 
 # flatpak run com.microsoft.Teams
 google-chrome-stable &
-emacs --eval "(server-start)" &
-emacs --eval "(progn (setq server-name \"communication\") (server-start) (mu4e) (mu4e-dashboard))" --name Communication &
+# emacs --eval "(server-start)" &
+
+# start the emacs daemon to replace vi/vim usage
+emacs --bg-daemon=term
 
 # ssh-agent dbus-run-session -- xmonad
 exec dbus-launch --sh-syntax --exit-with-session xmonad

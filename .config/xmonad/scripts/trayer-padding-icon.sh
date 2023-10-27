@@ -45,4 +45,9 @@ if [ ! -f $iconfile ]; then
 fi
 
 # Output the icon tag for xmobar
-echo "<icon=${iconfile}/>"
+# echo "<icon=${iconfile}/>"
+
+# print width number of spaces
+ echo "$(for i in `seq $(echo $width | cut -c1)`; do echo -n " "; done)"
+
+ 
