@@ -1,0 +1,15 @@
+{
+  "host": "imap.gmail.com",
+  "port": 993,
+  "tls": true,
+  "tlsOptions": {
+    "rejectUnauthorized": true
+  },
+  "username": "me.lokeshmohanty@gmail.com",
+  "passwordCmd": "pass mutt/me.lokeshmohanty@gmail.com",
+  "onNewMail": "mbsync -q -c ~/.config/mbsync/config --pull --new me.lokeshmohanty@gmail.com:INBOX",
+  "onNewMailPost": "notmuch new --quiet && sh ~/.config/imap/notify.sh",
+  "boxes": [
+    "INBOX"
+  ]
+}

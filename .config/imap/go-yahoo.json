@@ -1,0 +1,15 @@
+{
+  "host": "imap.mail.yahoo.com",
+  "port": 993,
+  "tls": true,
+  "tlsOptions": {
+    "rejectUnauthorized": true
+  },
+  "username": "lokesh1197@rocketmail.com",
+  "passwordCmd": "pass mutt/lokesh1197@yahoo.com",
+  "onNewMail": "mbsync -c ~/.config/mbsync/config --pull --new lokesh1197@yahoo.com:INBOX",
+  "onNewMailPost": "emacsclient -s communication -e '(mu4e-update-index)' && notify-send 'New mail in lokesh1197@yahoo.com'",
+  "boxes": [
+    "INBOX"
+  ]
+}
