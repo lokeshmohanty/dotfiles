@@ -12,7 +12,11 @@
 
 - Application exits when it tries to open a file window: Reinstalling `shared-mime-info` fixes it
 ** Cron
-https://serverfault.com/a/449652
+References: [[https://serverfault.com/a/449652][How to fix all crontab related problems (linux)]]
+
+- Make sure to set ~PATH~ (default: ~/bin:/usr/bin~ only)
+- Make sure to have a newline at the end (delimeter for cron)
+- For root permissions, run ~sudo crontab -e~ instead with no ~sudo~
 
 ** Firewall
 - Check allowed ports
@@ -408,6 +412,12 @@ References: [[https://www.vogella.com/tutorials/GitSubmodules/article.html][blog
 #+begin_src shell
   git config --global user.signingkey <gpg-key>
   git config --global commit.gpgsign true
+#+end_src
+
+** Run iftop without sudo access
+
+#+begin_src shell
+  sudo setcap cap_net_raw=eip $(which iftop)
 #+end_src
 
 * Ubuntu
