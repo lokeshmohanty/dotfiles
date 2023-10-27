@@ -16,7 +16,6 @@ clang, gcc alternative
 cmake, c++ build generator
 crda,required due to dmesg issues
 cronie, cron service
-dmenu, generic menu for X
 docker
 dosfstools
 dragon, drag and drop source/sink for X
@@ -25,6 +24,7 @@ eiskaltdcpp-qt, dc++ client
 elogind
 emacs-gtk3, text editor
 exfat-utils
+fd, find alternative (required by dirvish-fd)
 feh, image viewer (required only for setting wallpaper)
 ffmpeg
 ffmpegthumbnailer
@@ -38,6 +38,7 @@ fonts-roboto-ttf, fonts for nano emacs
 fzf, fuzzy finder
 gcc, c and c++ compiler
 gdb, c and c++ debugger
+giflib-devel, required ofr emacs 29
 gimp, image editor and manipulator
 git
 git,required by xmonad
@@ -45,6 +46,9 @@ github-cli
 glib-devel,required by mu
 glibc-32bit,required by steam
 gmime-devel,required by mu
+gnutls-devel, required by emacs 29
+go, go programming language
+gtk+3-devel, required by emacs 29
 hddtemp,required by inxi
 hplip, for configuring hp printers
 hunspell, for spell checking
@@ -61,6 +65,7 @@ kdenlive, video editor
 libdrm-32bit, required by steam
 libglapi-32bit, required by steam
 libgomp-devel, required for using openmp
+libnsgif-devel, required by emacs 29
 libX11-devel,required by xmonad and ueberzug
 libXScrnSaver-devel,required by xmonad
 libXft-devel,required by xmonad
@@ -99,6 +104,7 @@ nerd-fonts-otf,fonts
 nerd-fonts-ttf,fonts
 nnn, file browser
 notmuch
+noto-fonts-emoji, Google Noto Emoji Fonts
 noto-fonts-ttf,fonts
 nss-mdns, for hostname resolution for avahi
 ntfs-3g
@@ -124,12 +130,13 @@ python3-pip
 python3-tkinter, for matplotlib gui backend
 qalculate-gtk, calculator gui
 qrcp, transfer files to/from phone by generating a qrcode
-qutebrowser,very fast browser
 rclone
 redshift
 remmina
 ripgrep
 rpmextract, install .rpm files
+rofi, generic menu for X
+rofi-emoji, Emoji selector plugin for Rofi
 rsync
 sc-im, excel alternative for terminal
 smartmontools,required by inxi for smartctl
@@ -138,12 +145,14 @@ stack,haskell
 starship,shell prompt
 steam, game manager
 sxiv,image viewer
-texlab,required by emacs for latex lsp
+texinfo, required by emacs 29
+texlab, required by emacs for latex lsp
 texlive-full
 tigervnc, vnc client
 tlp-rdw, power management and radio management
 trayer-srg,system trayer for xmobar
 tree,required by inxi
+udiskie, automount removable storage
 unzip
 upower,required by inxi
 valgrind, tool to check memory
