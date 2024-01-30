@@ -1,9 +1,11 @@
 #+TITLE: Dotfiles (Configuration files for GNU/Linux based OS)
 #+AUTHOR: Lokesh Mohanty
 
+*Note:* Since I have moved to ~NixOS~, I am slowly translating and moving over all my dotfiles to ~nix~ in [[https://github.com/lokeshmohanty/nix-config][this repository]].
+
 * Installation
 
-Clone to ~~/.dotfiles~ and later symlink the configurations required
+Clone to =~/.dotfiles= and later symlink the configurations required
 
 #+begin_src shell
   # To clone without submodules:
